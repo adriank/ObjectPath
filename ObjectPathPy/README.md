@@ -9,11 +9,13 @@ First clone Py part of repo. Then import interpreter from core and use it.
 
 Simple example:
 
+`````python
 from core.interpreter import *
 
 myJSON={"x":1,"y":2}
 op=Tree(myJSON)
 print(op.execute("$.x +$.y"))
+`````
 
 For more sophisticated queries check tests/test_ObjectPath.py. All should work perfectly and if not, send bugs via GitHub.
 
