@@ -9,7 +9,9 @@ First clone Py part of repo. Then import interpreter from core and use it.
 
 Simple example:
 
+
 `````python
+#Being inside ObjectPathPy directory
 from core.interpreter import *
 
 myJSON={"x":1,"y":2}
