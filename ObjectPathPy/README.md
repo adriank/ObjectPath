@@ -1,4 +1,7 @@
 ObjectPath
 ==========
 
-The most advanced query language for JSON
+The most agile query language for JSON
+
+How to use it?
+______________
