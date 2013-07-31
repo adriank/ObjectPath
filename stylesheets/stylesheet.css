@@ -61,40 +61,40 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 10px 0;
-  font-weight: 700;
-  color:#222222;
-  font-family: 'Lucida Grande', 'Calibri', Helvetica, Arial, sans-serif;
-  letter-spacing: -1px;
-}
-
-h1 {
-  font-size: 36px;
-  font-weight: 700;
-}
-
-h2 {
-  padding-bottom: 10px;
-  font-size: 32px;
-  background: url('../images/bg_hr.png') repeat-x bottom;
-}
-
-h3 {
-  font-size: 24px;
-}
-
-h4 {
-  font-size: 21px;
-}
-
-h5 {
-  font-size: 18px;
-}
-
-h6 {
-  font-size: 16px;
-}
+/*h1, h2, h3, h4, h5, h6 {*/
+/*  margin: 10px 0;*/
+/*  font-weight: 700;*/
+/*  color:#222222;*/
+/*  font-family: 'Lucida Grande', 'Calibri', Helvetica, Arial, sans-serif;*/
+/*  letter-spacing: -1px;*/
+/*}*/
+/**/
+/*h1 {*/
+/*  font-size: 36px;*/
+/*  font-weight: 700;*/
+/*}*/
+/**/
+/*h2 {*/
+/*  padding-bottom: 10px;*/
+/*  font-size: 32px;*/
+/*  /*background: url('../images/bg_hr.png') repeat-x bottom;*/*/
+/*}*/
+/**/
+/*h3 {*/
+/*  font-size: 24px;*/
+/*}*/
+/**/
+/*h4 {*/
+/*  font-size: 21px;*/
+/*}*/
+/**/
+/*h5 {*/
+/*  font-size: 18px;*/
+/*}*/
+/**/
+/*h6 {*/
+/*  font-size: 16px;*/
+/*}*/
 
 p {
   margin: 10px 0 15px 0;
@@ -165,9 +165,6 @@ pre, code {
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-
-
-
 }
 
 pre {

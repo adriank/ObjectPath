@@ -1,79 +1,266 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <meta name="description" content="ObjectPath : The most agile query language for JSON" />
+		<link href="http://yui.yahooapis.com/combo?3.7.3/build/cssfonts/cssfonts-min.css&3.7.3/build/cssreset/cssreset-min.css" rel="stylesheet" type="text/css">
+		<!--<link href="stylesheets/stylesheet.css" rel="stylesheet" type="text/css">-->
+		<link href="http://asyncode.com/css/style.css" rel="stylesheet" type="text/css">
+		<link href="http://acf.acimg.eu/css/grids.css" rel="stylesheet" type="text/css">
+		<link href="http://yui.yahooapis.com/combo?3.2.0/build/node-menunav/assets/skins/sam/node-menunav.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="http://yui.yahooapis.com/combo?3.7.3/build/yui/yui-min.js&3.7.3/build/loader/loader-min.js"></script>
+		<!--<script type="text/javascript" src="/js/init.js"></script>-->
+		<style>
+			@font-face {
+				font-family: "Neuton Regular";
+				src: local("Neuton Regular"), url(http://acf.acimg.eu/fonts/Neuton-Regular.ttf ) format("truetype"); /* non-IE */
+			}
+			html{
+				background: #fff;
+			}
+			#cont-body{
+				color:#333;
+				min-height:400px;
+			}
+			#example{
+				/*height:250px;*/
+				margin-top: 100px;
+				color:#333;
+				min-height:250px;
+			}
+			#example .path{
+				<!--font-family:monospace;-->
+				<!--font-size:20px;-->
+			}
+			#title{
+				font-size:60px;
+				text-align:center;
+				color:#999;
+				font-family:"Neuton Regular",Helvetica,Arial,sans-serif;
+				margin-top:50px;
+			}
+			/* **************** TALK BUBBLE ***************** */
+			.bubble{overflow:hidden;_overflow:visible;_zoom:1;margin:12px;}
+			.bubble b b{position:absolute;height:0;width:0;border: solid 12px transparent;_border: 12px solid #111 /* set color to match background color for IE6 */;}
+			.bubble .bottom{visibility:hidden;}
+			/* top bubbles */
+			.bubbleTop .inner{margin-top:11px;}
+			.bubbleTop b b{top:0;left:40px;border-top-style:none;}
+			#recursiveDescent{left:15px;}
+			#child{left:105px}
+			#selector{left:125px}
+			#simpleOp{left:230px}
+			#simpleOp .bubbleTop b.top b{left:22px}
+			#simpleOp .bubbleTop b.top2 b{left:138px}
+			#simpleOp .bubbleTop b.top3 b{left:253px}
+			#property{left:180px}
+			#property .bubbleTop b.top b{left:25px}
+			#property .bubbleTop b.top2 b{left:255px}
+			.bubble{
+				width:300px;
+				position:relative;
+				left:65px;
+			}
+			.bubble .inner{
+				background-color:#EAFCFF;
+				border-radius: 4px;
+				border:1px dotted #555;
+				padding:5px;
+			}
+			.bubble b b{
+				border-bottom-color:#EAFCFF;
+			}
+			.fire, .fire *{color: #000; font-size:18px; b2order-bottom: 1px dashed #fff;}
+			.attribution{margin-left:27px;}
+			.links{
+				font-size:30px;
+				color:#aaa;
+				font-family:"Neuton Regular",Helvetica,Arial,sans-serif;
+			}
+			.examples{
+				float:left;
+				margin-left:150px;
+			}
+			.docs{
+				text-align:center;
+			}
+			.faq{
+				float:right;
+				margin-right:150px;
+			}
+		</style>
+		<script>
+			YUI().use("node","event","array-extras","transition",function(Y){
+				var example=Y.one("#example")
+						parts=example.all("h2 span"),
+						operators=example.all("span.operator")
+				parts.on("mouseenter",function(e){
+					if (e.target.get("nodeName").toLowerCase()!="span")
+						return
+					example.all(".hint").addClass("hide")
+					example.all("span.operator").removeClass("hover")
+					e.target.ancestor(".widget").all(">.path ."+e.target.getAttribute("class")).addClass("hover")
+				})
+				parts.on("mouseleave",function(e){
+					if (e.target.get("nodeName").toLowerCase()!="span")
+						return
+					Y.all("#OPExample1>.path span.hover").removeClass("hover")
+				})
+				operators.on("mouseenter",function(e){
+					if (e.target.get("nodeName").toLowerCase()!="span")
+						return
+					example.all(".hint").addClass("hide")
+					example.all("span.operator").removeClass("hover")
+					var classes=e.target.getAttribute("class").split(" ")
+					e.target.ancestor(".widget").all(">.path ."+classes.join(".")).addClass("hover")
+					var operatorName=Y.Array.find(classes,function(el){return el!="operator"})
+					Y.one("#"+operatorName).removeClass("hide")
+				})
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
+				Y.all("#cont-example, .hint").on("mouseleave",function(e){
+				<!--Y.log(example.one(".hint:not(.hide)"))-->
+					example.one(".hint:not(.hide)").transition({
+						easing: 'ease-out',
+						duration: 0.75, // seconds
+						opacity: 0
+					},function(e){
+						example.all(".hint").addClass("hide").setStyle("opacity",1)
+					})
+					Y.all("#OPExample1 >.path span.hover").removeClass("hover")
+				})
+			})
+		</script>
     <title>ObjectPath</title>
   </head>
 
   <body>
 
     <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/adriank/ObjectPath">View on GitHub</a>
-
-          <h1 id="project_title">ObjectPath</h1>
-          <h2 id="project_tagline">The most agile query language for JSON</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/adriank/ObjectPath/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/adriank/ObjectPath/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+		<a href="https://github.com/adriank/ObjectPath"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"/></a>
+		<div id="title" class="widget">
+			<h1>ObjectPath</h1>
+			<h2>The most agile query language for JSON</h2>
+		</div>
 
     <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+		<div id="example" class="container w750">
+			<div id="OPExample1" class="widget">
+				<h2>
+					Find <span class="root">in the shop</span> <span class="allShoes">all shoes</span> <span class="selector">of</span> <span class="red">red color</span> <span2 class="and">and</span2> <span class="priceLessThan20">price less than 50</span>
+				</h2>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
+				<span class="path">
+					<span class="operator root">$</span><span class="allShoes"><span class="operator recursiveDescent">..</span><span class="attributeName">shoes</span><span class="operator child">.</span><span class="operator wildcard">*</span></span><span class="operator selector">[</span><span class="red"><span class="operator property">color</span> <span class="operator simpleOp">is</span> "red"</span> <span class="operator simpleOp">and</span> <span class="priceLessThan20"><span class="operator property">price</span> <span class="operator simpleOp">&lt;</span> 50</span><span class="operator selector">]</span>
+				</span>
+			</div>
+			<div id="root" class="hint hide widget">
+				<div class="mod bubble bubbleTop">
+					<b class="top"><b class="tl"></b><b class="tr"></b></b>
+					<div class="inner">
+						<div class="hd fire">
+							<h3>$ - the root of the document</h3>
+						</div>
+						<div class="bd">
+							$ points to the root of the document. It can be either object or a list of objects. ObjectPath queries works for both! Here the document describes a shop and products available.
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="recursiveDescent" class="hint hide widget">
+				<div class="mod bubble bubbleTop">
+					<b class="top"><b class="tl"></b><b class="tr"></b></b>
+					<div class="inner">
+						<div class="hd fire">
+							<h3>.. - recursive descent</h3>
+						</div>
+						<div class="bd">
+							.. selects all objects from the subtree. Here it selects all objects from the shop.
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="wildcard" class="hint hide widget">
+				<div class="mod bubble bubbleTop">
+					<b class="top"><b class="tl"></b><b class="tr"></b></b>
+					<div class="inner">
+						<div class="hd fire">
+							<h3>* - the wildcard</h3>
+						</div>
+						<div class="bd">
+							* selects all objects from array.
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="child" class="hint hide widget">
+				<div class="mod bubble bubbleTop">
+					<b class="top"><b class="tl"></b><b class="tr"></b></b>
+					<div class="inner">
+						<div class="hd fire">
+							<h3>. - child/property</h3>
+						</div>
+						<div class="bd">
+							. selects a child or property of the subtree element. It supports arrays of objects and objects; finds property in object or all properties in objects in an array of objects.
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="selector" class="hint hide widget">
+				<div class="mod bubble bubbleTop">
+					<b class="top"><b class="tl"></b><b class="tr"></b></b>
+					<div class="inner">
+						<div class="hd fire">
+							<h3>[] - selector</h3>
+						</div>
+						<div class="bd">
+							[] is an advanaced tool for filtering lists of objects. It can do almost anything! More at <a href="http://docs.asyncode.com/text/ObjectPath-reference#Selectors">selectors reference</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="simpleOp" class="hint hide widget">
+				<div class="mod bubble bubbleTop">
+					<b class="top"><b class="tl"></b><b class="tr"></b></b>
+					<b class="top2"><b class="tl"></b><b class="tr"></b></b>
+					<b class="top3"><b class="tl"></b><b class="tr"></b></b>
+					<div class="inner">
+						<div class="hd fire">
+							<h3>and, or, &lt; - simple operators</h3>
+						</div>
+						<div class="bd">
+							ObjectPath supports a vast range of simple operators including boolean, arithmetic, comparison... and so on. The full list of operators is available in the <a href="http://docs.asyncode.com/text/ObjectPath-reference#Operators">ObjectPath reference</a>.
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="property" class="hint hide widget">
+				<div class="mod bubble bubbleTop">
+					<b class="top"><b class="tl"></b><b class="tr"></b></b>
+					<b class="top2"><b class="tl"></b><b class="tr"></b></b>
+					<div class="inner">
+						<div class="hd fire">
+							<h3>Object properties</h3>
+						</div>
+						<div class="bd">
+							These are properties of objects that will be checked against the expression.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="links w750">
+			<div class="examples"><a href="https://github.com/adriank/ObjectPath/blob/master/ObjectPathPy/tests/test_ObjectPath.py">EXAMPLES</a></div>
+			<div class="docs"><a href="//docs.asyncode.com/text/ObjectPath-reference">REFERENCE</a></div>
+		</div>
 
     <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">ObjectPath maintained by <a href="https://github.com/adriank">adriank</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
+<!--    <div class="footer2">-->
+<!--			<div class="w750">-->
+<!--				<p class="copyright">ObjectPath maintained by <a href="https://github.com/adriank">adriank</a></p>-->
+<!--				<p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>-->
+<!--			</div>-->
+<!--    </div>-->
 
   </body>
 </html>
