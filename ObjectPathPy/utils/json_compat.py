@@ -20,5 +20,5 @@ def loads(s,object_hook=None):
 		raise Error(str(e)+" "+s)
 
 def dumps(s,default=None):
-	return json.dumps(s,default=default, separators=(',',':'))
+	return json.dumps(s,default=default, indent=2, separators=(',',':'))
 dump=json.dump

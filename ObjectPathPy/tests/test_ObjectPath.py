@@ -305,7 +305,7 @@ class Utils_Paths(unittest.TestCase):
 
 	def test_complex_paths(self):
 		self.assertEqual(execute("$.._id"), [1, 2, 3, 4])
-		self.assertEqual(execute("$..l[0]"), object1["test"]["l"])
+		self.assertEqual(execute("$..l"), object1["test"]["l"])
 		self.assertEqual(execute("$..l.._id"), [3,4])
 		self.assertEqual(execute2("$.store.*"), [object2["store"]])
 		self.assertEqual(execute2("$.store.book.author"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])

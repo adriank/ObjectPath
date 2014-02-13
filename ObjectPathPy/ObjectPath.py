@@ -20,7 +20,6 @@ if __name__=="__main__":
 	a={}
 	if args.debug:
 		a["debug"]=True
-	print a
 	JSONfile=args.object or len(sys.argv) is 2 and sys.argv[1]
 	if JSONfile:
 		tree=Tree(json.load(open(JSONfile,"r")),a)
@@ -37,9 +36,9 @@ if __name__=="__main__":
 				if type(r) in (generator,chain):
 					#if debug:
 					#	print "returning",type(r).__name__
-					print list(r)
+					print json.dumps(list(r))
 				else:
-					print r
+					print json.dumps(r)
 			#except Exception,e:
 				#print e
 	except KeyboardInterrupt:

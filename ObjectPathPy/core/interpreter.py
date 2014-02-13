@@ -229,7 +229,7 @@ class Tree(Debugger):
 					fst=exe(fst)
 				typefst=type(fst)
 				if D: self.debug("left is '%s'",fst)
-				if node[2][0]=="*":
+				if node[2][0] == "*":
 					if D: self.end("returning '%s'",typefst in ITER_TYPES and fst or [fst])
 					return typefst in ITER_TYPES and fst or [fst]
 				snd=exe(node[2])
@@ -267,7 +267,7 @@ class Tree(Debugger):
 					except:
 						pass
 				if D: self.debug("returning '%s'",ret)
-				return ret
+				return len(ret) is 1 and ret[0] or ret
 			#TODO move it to tree generation phase
 			elif op=="{":
 				return {}

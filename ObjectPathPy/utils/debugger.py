@@ -33,7 +33,7 @@ class Debugger(object):
 			self.level=self.dbgMap["debug"]
 			#if app.dbg.has_key("cutAfter"):
 			#	self.CUT_AFTER=app.dbg["cutAfter"]
-			self.info("All strings will be cuted to %s chatacters. You can change this behavior by setting cutAfter attribute of debuger in config file. 0 to switch it off."%self.CUT_AFTER)
+			self.info("All strings will be cut to %s chatacters. You can change this behavior by setting cutAfter attribute of debuger in config file. 0 to switch it off."%self.CUT_AFTER)
 		except (KeyError, TypeError):
 			pass
 
