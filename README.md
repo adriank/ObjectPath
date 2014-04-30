@@ -53,18 +53,23 @@ ObjectPathJS - beta version of Javascript implementation. Many tests passed, {} 
 Command line usage
 -----
 
-    git clone https://github.com/adriank/ObjectPath.git
-    cd ObjectPath/ObjectPathPy
-    python ObjectPath -o file.json
+`````sh
+git clone https://github.com/adriank/ObjectPath.git
+cd ObjectPath/ObjectPathPy
+python ObjectPath -o file.json
+`````
 
 Python PIP usage
 ----------------
 
-    $ sudo pip install objectpath
-    $ python
-    >>> import objectpath
-    >>> tree=Tree({a:1})
-    >>> tree.execute("$.a")
-    1
-    >>>
-    
+`````sh
+$ sudo pip install objectpath
+$ python
+`````
+`````python
+>>> import objectpath
+>>> tree=Tree({a:1})
+>>> tree.execute("$.a")
+1
+>>>
+`````
