@@ -49,3 +49,22 @@ What's in this repo?
 ObjectPathPY - Python implementation of ObjectPath. This is a stable piece of code extracted from [AC Runtime](http://github.com/adriank/ACR) used in production for over one year without problems. While ObjectPath paths are working perfectly (all tests are passed), integration with Python programs is not documented. Use ObjectPath.py file as a reference of usage. Also Python-specific topics such as generators, chains and optimizations are not documented (comming soon!).
 
 ObjectPathJS - beta version of Javascript implementation. Many tests passed, {} and functions are not implemented yet. Javascript implementation has the very same API as the Python version.
+
+Command line usage
+-----
+
+    git clone https://github.com/adriank/ObjectPath.git
+    cd ObjectPath/ObjectPathPy
+    python ObjectPath -o file.json
+
+Python PIP usage
+----------------
+
+    $ sudo pip install objectpath
+    $ python
+    >>> import objectpath
+    >>> tree=Tree({a:1})
+    >>> tree.execute("$.a")
+    1
+    >>>
+    
