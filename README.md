@@ -65,8 +65,6 @@ Python PIP usage
 `````sh
 $ sudo pip install objectpath
 $ python
-`````
-`````python
 >>> import objectpath
 >>> tree=Tree({a:1})
 >>> tree.execute("$.a")
