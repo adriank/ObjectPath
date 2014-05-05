@@ -11,25 +11,34 @@ from utils import json_compat as json
 print """ObjectPath interactive shell
 	ctrl+c to exit.
 """
+
 if __name__=="__main__":
 	parser=argparse.ArgumentParser(description='Command line options')
-	parser.add_argument('-o', '--objectFile', dest='file', help='File containing JSON document.')
-	parser.add_argument('-u', '--objecturl', dest='URL', help='URL containing JSON document.')
+	parser.add_argument('-o', '--file', dest='file', help='File containing JSON document.')
+	parser.add_argument('-u', '--URL', dest='URL', help='URL containing JSON document.')
+	parser.add_argument('-xml', dest='xml', help='Expect XML input.',action='store_true')
 	parser.add_argument('-d', '--debug', dest='debug', help='Debbuging on/off.', action='store_true')
-	#parser.set_defaults(port = 9999, host='', appsDir=os.path.join(os.path.expanduser('~'),"projects"), appDir='', ACRconf='')
+
 	args = parser.parse_args()
 	a={}
 	if args.debug:
 		a["debug"]=True
-	JSONfile=args.file or len(sys.argv) is 2 and sys.argv[1]
-	if JSONfile:
-		tree=Tree(json.load(open(JSONfile,"r")),a)
-		print "JSON document loaded from", JSONfile
+	File=args.file or len(sys.argv) is 2 and sys.argv[1]
+	if args.xml:
+		from utils.xmlextras import xml2tree
+	if File:
+		tree=Tree(json.load(open(File,"r")),a)
+		print "JSON document loaded from", File
 	elif args.URL:
 		from urllib2 import urlopen
-		tree=Tree(json.load(urlopen(args.URL)),a)
+		if args.xml:
+			tree=Tree(json.loads(json.dumps(xml2tree(args.URL))),a)
+			#print json.dumps(xml2tree(args.URL))
+		else:
+			tree=Tree(json.load(urlopen(args.URL)),a)
+			print type(json.load(urlopen(args.URL)))
 	else:
-		print "JSON document source not specified. Creating ObjectPath interpreter for empty object ({})."
+		print "JSON document source not specified. Creating ObjectPath interpreter for empty object {}."
 		tree=Tree({},a)
 	try:
 		while True:

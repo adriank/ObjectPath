@@ -284,13 +284,24 @@ class Tree(Debugger):
 					#		yield exe(i)
 					if D: self.debug("doing list mapping")
 					return map(exe,node[1])
-				if len_node is 3: # operator []
+				if len_node is 3: # selector used []
 					fst=exe(node[1])
 					# check against None
 					if not fst:
 						return fst
 					selector=node[2]
 					if D: self.debug("found '%s' selector for '%s'",selector,fst)
+
+					if type(selector) is tuple and selector[0] is "[":
+						nodeList=[]
+						nodeList_append=nodeList.append
+						for i in fst:
+							if D: self.debug("setting self.current to '%s'",i)
+							self.current=i
+							nodeList_append(exe((selector[0],exe(selector[1]),exe(selector[2]))))
+						if D: self.debug("returning '%s' objects: '%s'",len(nodeList),nodeList)
+						return nodeList
+
 					if type(selector) is tuple and selector[0] in SELECTOR_OPS:
 						if D: self.debug("found '%s' operator in selector",selector[0])
 						nodeList=[]
@@ -352,7 +363,7 @@ class Tree(Debugger):
 							#CHECK - is it ok to do that or should it be ProgrammingError?
 							if D: self.debug("returning an empty list")
 							return []
-				raise ProgrammingError("Wrong usage of '[' operator")
+				raise ProgrammingError("Wrong usage of the '[' operator")
 			elif op=="fn":
 				""" Built-in functions """
 				fnName=node[1]
@@ -381,7 +392,14 @@ class Tree(Debugger):
 					args=args[0]
 					if type(args) in NUM_TYPES:
 						return args
-					return sum(args)/float(len(args))
+					if type(args) not in ITER_TYPES:
+						raise Exception("Argument is not iterable")
+					try:
+						return sum(args)/float(len(args))
+					except TypeError:
+						args=filter(lambda x: type(x) in NUM_TYPES, args)
+						self.warning("Some items in array were ommited")
+						return sum(args)/float(len(args))
 				elif fnName=="round":
 					return round(*args)
 				#casting
