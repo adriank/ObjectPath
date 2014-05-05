@@ -376,7 +376,7 @@ class Tree(Debugger):
 				if fnName=="sum":
 					args=args[0]
 					if type(args) in NUM_TYPES:
-						return args
+						return args 
 					return sum(map(lambda x:type(x) in NUM_TYPES and x or exe(x), args))
 				elif fnName=="max":
 					args=args[0]
