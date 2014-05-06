@@ -376,7 +376,7 @@ class Tree(Debugger):
 				if fnName=="sum":
 					args=args[0]
 					if type(args) in NUM_TYPES:
-						return args 
+						return args
 					return sum(map(lambda x:type(x) in NUM_TYPES and x or exe(x), args))
 				elif fnName=="max":
 					args=args[0]
@@ -393,7 +393,7 @@ class Tree(Debugger):
 					if type(args) in NUM_TYPES:
 						return args
 					if type(args) not in ITER_TYPES:
-						raise Exception("Argument is not iterable")
+						raise Exception("Argument for avg() is not iterable")
 					try:
 						return sum(args)/float(len(args))
 					except TypeError:
@@ -512,7 +512,19 @@ class Tree(Debugger):
 				elif fnName=="localize":
 					if type(args[0]) is timeutils.datetime.datetime:
 						return timeutils.UTC2local(*args)
+				#polygons
+				elif fnName=="area":
+					def segments(p):
+						p=map(lambda x: x[0:2],p)
+						return zip(p, p[1:] + [p[0]])
+					return 0.5 * abs(sum(x0*y1 - x1*y0
+						for ((x0, y0), (x1, y1)) in segments(args[0])))
 				#misc
+				elif fnName=="keys":
+					try:
+						return args[0].keys()
+					except AttributeError,e:
+						raise Exception("Argument is not object but %s in keys()"%type(args[0]).__name__)
 				elif fnName=="type":
 					ret=type(args[0])
 					if ret in ITER_TYPES:

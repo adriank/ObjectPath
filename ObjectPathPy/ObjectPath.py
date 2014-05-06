@@ -12,6 +12,40 @@ print """ObjectPath interactive shell
 	ctrl+c to exit.
 """
 
+def printJSON(o):
+	def plus():
+		depth[0]=depth[0]+1
+
+	def minus():
+		depth[0]=depth[0]-1
+
+	def rec(o):
+		plus()
+		if type(o) is list:
+			if depth[0]>5: return ["<array of "+str(len(o))+" items>"]
+			l=[]
+			for i in o[0:3]:
+				l.append(rec(i))
+				minus()
+			if len(o)>5:
+				l.append("<"+str(len(o)-3)+"more items>")
+			return l
+		if type(o) is dict:
+			if depth[0]>3: return {}
+			r={}
+			for k in o.keys():
+				r[k]=rec(o[k])
+				minus()
+			return r
+		else:
+			minus()
+			return o
+
+	depth=[0]
+	r=rec(o)
+	depth[0]=0
+	return r
+
 if __name__=="__main__":
 	parser=argparse.ArgumentParser(description='Command line options')
 	parser.add_argument('-o', '--file', dest='file', help='File containing JSON document.')
@@ -27,8 +61,10 @@ if __name__=="__main__":
 	if args.xml:
 		from utils.xmlextras import xml2tree
 	if File:
+		sys.stdout.write("Loading JSON document from "+File+"...")
+		sys.stdout.flush()
 		tree=Tree(json.load(open(File,"r")),a)
-		print "JSON document loaded from", File
+		print(" done.")
 	elif args.URL:
 		from urllib2 import urlopen
 		if args.xml:
@@ -46,12 +82,8 @@ if __name__=="__main__":
 				#if fakeEnv.doDebug:
 				#	print tree.tree
 				r=tree.execute(raw_input(">>> "))
-				if type(r) in (generator,chain):
-					#if debug:
-					#	print "returning",type(r).__name__
-					print json.dumps(list(r))
-				else:
-					print json.dumps(r)
+				print json.dumps(printJSON(r))
+				#print json.dumps(r)
 			except Exception,e:
 				print e
 	except KeyboardInterrupt:
