@@ -51,7 +51,7 @@ if __name__=="__main__":
 	parser.add_argument('-o', '--file', dest='file', help='File containing JSON document.')
 	parser.add_argument('-u', '--url', dest='URL', help='URL containing JSON document.')
 	parser.add_argument('-xml', dest='xml', help='Expect XML input.',action='store_true')
-	parser.add_argument('-d', '--debug', dest='debug', help='Debbuging on/off.', action='store_true')
+	parser.add_argument('-d', '--debug', dest='debug', help='Debbuging on/off.', action='store_true') 
 
 	args = parser.parse_args()
 	a={}
