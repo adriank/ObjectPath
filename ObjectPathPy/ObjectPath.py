@@ -67,7 +67,7 @@ if __name__=="__main__":
 		print(" done.")
 	elif args.URL:
 		from urllib2 import urlopen
-		if args.xml:
+		if args.xml: 
 			tree=Tree(json.loads(json.dumps(xml2tree(args.URL))),a)
 			#print json.dumps(xml2tree(args.URL))
 		else:
