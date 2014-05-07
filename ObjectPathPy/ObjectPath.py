@@ -49,7 +49,7 @@ def printJSON(o):
 if __name__=="__main__":
 	parser=argparse.ArgumentParser(description='Command line options')
 	parser.add_argument('-o', '--file', dest='file', help='File containing JSON document.')
-	parser.add_argument('-u', '--URL', dest='URL', help='URL containing JSON document.')
+	parser.add_argument('-u', '--url', dest='URL', help='URL containing JSON document.')
 	parser.add_argument('-xml', dest='xml', help='Expect XML input.',action='store_true')
 	parser.add_argument('-d', '--debug', dest='debug', help='Debbuging on/off.', action='store_true')
 
@@ -72,7 +72,6 @@ if __name__=="__main__":
 			#print json.dumps(xml2tree(args.URL))
 		else:
 			tree=Tree(json.load(urlopen(args.URL)),a)
-			print type(json.load(urlopen(args.URL)))
 	else:
 		print "JSON document source not specified. Creating ObjectPath interpreter for empty object {}."
 		tree=Tree({},a)
