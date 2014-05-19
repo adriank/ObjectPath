@@ -488,7 +488,10 @@ class Tree(Debugger):
 					try:
 						return joiner.join(args[0])
 					except:
-						return args[0]
+						try:
+							return joiner.join(map(str,args[0]))
+						except:
+							return args[0]
 				#time
 				elif fnName in ("now","age","time","date","dateTime"):
 					if fnName=="now":
