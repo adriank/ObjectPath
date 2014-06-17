@@ -57,24 +57,30 @@ if __name__=="__main__":
 	a={}
 	if args.debug:
 		a["debug"]=True
-	File=args.file or len(sys.argv) is 2 and sys.argv[1]
+	File=args.file or sys.argv[-1]
 	if args.xml:
 		from utils.xmlextras import xml2tree
-	if File:
-		sys.stdout.write("Loading JSON document from "+File+"...")
-		sys.stdout.flush()
-		tree=Tree(json.load(open(File,"r")),a)
-		print(" done.")
-	elif args.URL:
-		from urllib2 import urlopen
-		if args.xml:
-			tree=Tree(json.loads(json.dumps(xml2tree(args.URL))),a)
-			#print json.dumps(xml2tree(args.URL))
-		else:
-			tree=Tree(json.load(urlopen(args.URL)),a)
-	else:
+	src=False
+	print args.URL
+	if args.URL:
+		from urllib2 import Request,build_opener
+		request=Request(args.URL)
+		opener = build_opener()
+		request.add_header('User-Agent', 'ObjectPath/1.0 +http://objectpath.org/')
+		src=opener.open(request)
+	elif File:
+		src=open(File,"r")
+	if not src:
 		print "JSON document source not specified. Creating ObjectPath interpreter for empty object {}."
 		tree=Tree({},a)
+	else:
+		sys.stdout.write("Loading JSON document from "+str(args.URL or File)+"...")
+		sys.stdout.flush()
+		if args.xml:
+			tree=Tree(json.loads(json.dumps(xml2tree(src))),a)
+		else:
+			tree=Tree(json.load(src),a)
+		print(" done.")
 	try:
 		while True:
 			try:
