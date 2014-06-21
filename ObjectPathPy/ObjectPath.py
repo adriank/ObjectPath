@@ -3,9 +3,9 @@
 
 from core.interpreter import *
 import argparse
-import readline,sys
-from types import GeneratorType as generator
-from itertools import chain
+import sys
+# from types import GeneratorType as generator
+# from itertools import chain
 from utils import json_compat as json
 
 print """ObjectPath interactive shell
@@ -13,25 +13,27 @@ print """ObjectPath interactive shell
 """
 
 def printJSON(o):
+	depth=5
+	length=3
 	def plus():
-		depth[0]=depth[0]+1
+		currDepth[0]+=1
 
 	def minus():
-		depth[0]=depth[0]-1
+		currDepth[0]-=1
 
 	def rec(o):
 		plus()
 		if type(o) is list:
-			if depth[0]>5: return ["<array of "+str(len(o))+" items>"]
+			if currDepth[0]>depth: return ["<array of "+str(len(o))+" items>"]
 			l=[]
-			for i in o[0:3]:
+			for i in o[0:length]:
 				l.append(rec(i))
 				minus()
-			if len(o)>5:
-				l.append("<"+str(len(o)-3)+"more items>")
+			if len(o)>length:
+				l.append("<"+str(len(o)-length)+"more items>")
 			return l
 		if type(o) is dict:
-			if depth[0]>3: return {}
+			if currDepth[0]>depth: return {}
 			r={}
 			for k in o.keys():
 				r[k]=rec(o[k])
@@ -41,9 +43,9 @@ def printJSON(o):
 			minus()
 			return o
 
-	depth=[0]
+	currDepth=[0]
 	r=rec(o)
-	depth[0]=0
+	currDepth[0]=0
 	return r
 
 if __name__=="__main__":
@@ -61,7 +63,6 @@ if __name__=="__main__":
 	if args.xml:
 		from utils.xmlextras import xml2tree
 	src=False
-	print args.URL
 	if args.URL:
 		from urllib2 import Request,build_opener
 		request=Request(args.URL)
