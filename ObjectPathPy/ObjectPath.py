@@ -4,6 +4,7 @@
 from core.interpreter import *
 import argparse
 import sys
+import readline
 # from types import GeneratorType as generator
 # from itertools import chain
 from utils import json_compat as json
