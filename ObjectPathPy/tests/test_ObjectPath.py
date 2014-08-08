@@ -3,7 +3,14 @@
 
 from core.interpreter import *
 from random import randint, choice
-import sys, unittest, os
+import sys, os
+
+# For Python <2.7 compatibility use unittest2 to get the new APIs from 2.7+
+if sys.version[:2] >= (2, 7):
+	import unittest
+else:
+	import unittest2 as unittest
+
 
 sys.setrecursionlimit(20000)
 
