@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from core.interpreter import *
-from core import parser
 from random import randint, choice
 import sys, os
 
@@ -328,15 +327,9 @@ class Utils_Paths(unittest.TestCase):
 		#self.assertEqual(execute2("$.store..*[4 in @.k._id]")[0], object2.requestStorage['store'])
 		#self.assertEqual(execute("$..*[@._id>1 and @._id<3][0]"), {'_id': 2})
 
-
-class Utils_Parser(unittest.TestCase):
-	def test_unicode_epressions(self):
-		self.assertEqual(parser.parse(u'X'), parser.parse('X'))
-
 #testcase2=unittest.FunctionTestCase(test_efficiency(2))
 testcase1=unittest.TestLoader().loadTestsFromTestCase(Utils_interpreter)
 testcase2=unittest.TestLoader().loadTestsFromTestCase(Utils_Paths)
-testcase3=unittest.TestLoader().loadTestsFromTestCase(Utils_Parser)
 
-utils_interpreter=unittest.TestSuite([testcase1,testcase2,testcase3])
+utils_interpreter=unittest.TestSuite([testcase1,testcase2])
 #utils_interpreter=unittest.TestSuite([testcase2])
