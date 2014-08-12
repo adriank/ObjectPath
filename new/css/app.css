@@ -1,0 +1,124 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,300);
+@font-face {
+	font-family: "Neuton Regular";
+	src: local("Neuton Regular"), url(http://acf.acimg.eu/fonts/Neuton-Regular.ttf ) format("truetype"); /* non-IE */
+}
+
+html, body {
+	background-color: #434343;
+	color: white;
+	height: inherit;
+	font-family: "Open sans", 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+h1{
+	font-size:60px;
+	text-align:center;
+	color:#999;
+	font-family:"Neuton Regular",Helvetica,Arial,sans-serif;
+	margin-top:100px;
+}
+h2{
+	font-size: 30px;
+	font-family: "Neuton Regular","Open sans", 'Helvetica Neue', Helvetica, Arial, sans-serif;;
+	font-weight: 300;
+}
+.content{
+	margin-top:10%;
+}
+.sample-code{
+	font-size: 24px;
+}
+#tree-structures{
+	display: inline-block;
+	border-bottom: dashed 1px;
+	border-spacing: 10px;
+}
+.popover-content{
+	color:#333;
+	font-size: 14px;
+	font-family: "Open sans", 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.popover-content ul{
+	margin-bottom: 0;
+	margin-left: 18px;
+}
+.popover-content ul li i{
+	color: #888;
+}
+code{
+	background: inherit;
+	color: inherit;
+	font-size: 100%;
+	padding: 0px 2px 0px 2px;
+	display: inline-block;
+}
+code .html-tag{
+	color: #57A043;
+}
+code .html-attr{
+	color: #EDAA36;
+}
+code .html-value{
+	color: #D1CB32;
+}
+code .op-name{
+	color: #359FEA;
+}
+@media (max-width: 992px) {
+	body{
+		text-align: center !important;
+	}
+	.content{
+		margin-top:0px !important;
+	}
+	h1{
+		font-size: 26px !important;
+	}
+	.sample-code{
+		font-size: 18px !important;
+	}
+	.social{
+		float: none !important;
+	}
+}
+.link-icon{
+	text-decoration: none;
+	color: #333;
+}
+.link-icon:hover{
+	text-decoration: none;
+}
+.modal-big{
+   width:800px;
+   /*margin-left:-400px;*/
+}
+.modal form{
+	margin: 0;
+	padding: 0;
+}
+.modal .tabbable{
+	height: inherit;
+}
+.modal .tab-content{
+	max-height: 400px;
+}
+#urls .badge{
+  margin-right: 15px;
+}
+#urls .link-delete{
+  background-color: #B94A48;
+}
+#urls .link-user{
+  background-color: #3A87AD;
+}
+.userName{
+	color: #357EBD;
+}
+.social i.fa{
+	color: #ddd;
+	transition: color 1s;
+}
+.social i.fa:hover{
+	color: inherit;
+}

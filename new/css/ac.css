@@ -1,0 +1,38 @@
+.m4{margin:4px;}
+.m8{margin:8px;}
+.m12{margin:12px;}
+.m16{margin:16px;}
+.m32{margin:32px;}
+/* margins - horizontal - left and right */
+/* TODO margin-bottom seems to be not needed */
+.mv4{margin-top:4px;margin-bottom:4px;}
+.mv8{margin-top:8px;margin-bottom:8px;}
+.mv12{margin-top:12px;margin-bottom:12px;}
+.mv16{margin-top:16px;margin-bottom:16px;}
+.mv32{margin-top:32px;margin-bottom:32px;}
+/* margins - vertical - top and bottom */
+.mh4{margin-left:4px;margin-right:4px;}
+.mh8{margin-left:8px;margin-right:8px;}
+.mh12{margin-left:12px;margin-right:12px;}
+.mh16{margin-left:16px;margin-right:16px;}
+.mh32{margin-left:32px;margin-right:32px;}
+/* paddings - all */
+.p4{padding:4px;}
+.p8{padding:8px;}
+.p12{padding:12px;}
+.p16{padding:16px;}
+.p32{padding:32px;}
+/* paddings - vertical - top and bottom */
+.pv4{padding-top:4px;padding-bottom:4px;}
+.pv8{padding-top:8px;padding-bottom:8px;}
+.pv12{padding-top:12px;padding-bottom:12px;}
+.pv16{padding-top:16px;padding-bottom:16px;}
+.pv32{padding-top:32px;padding-bottom:32px;}
+/* paddings - horizontal - left and right */
+.ph4{padding-left:4px;padding-right:4px;}
+.ph8{padding-left:8px;padding-right:8px;}
+.ph12{padding-left:12px;padding-right:12px;}
+.ph16{padding-left:16px;padding-right:16px;}
+.ph32{padding-left:32px;padding-right:32px;}
+.block{display: block;}
+.inline-block{display: inline-block;}
