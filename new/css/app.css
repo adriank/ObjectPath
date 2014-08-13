@@ -6,22 +6,29 @@
 
 html, body {
 	background-color: #434343;
-	color: white;
+	color: #eee;
 	height: inherit;
-	font-family: "Open sans", 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: Arial, sans-serif;
 }
 
 h1{
 	font-size:60px;
 	text-align:center;
-	color:#999;
+	color:white;
 	font-family:"Neuton Regular",Helvetica,Arial,sans-serif;
-	margin-top:100px;
+	margin-top:50px;
 }
 h2{
-	font-size: 30px;
+	font-size: 23px;
 	font-family: "Neuton Regular","Open sans", 'Helvetica Neue', Helvetica, Arial, sans-serif;;
 	font-weight: 300;
+}
+#OPExample1{
+	margin-top: 100px;
+	margin-bottom: 150px;
+}
+#OPExample1 .popover{
+	max-width: 400px;
 }
 .content{
 	margin-top:10%;
@@ -46,25 +53,24 @@ h2{
 .popover-content ul li i{
 	color: #888;
 }
-code{
-	background: inherit;
-	color: inherit;
-	font-size: 100%;
-	padding: 0px 2px 0px 2px;
-	display: inline-block;
+.code-example{
+	margin-top: 50px;
+	font-size: 23px;
+	color: white;
 }
-code .html-tag{
-	color: #57A043;
+.code-example span:hover,
+.path .hover,
+.path span.operator:hover{
+	background-color: #57A043;
+	border-radius: 7px;
 }
-code .html-attr{
-	color: #EDAA36;
+#OPExample1 .path{
+	font-size: 30px;
 }
-code .html-value{
-	color: #D1CB32;
+#OPExample1 .path .popover h3{
+	margin-top: 0;
 }
-code .op-name{
-	color: #359FEA;
-}
+
 @media (max-width: 992px) {
 	body{
 		text-align: center !important;

@@ -22,10 +22,10 @@
 		</div>
 
 		<div class="container text-center center-block">
-			<h1 id="title">ObjectPath</h1>
-			<h2>The agile query language for <span id="tree-structures">tree structures</span></h2>
+			<h1 class="title">ObjectPath</h1>
+			<h2 class="subtitle">The agile query language for <span id="tree-structures">tree structures</span></h2>
 			<div class="tree-details hide">
-				<!--<p class="text-center"><strong>Supported</strong></p>-->
+				<p class="text-center"><strong>Supported tree structures</strong></p>
 				<ul class="list-unstyled fa-ul">
 					<li><i class="fa-li fa fa-arrow-circle-right"></i>Python nested dict/list</li>
 					<li><i class="fa-li fa fa-arrow-circle-right"></i>JSON</li>
@@ -34,22 +34,69 @@
 			</div>
 		</div>
 
-		<!--<div class="container" style="margin-top:64px;">-->
-		<!--	<div class="row">-->
-		<!--		<div class="col-md-4">-->
-		<!--			<h3>Collection</h3>-->
-		<!--			<p>Collect data from almost anywhere, from <b>SQL databases</b> to <b>social media</b> to <b>devices</b>. Easily <b>prepare data for analysis</b>.</p>-->
-		<!--		</div>-->
-		<!--		<div class="col-md-4">-->
-		<!--			<h3>Analysis</h3>-->
-		<!--			<p>Leverage MongoDB <b>MapReduce</b> and <b>Aggregation frameworks</b>, Python libraries and many other to <b>analyze your data</b>.</p>-->
-		<!--		</div>-->
-		<!--		<div class="col-md-4">-->
-		<!--			<h3>Visualization</h3>-->
-		<!--			<p>Present computation results as <b>amazing interactive dashboards</b> based on Chart.js and d3 libraries, securely share them with anyone.</p>-->
-		<!--		</div>-->
-		<!--	</div>-->
-		<!--</div>-->
+		<div id="OPExample1" class="container text-center center-block">
+			<p class="code-example">
+				Find <span class="root">in the shop</span> <span class="allShoes">all shoes</span> <span class="selector">of</span> <span class="red">red color</span> <span2 class="and">and</span2> <span class="priceLessThan50">price less than 50</span>
+			</p>
+
+			<span class="path">
+				<span class="operator root">$</span><span class="allShoes"><span class="operator recursiveDescent">..</span><span class="attributeName">shoes</span><span class="operator child">.</span><span class="operator wildcard">*</span></span><span class="operator selector">[</span><span class="red"><span class="operator property">color</span> <span class="operator simpleOp">is</span> "red"</span> <span class="operator simpleOp">and</span> <span class="priceLessThan50"><span class="operator property">price</span> <span class="operator simpleOp">&lt;</span> 50</span><span class="operator selector">]</span>
+			</span>
+		</div>
+
+		<div class="hint root hide">
+			<h3>The root of the document</h3>
+			<code>$</code> points to the root of the document. It can be either object or a list of objects. ObjectPath queries works for both! Here the document describes a shop and products available.
+		</div>
+
+		<div class="hint recursiveDescent hide">
+			<h3>Recursive descent</h3>
+			<code>..</code> selects all objects from the subtree. Here it selects all objects from the shop.
+		</div>
+
+		<div class="hint wildcard hide">
+			<h3>The wildcard</h3>
+			<code>*</code> selects all objects from array.
+		</div>
+
+		<div class="hint child hide">
+			<h3>Child/property</h3>
+			<code>.</code> selects a child or property of the subtree element. It finds property in single object or properties of objects in an array of objects.
+		</div>
+
+		<div class="hint selector hide">
+			<h3>The selector</h3>
+			<code>[]</code> is an advanaced tool for filtering lists of objects. It can do almost anything! More at <a href="http://docs.asyncode.com/text/ObjectPath-reference#Selectors">selectors reference</a>
+		</div>
+
+		<div class="hint simpleOp hide">
+			<h3>Simple operators</h3>
+			ObjectPath supports a vast range of simple operators including boolean, arithmetic, comparison... and so on. The full list of operators is available in the <a href="http://docs.asyncode.com/text/ObjectPath-reference#Operators">ObjectPath reference</a>.
+		</div>
+
+		<div class="hint property hide">
+			<h3>Object properties</h3>
+			These are properties of objects that will be checked against the expression.
+		</div>
+
+		<div class="container" style="margin-top:64px;">
+			<div class="row">
+				<div class="col-md-3">
+					<h4>Easy yet powerful</h4>
+					<p>Easy to start with and suitable for complex data-mining jobs.</p>
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-3">
+					<h4>Support for complex data sets</h4>
+					<p>Allows for working with big nested tree structures. Up to size of your RAM.</p>
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-3">
+					<h4>Bullet-proof</h4>
+					<p>Actively developed, backed and used in enterprise level software.</p>
+				</div>
+			</div>
+		</div>
 
 		<script src="http://code.jquery.com/jquery.min.js"></script>
 		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
