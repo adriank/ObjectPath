@@ -4,6 +4,9 @@
 	src: local("Neuton Regular"), url(http://acf.acimg.eu/fonts/Neuton-Regular.ttf ) format("truetype"); /* non-IE */
 }
 
+html{
+	min-height: 100%;
+}
 html, body {
 	background-color: #434343;
 	color: #eee;
@@ -26,6 +29,7 @@ h2{
 #OPExample1{
 	margin-top: 100px;
 	margin-bottom: 150px;
+	cursor: default;
 }
 #OPExample1 .popover{
 	max-width: 400px;
@@ -63,6 +67,7 @@ h2{
 .path span.operator:hover{
 	background-color: #57A043;
 	border-radius: 7px;
+	cursor: default;
 }
 #OPExample1 .path{
 	font-size: 30px;
