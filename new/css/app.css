@@ -3,7 +3,6 @@
 	font-family: "Neuton Regular";
 	src: local("Neuton Regular"), url(http://acf.acimg.eu/fonts/Neuton-Regular.ttf ) format("truetype"); /* non-IE */
 }
-
 html{
 	min-height: 100%;
 }
@@ -11,17 +10,33 @@ html, body {
 	background-color: #434343;
 	color: #eee;
 	height: inherit;
-	font-family: Arial, sans-serif;
+	font-family: "Open sans", Arial, sans-serif;
 }
-
-h1{
+.header h1{
 	font-size:60px;
 	text-align:center;
 	color:white;
 	font-family:"Neuton Regular",Helvetica,Arial,sans-serif;
 	margin-top:50px;
 }
-h2{
+.logo{
+	text-align: left;
+	font-size:30px;
+	margin-top:16px;
+	font-family:"Neuton Regular",Helvetica,Arial,sans-serif;
+	color:white;
+}
+.logo a{
+	color: inherit;
+	text-decoration: inherit;
+}
+.logo small{
+	font-family:"Open sans", Arial,sans-serif;
+	font-size:18px;
+	display: inline-block;
+	margin-left: 3px;
+}
+.header h2{
 	font-size: 23px;
 	font-family: "Neuton Regular","Open sans", 'Helvetica Neue', Helvetica, Arial, sans-serif;;
 	font-weight: 300;
@@ -83,7 +98,7 @@ h2{
 	.content{
 		margin-top:0px !important;
 	}
-	h1{
+	.header h1{
 		font-size: 26px !important;
 	}
 	.sample-code{
@@ -132,4 +147,27 @@ h2{
 }
 .social i.fa:hover{
 	color: inherit;
+}
+i.JS{
+	display: inline-block;
+}
+i.JS:before{
+	display: inline-block;
+	content: "JS";
+	color: #333;
+	text-align: center;
+	border-radius: 2px;
+	background-color: #FFF651;
+	height: 20px;
+	width: 20px;
+}
+i.Py{
+	display: inline-block;
+	background-image: url('../img/Py.png');
+	height: 20px;
+	width: 20px;
+}
+code{
+	background:#336333;
+	color: #F7D2DC;
 }
