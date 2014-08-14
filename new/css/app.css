@@ -3,14 +3,22 @@
 	font-family: "Neuton Regular";
 	src: local("Neuton Regular"), url(http://acf.acimg.eu/fonts/Neuton-Regular.ttf ) format("truetype"); /* non-IE */
 }
+
 html{
 	min-height: 100%;
 }
 html, body {
 	background-color: #434343;
-	color: #eee;
+	color: #ccc;
 	height: inherit;
 	font-family: "Open sans", Arial, sans-serif;
+}
+h3,h4,h5,h6{
+		font-family: "Open sans", Arial, sans-serif;
+		color: #eee;
+}
+.header{
+	/*background: #333;*/
 }
 .header h1{
 	font-size:60px;
@@ -73,14 +81,16 @@ html, body {
 	color: #888;
 }
 .code-example{
-	margin-top: 50px;
+	margin-top: 20px;
 	font-size: 23px;
 	color: white;
 }
 .code-example span:hover,
 .path .hover,
+.path .hover span,
 .path span.operator:hover{
 	background-color: #57A043;
+	color: white;
 	border-radius: 7px;
 	cursor: default;
 }
@@ -104,49 +114,52 @@ html, body {
 	.sample-code{
 		font-size: 18px !important;
 	}
-	.social{
+	.menu{
 		float: none !important;
 	}
 }
-.link-icon{
-	text-decoration: none;
-	color: #333;
+
+.menu{
+	margin-top: 16px;
 }
-.link-icon:hover{
-	text-decoration: none;
+.main-menu i.fa{
+	color: #E4EA35;
 }
-.modal-big{
-   width:800px;
-   /*margin-left:-400px;*/
-}
-.modal form{
-	margin: 0;
-	padding: 0;
-}
-.modal .tabbable{
-	height: inherit;
-}
-.modal .tab-content{
-	max-height: 400px;
-}
-#urls .badge{
-  margin-right: 15px;
-}
-#urls .link-delete{
-  background-color: #B94A48;
-}
-#urls .link-user{
-  background-color: #3A87AD;
-}
-.userName{
-	color: #357EBD;
-}
-.social i.fa{
-	color: #ddd;
+.social i.fa,
+.menu i.fa{
+	color: #ccc;
 	transition: color 1s;
 }
+.menu i.fa:hover{
+	transition: color 1s;
+	color: #edaa36;
+}
 .social i.fa:hover{
+	transition: color 1s;
 	color: inherit;
+}
+.menu .fa:after{
+	position: relative;
+	display: inline-block;
+	font-size: 16px;
+	margin-left: 8px;
+	top: -3px;
+	width: 0px;
+	transition: width 1s;
+	overflow: hidden;
+}
+.menu .fa:hover:after{
+	width: 150px;
+	transition: width 1s;
+}
+.menu .fa-home:after{
+	content: "Home";
+}
+.menu .fa-book:after{
+	content: "Documentation";
+}
+.menu .fa-download:after{
+	content: "Download";
 }
 i.JS{
 	display: inline-block;
@@ -191,4 +204,21 @@ i.Py{
 .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
 	border-top: 1px solid #666;
 	vertical-align: middle;
+}
+.path .operator {
+    color: #6CAD5A;
+}
+.path .w2ildcard {
+    color: #edaa36;
+}
+.path .string {
+    color: #CEC73D;
+}
+.path .number {
+    color: #5EB4ED;
+}
+.path .operator.property,
+.path .operator.root,
+.path .operator:hover{
+	color: inherit;
 }
