@@ -105,20 +105,23 @@ h3,h4,h5,h6{
 }
 
 @media (max-width: 992px) {
-	body{
-		text-align: center !important;
+	.social{
+		text-align: center;
 	}
 	.content{
 		margin-top:0px !important;
 	}
 	.header h1{
-		font-size: 26px !important;
+		font-size: 36px !important;
 	}
 	.sample-code{
 		font-size: 18px !important;
 	}
 	.menu{
 		float: none !important;
+	}
+	.main-menu{
+		text-align: left !important;
 	}
 }
 
