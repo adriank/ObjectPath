@@ -1,0 +1,38 @@
+<h2>{{$.locale.userSettings}}</h2>
+<form action="/api/user/update" method="post" enctype="multipart/form-data" class="col-lg-8 form-horizontal">
+	<legend>{{$.locale.basicContactInfo}}</legend>
+	<div class="form-group">
+		<label for="name" class="col-lg-4 control-label">{{$.locale.userName}}</label>
+		<div class="col-lg-5">
+			<input type="text" id="name" name="name" value="{{$.user.name}}" title="" class="form-control"/>
+		</div>
+	</div>
+	<legend>{{$.locale.IM}}</legend>
+	<div class="form-group">
+		<label for="hangouts" class="col-lg-4 control-label">Google Hangouts (Talk)</label>
+		<div class="col-lg-5">
+			<input type="text" id="hangouts" name="hangouts" value="{{$.user.hangouts}}" title="" class="form-control"/>
+		</div>
+	</div>
+	<legend for="facebook">{{$.locale.socialMedia}} </legend>
+	<div class="form-group">
+		<label for="facebook" class="col-lg-4 control-label">Facebook</label>
+		<div class="col-lg-5">
+			<input type="url" id="facebook" name="facebook" value="{{$.user.facebook}}" title="" class="form-control"/>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="gplus" class="col-lg-4 control-label">Google Plus</label>
+		<div class="col-lg-5">
+			<input type="url" id="gplus" name="gplus" value="{{$.user.gplus}}" title="" class="form-control"/>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="linkedin" class="col-lg-4 control-label">LinkedIn</label>
+		<div class="col-lg-5">
+			<input type="url" id="linkedin" name="linkedin" value="{{$.user.linkedin}}" title="" class="form-control"/>
+		</div>
+	</div>
+	<button class="btn btn-primary" type="submit">{{$.locale.save}}</button>
+
+</form>

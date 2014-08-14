@@ -1,0 +1,24 @@
+<div class="container">
+ <h1 class="col-lg-12">{{$.locale.links}}</h1>
+
+ <form class="col-lg-8 mv32" action="/api/links/add" method="post">
+  <div class="input-group">
+   <input name="url" type="text" class="form-control" placeholder="Paste your link here!">
+   <span class="input-group-btn">
+    <button class="btn btn-warning" type="submit">Go!</button>
+   </span>
+  </div>
+ </form>
+</div>
+
+<div class="container">
+ <div class="col-lg-8">
+  <ul id="urls" ac-dataPath="$.urls" class="unstyled list-group">
+   <li class="list-group-item">
+    <a href="{{@.url}}" target="_blank">{{@.url}}</a>
+    <a href="/api/links/delete/{{@._id.'$oid'}}" class="badge link-delete pull-right">x</a>
+    <span class="badge link-user pull-right">{{@.owner.name}}
+   </li>
+  </ul>
+ </div>
+</div>

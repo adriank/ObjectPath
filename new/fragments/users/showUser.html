@@ -1,0 +1,41 @@
+<div class="container" >
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3>{{$.locale.profileOf}}: {{@.user.fName}} {{@.user.sName}}
+				<a href="/users/settings" ac-target="#main" class="btn btn-primary pull-right">{{$.locale.accountSettings}}</a>
+				<a href=/api/></a>
+			</h3>
+
+		</div>
+
+		<div class="panel-body">
+			<dl class="dl-horizontal">
+				<dt>{{$.locale.position}}:</dt>
+				<dd>{{@.user.position}}</dd>
+				<dt>{{$.locale.reportsTo}}:</dt>
+				<dd>{{@.user.reportsToName}}</dd>
+				<dt>{{$.locale.workingFromH}}:</dt>
+				<dd>{{@.user.workingFrom[0]}}:{{@.user.workingFrom[1]}} {{$.locale.na}} {{@.user.etat}}{{$.locale.partTime}}</dd>
+				<dt>{{$.locale.city}}:</dt>
+				<dd>{{@.user.city}}, {{@.user.voivodeship}}</dd>
+				<dt>{{$.locale.telephone}}:</dt>
+				<dd>{{@.user.telephone}}</dd>
+				<dt>{{$.locale.gg}}:</dt>
+				<dd>
+					<img src="http://status.gadu-gadu.pl/users/status.asp?id={{@.user.gg}}">
+					</img>
+					<a href="gg:{{@.user.gg}}">{{@.user.gg}}</a>
+				</dd>
+				<dt>{{$.locale.skype}}:</dt>
+				<dd><a href="skype:{{@.user.skype}}?call">{{@.user.skype}}</a></dd>
+				<dt>{{$.locale.email}}:</dt>
+				<dd><a href="mailto:{{@.user.email}}">{{@.user.email}}</a></dd>
+				<dt>{{$.locale.aboutMe}}:</dt>
+				<dd>{{@.user.aboutMe}}</dd>
+			</dl>
+		</div>
+	</div>
+
+
+</div>

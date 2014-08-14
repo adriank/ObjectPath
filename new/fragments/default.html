@@ -1,0 +1,18 @@
+<div ac-fragment="navbar" ac-condition="$.'acr:user'.'@ID'"></div>
+
+<div id="main" class="container">
+	<div class="jumbotron" ac-condition="$.'acr:user'.'@ID'">
+		<h1>Hello, {{$.user.name}}!</h1>
+		<p>You are logged in and your e-mail address is {{$.'acr:user'.'@email'}}</p>
+		<p><a class="btn btn-primary btn-lg" role="button">Learn more</a></p>
+	</div>
+</div>
+
+<div id="login" ac-condition="not $.'acr:user'.'@ID'">
+	<form class="form-signin" action="/api/doLogin" method="post" enctype="multipart/form-data">
+		<h1 class="form-signin-heading">{{$.locale.logIn}}</h1>
+		<input name="email" class="input-block-level" type="email" autofocus="" placeholder="{{$.locale.email}}" required="true"></input>
+		<input name="password" class="input-block-level" type="password" placeholder="{{$.locale.password}}" required="true"></input>
+		<button class="btn btn-large btn-warning btn-block" type="submit">{{$.locale.logIn}}</button>
+	</form>
+</div>

@@ -1,0 +1,24 @@
+<div class="container" >
+		<h1>{{$.locale.users}}</h1>
+			<div>
+				<a href="/users/register" ac-target="#main" class="btn btn-primary btn-small">{{$.locale.registerNew}}</a><br/><br/>
+			</div>
+		</div>
+		<div class= col-lg-4>
+		<h3>Users</h3>
+			<ol name="users" ac-dataPath="@.users" class="unstyled">
+				<li>
+					<a href="/users/showUser" ac-target="#main" ac-dataSource="/api/user/showUser/{{@._id.'$oid'}}">{{@.name}}</a> <a href="mailto:{{@.email}}" class="link-icon fa fa-envelope"></a>
+					<!--target="_blank" opens the page in a new tab/window-->
+					<a class="link-icon fa fa-facebook" href="{{@.facebook}}" title="Facebook" target="_blank">
+					</a>
+					<a class="link-icon" href="{{@.google}}" title="Google+" target="_blank">
+						<i class="fa fa-google-plus"></i>
+					</a>
+					<a class="link-icon" href="{{@.linkedIn}}" title="LinkedIn" target="_blank">
+						<i class="fa fa-linkedin"></i>
+					</a>
+				</li>
+			</ol>
+	</div>
+</div>
