@@ -73,6 +73,9 @@ h3,h4,h5,h6{
 	font-size: 14px;
 	font-family: "Open sans", 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+.popover-content h3{
+	color: #333;
+}
 .popover-content ul{
 	margin-bottom: 0;
 	margin-left: 18px;
