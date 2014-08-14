@@ -160,12 +160,15 @@ i.JS:before{
 	background-color: #FFF651;
 	height: 20px;
 	width: 20px;
+	margin-right: 3px;
 }
 i.Py{
 	display: inline-block;
 	background-image: url('../img/Py.png');
 	height: 20px;
 	width: 20px;
+	margin-right: 3px;
+	margin-bottom: -5px;
 }
 .reference code{
 	background:#336333;
@@ -178,4 +181,14 @@ i.Py{
 .alert ul,
 .alert ol{
 	margin-left: 20px;
+}
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+	background-color: #4c4c4c;
+}
+.table > thead > tr > th {
+	border-bottom: 2px solid #666;
+}
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+	border-top: 1px solid #666;
+	vertical-align: middle;
 }
