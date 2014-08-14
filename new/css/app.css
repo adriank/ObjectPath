@@ -171,3 +171,11 @@ i.Py{
 	background:#336333;
 	color: #F7D2DC;
 }
+.alert code{
+	background:#f9f2f4;
+	color: #c7254e;
+}
+.alert ul,
+.alert ol{
+	margin-left: 20px;
+}

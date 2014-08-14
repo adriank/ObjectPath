@@ -34,15 +34,24 @@
 				<div class="alert alert-warning" role="alert">
 					<i class="fa fa-warning fa-3x pull-left"></i><strong>Warning!</strong> <i class="JS"></i> Javascript doesn't support big integers at all. Keep it in mind and convert them to strings. Or just use the Python version.
 				</div>
-				<h3>Types</h3>
-				<p>ObjectPath inherits all data types from JSON introducing some modifications:</p>
+
+				<h3>Simple types</h3>
+				<p>ObjectPath inherits all JSON data types and supports a few more.</p>
 				<ul>
-					<li><i class="Py"></i> JSON's <em>number</em> is split into integer and float:
+					<li><em>number</em> like <code>100</code> or <code>2.333</code></li>
+					<li><em>string</em> like <code>"string"</code> or <code>'string'</code></li>
+					<li><em>null</em> like <code>null</code></li>
+					<li><em>true</em> like <code>true</code> or <code>t</code></li>
+					<li><em>false</em> like <code>false</code> or <code>f</code></li>
+				</ul>
+				<p>ObjectPath type rules:</p>
+				<ul>
+					<li><i class="Py"></i><em>number</em> is split into integer and float:
 						<ul>
-							<li><code>integer</code> is fast and small integer number</li>
-							<li><code>float</code> is slow and very accurate real number</li>
+							<li><em>integer</em> is fast and small integer number</li>
+							<li><em>float</em> is slow and very accurate real number</li>
 						</ul>
-						Javascript doesn't support float at all.
+						Python implementation of ObjectPath tries to determine which one to use. Sometimes number is converted into Python's <em>long</em> type. Javascript has one uniform <em>number</em> type (with <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.7.3.2" target="_blank">limit on number size</a>).
 					</li>
 					<li>Strings are encoded in UTF-8,</li>
 					<li><i class="Py"></i>Added the <code>datetime</code>, <code>date</code> and <code>time</code> types to handle dates and times,</li>
@@ -55,7 +64,493 @@
 					<li>Negative are: <code>false</code>, <code>null</code>, <code>0</code>, <code>""</code>, <code>[]</code>, <code>{}</code>. Any other value is positive.</li>
 				</ul>
 
+				<h3>Complex types</h3>
+				<p>Arrays can be defined in the language by issuing:</p>
+				<pre>[ val1, val2, ..., valN]</pre>
+				<p>and for objects it's:</p>
+				<pre>{ "atr1":val1, "atr2":val2, ..., "atrN":valN }<br />{ atr1:val1, atr2:val2, ..., atrN:valN }</pre>
+				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i>
+					<ul>
+						<li>Attribute names can be dynamicly created.  Example: <code>{$.myCar.model: "avg fuel consumption "<br/> + avg($.cars[@.model is $.myCar.model].fuelConsumption)} -> {"Toyota Prius": 4.5}</code></li>
+						<li>When expression returns value other than string it is casted to a string. Example: <code>{2+2:"4"} -> {"4":"4"}</code></li>
+						<li>Names can be written without quotes, but in that case they cannot start with an operator. ObjectPath raises an exception if name is not valid.</li>
+					</ul>
+				</div>
+
+				<h3>Date and time</h3>
+				<p>Dates are handled as <code>datetime</code> objects. There are also <code>date</code> and <code>time</code> objects which provide support for date and time manipulation. <code>Datetime</code>, <code>date</code> and <code>time</code> objects support <code>year</code>, <code>month</code>, <code>day</code>, <code>hour</code>, <code>minute</code>, <code>second</code> and <code>microsecond</code> attributes eg. <code>now().year -&gt; 2011</code>.</p>
+				<div class="alert alert-warning" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i>Operations on dates should be performed on UTC dates and then converted to local time in order to avoid locale and DST (daylight saving time) nuances.</div>
+
+				<h2>Operators</h2>
+				<h3>Arithmetic operators</h3>
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th>Operator</th>
+							<th>Description</th>
+							<th>Example</th>
+							<th>Notes</th>
+							<th>Implementations</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>+</td>
+							<td>addition</td>
+							<td>2 + 3 -&gt; 5</td>
+							<td>Alternate usage is concatenation</td>
+							<td>Py, JS</td>
+						</tr>
+						<tr>
+							<td>-</td>
+							<td>subtraction</td>
+							<td>2 - 3 -&gt; -1</td>
+							<td>&#160;</td>
+							<td>Py, JS</td>
+						</tr>
+						<tr>
+							<td>*</td>
+							<td>multiplication</td>
+							<td>2 * 3 -&gt; 6</td>
+							<td>Alternate usage is select all objects from array</td>
+							<td>Py, JS</td>
+						</tr>
+						<tr>
+							<td>/</td>
+							<td>division</td>
+							<td>2/3 -&gt; 0.6666666666666666,<br />float(2)/3 -&gt; 0.6666666666666666</td>
+							<td>Integer division results in floating point number. Use int() built-in function to make it integer again.</td>
+							<td>Py, JS</td>
+						</tr>
+						<tr>
+							<td>%</td>
+							<td>modulo</td>
+							<td>10%3 -&gt; 1</td>
+							<td>&#160;</td>
+							<td>Py, JS</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<h3>Boolean logic operators</h3>
+					<table class="table table-condensed">
+						<thead>
+							<tr>
+								<td>Operator</td>
+								<td>Description</td>
+								<td>Example</td>
+								<td>Notes</td>
+								<td>Implementations</td>
+							</tr>
+						</thead>
+					<tbody>
+					<tr>
+					<td>not</td>
+					<td>negation</td>
+					<td>not 3 -&gt; false</td>
+					<td><em>not</em> always casts result to boolean type</td>
+					<td>&#160;Py, JS</td>
+					</tr>
+					<tr>
+					<td>and</td>
+					<td>conjunction</td>
+					<td>false and true -&gt; false</td>
+					<td><em>and</em> evaluates left expression, if negative it is returned and right expression is not evaluated.</td>
+					<td>&#160;Py, JS</td>
+					</tr>
+					<tr>
+					<td>or</td>
+					<td>alternation</td>
+					<td>true or false -&gt;true</td>
+					<td><em>or</em> evaluates left expression if positive it is returned and right expression is not evaluated.</td>
+					<td>&#160;Py, JS</td>
+					</tr>
+					</tbody>
+					</table>
+					<h3>Comparison operators</h3>
+					<p>All comparison operators try to cast right expression result to type of left expression result type. Sometimes it fails so the best practice is to use casting functions when types may be different.</p>
+					<p><span style="color: #ff0000;">WARNING! The comparison operators are not chainable so 1&lt;2&lt;2 will compare 2 with result of 1&lt;2 which is <em>true</em> and return <em>true</em>. Use 1&lt;2 and 2&lt;3 instead.</span></p>
+					<table class="table table-condensed">
+					<thead>
+					<tr>
+					<td>Operator</td>
+					<td>Description</td>
+					<td>Example</td>
+					<td>Notes</td>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+					<td>is</td>
+					<td>equality</td>
+					<td>'3' is 3 -&gt; true</td>
+					<td><span style="text-decoration: line-through;">right expression result is casted to type of left expression result and then compared</span></td>
+					</tr>
+					<tr>
+					<td>is not</td>
+					<td>equality negation</td>
+					<td>3 is not 3 -&gt; false</td>
+					<td>&#160;</td>
+					</tr>
+					<tr>
+					<td><span>&gt;, &gt;=, &lt;, &lt;= </span></td>
+					<td>grater than, grater than or equal, less than, less than or equal</td>
+					<td>1&gt;0 -&gt;true</td>
+					<td><span style="color: #ff0000;">WARNING! if these operators are used inside BLSL XML container characters &lt; and &gt; must be escaped to &amp;lt; and &amp;gt; respectively. Alternate option is to wrap whole expression in CDATA section.</span></td>
+					</tr>
+					</tbody>
+					</table>
+					<h3>Membership tests</h3>
+					<table class="table table-condensed">
+					<thead>
+					<tr>
+					<td>Operator</td>
+					<td>Description</td>
+					<td>Example</td>
+					<td>Notes</td>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+					<td>in</td>
+					<td>Checks if left expression result is in <em>array</em>, <em>object</em> or <em>string</em></td>
+					<td>3 in [1,2,4] -&gt; false, <br />"ia" in "Adrian" -&gt; true</td>
+					<td>In objects, keys will be matched.</td>
+					</tr>
+					<tr>
+					<td>not in</td>
+					<td>Opposite behavior to in; Faster equivalent to <em>not expr in array</em></td>
+					<td>1 not in [1,2,3] -&gt; false</td>
+					<td>&#160;</td>
+					</tr>
+					</tbody>
+					</table>
+					<h3>Concatenation operator +</h3>
+					<p>Beside standard addition of numbers, + concatenates strings, arrays and objects. Left and right expression results must be of the same type (concatenating e.g. string and list yields an error).</p>
+					<p>If two arrays are concatenated, right array elements are added to the end of left array.</p>
+					<p>Objects are merged so that right object overwrites existing elements of left object. Object concatenation is not deep. It means that only direct child elements of root element are overwritten rather than <strong><a title="Leaf node" href="http://en.wikipedia.org/wiki/Leaf_node">leaf nodes</a></strong>.</p>
+					<pre>[1,2,4] + [3,5] -&gt; [1,2,4,3,5]<br />{"a":1,"b":2} + {"a":2,"c":3} -&gt; {"a":2,"b":2,"c":3}</pre>
+					<h2>Built-in functions</h2>
+					<h3>Casting functions</h3>
+					<p>Casting is done by passing arguments to Python functions of the same name.</p>
+					<table class="table table-condensed">
+					<thead>
+					<tr>
+					<td>Function</td>
+					<td>Example</td>
+					<td>Notes</td>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+					<td>str(any)</td>
+					<td>str(11) -&gt; '11'</td>
+					<td>&#160;</td>
+					</tr>
+					<tr>
+					<td>int(numberOrString)</td>
+					<td>int(123.45) -&gt; 123</td>
+					<td>&#160;</td>
+					</tr>
+					<tr>
+					<td>float(numberOrString)</td>
+					<td>float(&#8216;123.45&#8217;) -&gt; 123.45</td>
+					<td>&#160;</td>
+					</tr>
+					<tr>
+					<td>array(any)</td>
+					<td>array(now()) -&gt; [2011,4,8,13,3,55,747070]</td>
+					<td>&#160;</td>
+					</tr>
+					</tbody>
+					</table>
+					<h3>Arithmetic functions</h3>
+					<table class="table table-condensed">
+					<thead>
+					<tr>
+					<td>Function</td>
+					<td>Example</td>
+					<td>Notes</td>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+					<td>sum(array)</td>
+					<td>sum([1,2,3,4]) -&gt; '10'</td>
+					<td>Argument is a list of numbers. If there are float numbers in the list, sum() returns float.</td>
+					</tr>
+					<tr>
+					<td>max(array)</td>
+					<td>max([2,4,1,3]) -&gt; 4</td>
+					<td>&#160;</td>
+					</tr>
+					<tr>
+					<td>min(array)</td>
+					<td>min([2,4,1,3]) -&gt; 1</td>
+					<td>&#160;</td>
+					</tr>
+					<tr>
+					<td>avg(array)</td>
+					<td>avg([2,4,1,3]) -&gt; 2.5</td>
+					<td>equivalent to sum(array)/len(array)</td>
+					</tr>
+					<tr>
+					<td>round(float, integer)</td>
+					<td>round(0.55,1) -&gt; 0.5</td>
+					<td>Returns always float. Second argument defines the precision of round.</td>
+					</tr>
+					</tbody>
+					</table>
+					<h3>String functions</h3>
+					<table class="table table-condensed">
+					<thead>
+					<tr>
+					<td>Function</td>
+					<td>Example</td>
+					<td>Notes</td>
+					</tr>
+					</thead>
+					<colgroup><col /><col /><col /><col /></colgroup>
+					<tbody>
+					<tr>
+					<td>replace(string, toReplace, replacement)</td>
+					<td>replace('abcd','b','a') -&gt; 'aacd'</td>
+					<td>&#160;</td>
+					</tr>
+					<tr>
+					<td>escape(string)</td>
+					<td>escape('') -&gt; ''</td>
+					<td>The / character escapes ' because it is reserved as end of string sign.</td>
+					</tr>
+					<tr>
+					<td>unescape(string)</td>
+					<td>unescape('') -&gt; ''</td>
+					<td>Reverse to the escape.</td>
+					</tr>
+					<tr>
+					<td>upper(string)</td>
+					<td>upper('AaA') -&gt; 'AAA'</td>
+					<td>&#160;</td>
+					</tr>
+					<tr>
+					<td>lower(string)</td>
+					<td>lower('AaA') -&gt; 'aaa'</td>
+					<td>&#160;</td>
+					</tr>
+					<tr>
+					<td>capitalize(string)</td>
+					<td>capitalize('AaA') -&gt; 'Aaa'</td>
+					<td>&#160;</td>
+					</tr>
+					<tr>
+					<td>title(string)</td>
+					<td>title('aaa bbb') -&gt; 'Aaa Bbb'</td>
+					<td>&#160;</td>
+					</tr>
+					<tr>
+					<td>split(string[, sep])</td>
+					<td>split('aaa bbb') -&gt; ['aaa','bbb'],<br />split('aaa,bbb','.') -&gt; ['aaa','bbb']</td>
+					<td>&#160;</td>
+					</tr>
+					</tbody>
+					</table>
+					<h3>Array functions</h3>
+					<table class="table table-condensed">
+					<thead>
+					<tr>
+					<td>Function</td>
+					<td>Example</td>
+					<td>Notes</td>
+					</tr>
+					</thead>
+					<colgroup><col /><col /><col /><col /></colgroup>
+					<tbody>
+					<tr>
+					<td>sort(array[, key])</td>
+					<td>sort(['c','b','a']) -&gt; ['a','b','c'],<br />sort([{v:'c',x:1},{v:'b',x:2},{v:'a',x:3}],'v') -&gt; [{v:'a',x:3},{v:'b',x:2},{v:'c',x:1}]</td>
+					<td>If key is provided, will sort array of objects by key.</td>
+					</tr>
+					<tr>
+					<td>reverse(array)</td>
+					<td>reverse([1,2,3]) -&gt; [3,2,1]</td>
+					<td>&#160;</td>
+					</tr>
+					<tr>
+					<td>count(array), len(array)</td>
+					<td>count([1,2,3]) -&gt; 3</td>
+					<td>Reverse to the escape.</td>
+					</tr>
+					<tr>
+					<td>join(array[, joiner])</td>
+					<td>join(['c','b','a']) -&gt; 'cba',<br />join(['c','b','a'],'.') -&gt; 'c.b.a',</td>
+					<td>&#160;</td>
+					</tr>
+					</tbody>
+					</table>
+					<h3>Date and time functions</h3>
+					<p>All date and time functions are manipulating <em>datetime</em> objects. The default (and the only!) timezone is UTC.</p>
+					<table class="table table-condensed">
+					<thead>
+					<tr>
+					<td>Function</td>
+					<td>Example</td>
+					<td>Notes</td>
+					</tr>
+					</thead>
+					<colgroup><col /><col /><col /><col /></colgroup>
+					<tbody>
+					<tr>
+					<td>now()</td>
+					<td>now() -&gt; '2011-04-08 13:03:55.747070'</td>
+					<td>Gets current UTC time.</td>
+					</tr>
+					<tr>
+					<td>date(<em>arg</em>)</td>
+					<td>date() -&gt; '2011-04-08',<br />date([2011,4,8]) -&gt; '2011-04-08',<br />date(now()) -&gt; '2011-04-08'</td>
+					<td><em>arg</em> can be array of structure [yyyy,mm,dd] or <em>datetime</em> object . If no arg is specified then <em>date()</em> defaults to current UTC date.</td>
+					</tr>
+					<tr>
+					<td>time(<em>arg</em>)</td>
+					<td>time() -&gt; '13:03:55.747070',<br />time([13,3,55,747070]) -&gt; '13:03:55.747070',<br />time(now()) -&gt; '13:03:55.747070'</td>
+					<td><em>arg</em> can be array of structure [hh,mm,ss,mmmmmm] where only hour is required, or <em>datetime</em> object . If no arg is specified then <em>time()</em> defaults to current UTC time.</td>
+					</tr>
+					<tr>
+					<td>dateTime(<em>args</em>)</td>
+					<td>dateTime(now()) -&gt;&#160;'2011-04-08 13:03:55.747070',<br />dateTime([2011,4.8,13,3,55,747070]) -&gt;&#160;'2011-04-08 13:03:55.747070',<br />dateTime(date(),time()) -&gt;&#160;'2011-04-08 13:03:55.747070',<br />dateTime([2011,4.8],time()) -&gt;&#160;'2011-04-08 13:03:55.747070'</td>
+					<td><em>args</em>: if one argument is specified then it need to be <em>datetime</em> object or <em>[yyyy,mm,dd,hh,mm,ss,mmmmmm]</em> where <em>year</em>, <em>month</em>, <em>day</em>, <em>hour</em> and <em>minute</em> are required. If two arguments are specified, the first argument can be <em>date</em> object or <em>[yyyy,mm,dd]</em> array, second can be <em>time</em> object or <em>[hh,mm,ss,mmmmmm]</em> array where only hour is required.</td>
+					</tr>
+					<tr>
+					<td>age(time)</td>
+					<td>age(sometime) -&gt; [1, 'week']</td>
+					<td>Counts how old the provided time is and prettyprints it.</td>
+					</tr>
+					<tr>
+					<td>toMillis(time)</td>
+					<td>&#160;</td>
+					<td>Counts milliseconds since epoch.</td>
+					</tr>
+					</tbody>
+					</table>
+					<h3>Misc functions</h3>
+					<table class="table table-condensed">
+					<thead>
+					<tr>
+					<td>Function</td>
+					<td>Example</td>
+					<td>Notes</td>
+					</tr>
+					</thead>
+					<colgroup><col /><col /><col /><col /></colgroup>
+					<tbody>
+					<tr>
+					<td>type(any)</td>
+					<td>type([1,3,2,5]) -&gt; 'array'</td>
+					<td>Tool helpful in debugging expressions.</td>
+					</tr>
+					<tr>
+					<td>count(any), len(any)</td>
+					<td>count("abcd") -&gt; 4</td>
+					<td>Counts elements in a given argument. If element is not countable, it is returned unmodified.</td>
+					</tr>
+					<tr>
+					<td>sort(array)</td>
+					<td>sort([1,3,2,2,5]) -&gt; [1,2,2,3,5]</td>
+					<td>Sorts elements in an array.<br /><span style="color: #ff0000;">WARNING! Sort might be very slow for large data.</span></td>
+					</tr>
+					<tr>
+					<td>reverse(array)</td>
+					<td>reverse([1,3,2,2,5]) -&gt; [5,2,2,3,1]</td>
+					<td>Since ACR 1.1. <br /><span style="color: #ff0000;">WARNING! Reverse might be very slow for large data.</span></td>
+					</tr>
+					<tr>
+					<td>generateID()</td>
+					<td>&#160;</td>
+					<td>Generates unique ID. Since ACR 1.0.4</td>
+					</tr>
+					<tr>
+					<td>objectID(oidString), ObjectId(oidString)</td>
+					<td>&#160;</td>
+					<td>MongoDB helper function.</td>
+					</tr>
+					</tbody>
+					</table>
+					<h3>Localize function</h3>
+					<p><span class="code">Localize()</span> function tries to localize an argument. Now it works only for dates and times, but it is meant to support numbers and currencies.</p>
+					<p>It is good idea to store UTC times in the database and show localized time to the user. To show localized current time in Warsaw, Poland use localize() function as following:</p>
+					<pre>localize(now(),'Europe/Warsaw')</pre>
+					<h2>Paths</h2>
+					<p>ObjectPath aims to follow the <a href="http://goessner.net/articles/JsonPath/" target="_blank">JSONPath specification</a>, but instead copying behavior one to one, language adds its own selector syntax to significantly extend expressiveness of the language. By not relying on JavaScript, selectors are more human readable than in JSONPath.</p>
+					<p>Paths uses dot notation (JSONPath bracket-notation is dropped):</p>
+					<pre>$.attributeName[selector].attributeName2</pre>
+					<p>where $ is root element, <em>ns</em> is optional and defaults to local namespace (request storage in AC Runtime), . selects all direct child elements from node, <em>attributeName</em> restricts these elements to those containing attribute of name <em>attributeName</em> and [] contains selector expression which restrict results even more. <em>attributeName2</em> selects child elements from results of previous computation.</p>
+					<h3>Complete syntax</h3>
+					<p>Following table contains complete syntax of paths (near identical to the JSONPath table):</p>
+					<table class="table table-condensed">
+					<thead>
+					<tr class="evn">
+					<td><strong></strong>Operator</td>
+					<td><strong>Description</strong></td>
+					</tr>
+					</thead>
+					<tbody>
+					<tr class="odd">
+					<td>$</td>
+					<td class="lft">the root object/element</td>
+					</tr>
+					<tr class="odd">
+					<td>@</td>
+					<td class="lft">the current object/element</td>
+					</tr>
+					<tr class="odd">
+					<td>.</td>
+					<td class="lft">child/property operator</td>
+					</tr>
+					<tr class="odd">
+					<td>..</td>
+					<td class="lft">recursive descent. ObjectPath borrows this syntax from E4X (and JSONPath).</td>
+					</tr>
+					<tr class="evn">
+					<td>*</td>
+					<td class="lft">wildcard. All objects/elements regardless their names.</td>
+					</tr>
+					<tr class="evn">
+					<td>[]</td>
+					<td class="lft">selector operator. Full documentation is available in next chapter.</td>
+					</tr>
+					<tr class="evn">
+					<td><span style="text-decoration: line-through;">[start:end:step]</span></td>
+					<td class="lft"><span style="text-decoration: line-through;">NOT IMPLEMENTED YET array slice operator borrowed from ES4.</span></td>
+					</tr>
+					</tbody>
+					</table>
+					<h3>Selectors</h3>
+					<p>Selector selects array elements that are satisfying expression. Expression are not restricted so one can nest paths or use comparison operators.</p>
+					<p>Selectors are written inside the [] operator.</p>
+					<p>If selector returns N integer number, N+1th element will be returned:</p>
+					<pre>$.*[1] -&gt; second element from array</pre>
+					<p>If selector contains a string, its behavior is similar to dot operator:</p>
+					<pre>$..*['string'] is $..string -&gt; true</pre>
+					<p>Selector can use comparison operators to find elements:</p>
+					<pre>$..*[@.'attribute' is 'ok']</pre>
+					<p>and boolean operators to handle more than one condition:</p>
+					<pre>$..*[@.'attribute' is 'ok' or len(@.*[1]) is 2]</pre>
+					<p>@ operator matches current element. Selector iterates over left expression result (which is array). @ will match the element currently checked against expression.</p>
+					<p>WARNING! @ operator is slow! Try using or/and operators in conjunction with simple expression that should match some elements or other optimization techniques.</p>
+					<h2>Plans to extend ObjectPath</h2>
+					<p>Most important enhancements:</p>
+					<ul>
+					<li>provide date and time manipulation built-in functions,</li>
+					<li>distinguish regex functions and string functions - regexes are slow and not necessary in most cases,</li>
+					<li>add regex matching to selectors,</li>
+					</ul>
+					<h2>Optimization plans</h2>
+					<ul>
+					<li>make&#160;<em>$..*[1]</em> faster - generator will help,</li>
+					<li>replace operator names with numbers.</li>
+					</ul>
+
 			</div>
+
 			<div class="col-md-3">MENU</div>
 		</div>
 
