@@ -1,9 +1,0 @@
-<h2 class="form-signin-heading text-center">{{$.locale.register}}</h2>
-<form class="form-signin" action="/api/user/create" method="post" enctype="multipart/form-data">
-	<input name="name" class="input-block-level" type="text" placeholder="{{$.locale.name}}" required="true"></input>
-	<input name="email" class="input-block-level" type="email" autofocus="" placeholder="{{$.locale.email}}" required="true"></input>
-	<input name="password" class="input-block-level" type="password" placeholder="{{$.locale.password}}" required="true"></input>
-	<input name="r_password" class="input-block-level" type="password" placeholder="{{$.locale.r_password}}" required="true"></input>
-	<button class="btn btn-large btn-primary btn-block" type="submit">{{$.locale.register}}</button>
-</form>
-
