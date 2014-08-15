@@ -18,11 +18,20 @@ h3,h4,h5,h6{
 		font-family: "Open sans", Arial, sans-serif;
 		color: #eee;
 }
+#steps{
+	margin-top:64px;
+	padding: 32px 0;
+	background: #333;
+	color: #ddd;
+}
+#steps a{
+	color: #61A8E2;
+}
 .header{
 	/*background: #333;*/
 }
 .header h1{
-	font-size:60px;
+	font-size:64px;
 	text-align:center;
 	color:white;
 	font-family:"Neuton Regular",Helvetica,Arial,sans-serif;
@@ -47,12 +56,24 @@ h3,h4,h5,h6{
 }
 .header h2{
 	font-size: 23px;
+	letter-spacing: 2px;
 	font-family: "Neuton Regular","Open sans", 'Helvetica Neue', Helvetica, Arial, sans-serif;;
 	font-weight: 300;
 }
+.try-it-now{
+	font-size: 22px;
+	margin-top: 32px;
+	background: #333;
+	padding: 12px 32px;
+	transition: background-color 1s;
+}
+.try-it-now:hover{
+	background: #47a447;
+	transition: background-color 1s;
+}
 #OPExample1{
-	margin-top: 100px;
-	margin-bottom: 150px;
+	margin-top: 32px;
+	margin-bottom: 166px;
 	cursor: default;
 }
 #OPExample1 .popover{

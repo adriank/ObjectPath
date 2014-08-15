@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	$('#tree-structures').popover({
 		html:true,
-		placement:"bottom",
+		placement:"right",
 		trigger:"hover",
 		delay:{ show: 0, hide: 1000 },
 		content:$(".tree-details").html(),
