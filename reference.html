@@ -41,14 +41,15 @@
 			<div class="col-md-9">
 				<h2>Reference Manual</h2>
 				<p>Use this page if you forgot about details of the language. If you are newcomer start with <a href="/ObjectPath/tutorial.html">tutorial</a>.</p>
-				<h3>Implementation info</h3>
+
+				<h3 id="Implementation">Implementation info</h3>
 				<p></p>
 				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i><strong>Heads Up!</strong> ObjectPath has currently two implementations, Python and Javascript. The Python version is reference implementation. Features supported by Javascript are indicated by <i class="JS"></i>. Python specific features are indicated by <i class="Py"></i></div>
 				<div class="alert alert-warning" role="alert">
 					<i class="fa fa-warning fa-3x pull-left"></i><strong>Warning!</strong> <i class="JS"></i> Javascript doesn't support big integers at all. Keep it in mind and convert them to strings. Or just use the Python version.
 				</div>
 
-				<h3>Simple types</h3>
+				<h3 id="SimpleTypes">Simple types</h3>
 				<p>ObjectPath inherits all JSON data types and supports a few more.</p>
 				<ul>
 					<li><em>number</em> like <code>100</code> or <code>2.333</code></li>
@@ -77,7 +78,7 @@
 					<li>Negative are: <code>false</code>, <code>null</code>, <code>0</code>, <code>""</code>, <code>[]</code>, <code>{}</code>. Any other value is positive.</li>
 				</ul>
 
-				<h3>Complex types</h3>
+				<h3 id="ComplexTypes">Complex types</h3>
 				<p>Arrays can be defined in the language by issuing:</p>
 				<pre>[ val1, val2, ..., valN]</pre>
 				<p>and for objects it's:</p>
@@ -90,12 +91,12 @@
 					</ul>
 				</div>
 
-				<h3>Dates and times</h3>
+				<h3 id="DatesTimes">Dates and times</h3>
 				<p>Dates are handled as <code>datetime</code> objects. There are also <code>date</code> and <code>time</code> objects which provide support for date and time manipulation. <code>Datetime</code>, <code>date</code> and <code>time</code> objects support <code>year</code>, <code>month</code>, <code>day</code>, <code>hour</code>, <code>minute</code>, <code>second</code> and <code>microsecond</code> attributes eg. <code>now().year</code> -> <code>2011</code>.</p>
 				<div class="alert alert-warning" role="alert"><i class="fa fa-warning fa-3x pull-left"></i>Operations on dates should be performed on UTC dates and then converted to local time in order to avoid locale and DST (daylight saving time) nuances.</div>
 
-				<h2>Operators</h2>
-				<h3>Arithmetic operators</h3>
+				<h2 id="Operations">Operators</h2>
+				<h3 id="Arithmetic-ops">Arithmetic operators</h3>
 				<table class="table table-condensed table-striped">
 					<thead>
 						<tr>
@@ -145,7 +146,7 @@
 					</tbody>
 				</table>
 
-				<h3>Boolean logic operators</h3>
+				<h3 id="Boolean-ops">Boolean logic operators</h3>
 				<table class="table table-condensed table-striped">
 					<thead>
 						<tr>
@@ -181,7 +182,7 @@
 					</tbody>
 				</table>
 
-				<h3>Comparison operators</h3>
+				<h3 id="Comparison-ops">Comparison operators</h3>
 				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i>Comparison operators try to cast the right side expression result to type of the left expression result type. Sometimes it fails so the best practice is to use casting functions when types may be different.</div>
 				<div class="alert alert-warning" role="alert"><i class="fa fa-warning fa-3x pull-left"></i>The comparison operators are not chainable so 1&lt;2&lt;2 will compare 2 with result of 1&lt;2 which is <em>true</em> and return <em>true</em>. Use 1&lt;2 and 2&lt;3 instead.</div>
 				<table class="table table-condensed table-striped">
@@ -220,7 +221,7 @@
 					</tbody>
 				</table>
 
-				<h3>Membership tests</h3>
+				<h3 id="Membership-ops">Membership tests</h3>
 				<table class="table table-condensed table-striped">
 					<thead>
 						<tr>
@@ -249,7 +250,7 @@
 					</tbody>
 				</table>
 
-				<h3>Concatenation operator <code>+</code></h3>
+				<h3 id="Concatenation-ops">Concatenation operator <code>+</code></h3>
 				<p>Beside standard addition of numbers, <code>+</code> concatenates strings, arrays and objects.</p>
 				<p>If two arrays are concatenated, right array elements are added to the end of the left array.</p>
 				<p>If string is concatenated with array it is added to the beggining or end of array.</p>
@@ -263,8 +264,8 @@
 >>> {"a":1, "b":2} + {"a":2, "c":3}
 {"a":2, "b":2, "c":3}</pre>
 
-				<h2>Built-in functions</h2>
-				<h3>Casting functions</h3>
+				<h2 id="Functions">Built-in functions</h2>
+				<h3 id="Casting-fns">Casting functions</h3>
 				<p>Casting is done by passing arguments to Python functions of the same name.</p>
 				<table class="table table-condensed table-striped">
 					<thead>
@@ -303,7 +304,7 @@
 					</tbody>
 				</table>
 
-				<h3>Arithmetic functions</h3>
+				<h3 id="Arithmetic-fns">Arithmetic functions</h3>
 				<table class="table table-condensed table-striped">
 					<thead>
 						<tr>
@@ -347,7 +348,7 @@
 					</tbody>
 				</table>
 
-				<h3>String functions</h3>
+				<h3 id="String-fns">String functions</h3>
 				<table class="table table-condensed table-striped">
 					<thead>
 						<tr>
@@ -410,7 +411,7 @@
 					</tbody>
 				</table>
 
-				<h3>Array functions</h3>
+				<h3 id="Array-fns">Array functions</h3>
 				<table class="table table-condensed table-striped">
 					<thead>
 						<tr>
@@ -451,7 +452,7 @@
 					</tbody>
 				</table>
 
-				<h3>Date and time functions</h3>
+				<h3 id="DateTime-fns">Date and time functions</h3>
 				<p>All date and time functions are manipulating <em>datetime</em> objects. The default (and the only!) timezone is UTC.</p>
 				<table class="table table-condensed table-striped">
 					<thead>
@@ -515,7 +516,7 @@
 					</tbody>
 				</table>
 
-				<h3>Misc functions</h3>
+				<h3 id="Misc-fns">Misc functions</h3>
 				<table class="table table-condensed table-striped">
 					<thead>
 						<tr>
@@ -565,16 +566,16 @@
 					</tbody>
 				</table>
 
-				<h3>Localize function</h3>
+				<h3 id="Localization-fns">Localization function</h3>
 				<p><code>Localize()</code> function tries to localize an argument. Now it works only for dates and times, but it is meant to support numbers and currencies.</p>
 				<p>It is good idea to store UTC times in the database and show localized time to the user. To show localized current time in Warsaw, Poland use <code>localize()</code> function as following:</p>
 				<pre>localize(now(),'Europe/Warsaw')</pre>
 
-				<h2>Paths</h2>
+				<h2 id="Paths">Paths</h2>
 				<p>ObjectPath aims to follow the <a href="http://goessner.net/articles/JsonPath/" target="_blank">JSONPath specification</a>, but instead copying behavior one to one, language adds its own selector syntax to significantly extend expressiveness of the language. By not relying on JavaScript, selectors are more human readable than in JSONPath.</p>
 				<p>Paths uses dot notation (JSONPath bracket-notation is dropped):</p>
 				<pre>$.attributeName[selector].attributeName2</pre>
-				<p>where $ is root element, <em>ns</em> is optional and defaults to local namespace (request storage in AC Runtime), . selects all direct child elements from node, <em>attributeName</em> restricts these elements to those containing attribute of name <em>attributeName</em> and [] contains selector expression which restrict results even more. <em>attributeName2</em> selects child elements from results of previous computation.</p>
+				<p>where <code>$</code> is root element, <em>ns</em> is optional and defaults to local namespace (request storage in AC Runtime), . selects all direct child elements from node, <em>attributeName</em> restricts these elements to those containing attribute of name <em>attributeName</em> and [] contains selector expression which restrict results even more. <em>attributeName2</em> selects child elements from results of previous computation.</p>
 
 				<h3>Complete syntax</h3>
 				<p>Following table contains complete syntax of paths (near identical to the JSONPath table):</p>
@@ -617,7 +618,7 @@
 					</tbody>
 				</table>
 
-				<h3>Selectors</h3>
+				<h3 id="Selectors">Selectors</h3>
 				<p>Selector selects array elements that are satisfying expression. Expression are not restricted so one can nest paths or use comparison operators.</p>
 				<p>Selectors are written inside the [] operator.</p>
 				<p>If selector returns N integer number, N+1th element will be returned:</p>

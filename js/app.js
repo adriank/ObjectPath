@@ -8,6 +8,15 @@ $(document).ready(function(){
 		container: '#tree-structures'
 	})
 
+	$('.dataSource').popover({
+		html:true,
+		placement:"top",
+		trigger:"hover",
+		delay:{ show: 0, hide: 1000 },
+		content:$(".dataSource-hint").html(),
+		container: '.dataSource'
+	})
+
 	//$('.tooltip-trigger').tooltip()
 
 	if (innerWidth>750) {}

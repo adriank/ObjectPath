@@ -52,32 +52,49 @@
 
 		<div id="OPExample1" class="container text-center center-block">
 			<p class="code-example">
-				Find <span class="root">in the shop</span> <span class="allShoes">all shoes</span> <span class="selector">of</span> <span class="red">red color</span> and <span class="priceLessThan50">price less than 50</span>
+				<span class="dataSource">In weather readings</span>
+				find <span class="allReadings">cities</span>
+				<!--<span class="allReadings">in all readings</span>-->
+				<span class="selector">where</span>
+				<span class="tempGreaterThan25">temperature is higher than 25&deg;C</span>
+				and
+				<span class="clearSky"> the sky is clear.</span>
 			</p>
 
+			<div class="dataSource-hint hide">
+				Data for example taken from <a href="http://openweathermap.org/current">openweathermap.org</a>&#160;API. <a href="http://api.openweathermap.org/data/2.5/box/city?bbox=12,32,15,37,10&cluster=yes">See the JSON file</a>.
+			</div>
+
 			<span class="path">
-				<span class="operator root">$</span><span class="allShoes"><span class="operator recursiveDescent">..</span><span class="attributeName">shoes</span><span class="operator child">.</span><span class="operator wildcard">*</span></span><span class="operator selector">[</span><span class="red"><span class="operator property">color</span> <span class="operator simpleOp">is</span> <span class="string">"red"</span></span> <span class="operator simpleOp">and</span> <span class="priceLessThan50"><span class="operator property">price</span> <span class="operator simpleOp">&lt;</span> <span class="number">50</span></span><span class="operator selector">]</span>
+				<span class="operator root">$</span><span class="allReadings"><span
+				class="operator recursiveDescent">..</span><span class="operator wildcard">*</span></span><span class="operator selector">[</span><span class="tempGreaterThan25"><span class="operator current">@</span><span class="operator recursiveDescent">..</span><span class="operator property">temp</span> <span class="operator simpleOp">&gt;</span> <span class="number">25</span></span> <span class="operator simpleOp">and</span> <span class="clearSky"><span class="operator current">@</span><span class="operator child">.</span><span class="operator property">clouds</span><span class="operator child">.</span><span class="operator property">all</span> <span class="operator simpleOp">is</span> <span class=" number">0</span></span><span class="operator selector">]</span><span class="cities"><span class="operator child">.</span><span class="operator property">name</span>
+				</span>
 			</span>
 		</div>
 
 		<div class="hint root hide">
 			<h3>The root of the document</h3>
-			<code>$</code> points to the root of the document. It can be either object or a list of objects. ObjectPath queries works for both! Here the document describes a shop and products available.
+			<code>$</code> points to the root of the document. It can be either object or a list of objects. ObjectPath queries works for both! Here the JSON document describes weather readings within provided geopraphic coordinates.
+		</div>
+
+		<div class="hint current hide">
+			<h3>The current item</h3>
+			<code>@</code> points to current item from the list generated from executing expression on the left side of <code>[]</code>. Here we check if temperature in each city is greater than 25&deg;C.
 		</div>
 
 		<div class="hint recursiveDescent hide">
 			<h3>Recursive descent</h3>
-			<code>..</code> selects all objects from the subtree. Here it selects all objects from the shop.
+			<code>..</code> finds all objects in the subtree. Here it selects all objects from the readings.
 		</div>
 
 		<div class="hint wildcard hide">
 			<h3>The wildcard</h3>
-			<code>*</code> selects all objects from array.
+			<code>*</code> selects all objects from array. This is a helper for <code>..</code> operator.
 		</div>
 
 		<div class="hint child hide">
 			<h3>Child/property</h3>
-			<code>.</code> selects a child or property of the subtree element. It finds property in single object or properties of objects in an array of objects.
+			<code>.</code> goes one level deeper into data structure (selects child of a parent). In conjunction with <em>property name</em> like <code>.temp</code> and array of objects it returns array of values under each object's <code>temp</code> attribute.More at <a href="/ObjectPath/reference.html#Paths">paths reference</a>
 		</div>
 
 		<div class="hint selector hide">

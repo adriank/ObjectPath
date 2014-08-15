@@ -266,6 +266,7 @@ i.Py{
 }
 .path .operator.property,
 .path .operator.root,
+.path .operator.current,
 .path .operator:hover{
 	color: inherit;
 }
