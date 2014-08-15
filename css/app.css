@@ -129,7 +129,7 @@ h3,h4,h5,h6{
 	margin-top: 16px;
 }
 .main-menu i.fa{
-	color: #E4EA35;
+	/*color: #E4EA35;*/
 }
 .social i.fa,
 .menu i.fa{
@@ -145,7 +145,8 @@ h3,h4,h5,h6{
 .menu i.fa:hover{
 	transition: color 1s;
 	background: #ddd;
-	color: #edaa36;
+	color: inherit;
+	/*color: #edaa36;*/
 }
 .social i.fa:hover{
 	transition: color 1s;
