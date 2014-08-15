@@ -25,7 +25,7 @@ h3,h4,h5,h6{
 	text-align:center;
 	color:white;
 	font-family:"Neuton Regular",Helvetica,Arial,sans-serif;
-	margin-top:50px;
+	margin-top:100px;
 }
 .logo{
 	text-align: left;
@@ -136,12 +136,20 @@ h3,h4,h5,h6{
 	color: #ccc;
 	transition: color 1s;
 }
+.menu i.fa{
+	padding: 5px;
+	border-radius: 10px;
+	transition: color 1s;
+	transition: background-color 1s;
+}
 .menu i.fa:hover{
 	transition: color 1s;
+	background: #ddd;
 	color: #edaa36;
 }
 .social i.fa:hover{
 	transition: color 1s;
+	transition: background-color 1s;
 	color: inherit;
 }
 .menu .fa:after{
@@ -149,23 +157,33 @@ h3,h4,h5,h6{
 	display: inline-block;
 	font-size: 16px;
 	margin-left: 8px;
-	top: -3px;
+	padding-top: 6px;
 	width: 0px;
 	transition: width 1s;
 	overflow: hidden;
+	/*background: red;#434343;*/
+	height: 23px;
 }
 .menu .fa:hover:after{
-	width: 150px;
 	transition: width 1s;
 }
 .menu .fa-home:after{
 	content: "Home";
 }
+.menu .fa-home:hover:after{
+	width: 50px;
+}
 .menu .fa-book:after{
 	content: "Documentation";
 }
+.menu .fa-book:hover:after{
+	width: 125px;
+}
 .menu .fa-download:after{
-	content: "Download";
+	content: "Install";
+}
+.menu .fa-download:hover:after{
+	width: 55px;
 }
 i.JS{
 	display: inline-block;
