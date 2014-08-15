@@ -12,6 +12,7 @@ html, body {
 	color: #ccc;
 	height: inherit;
 	font-family: "Open sans", Arial, sans-serif;
+	padding-bottom: 50px;
 }
 h3,h4,h5,h6{
 		font-family: "Open sans", Arial, sans-serif;
