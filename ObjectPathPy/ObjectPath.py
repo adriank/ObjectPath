@@ -53,14 +53,14 @@ if __name__=="__main__":
 	parser=argparse.ArgumentParser(description='Command line options')
 	parser.add_argument('-o', '--file', dest='file', help='File containing JSON document.')
 	parser.add_argument('-u', '--url', dest='URL', help='URL containing JSON document.')
-	parser.add_argument('-xml', dest='xml', help='Expect XML input.',action='store_true')
+	parser.add_argument('-xml', dest='xml', help='[EXPERIMENTAL] Expect XML input.',action='store_true')
 	parser.add_argument('-d', '--debug', dest='debug', help='Debbuging on/off.', action='store_true')
 
 	args = parser.parse_args()
 	a={}
 	if args.debug:
 		a["debug"]=True
-	File=args.file or sys.argv[-1]
+	File=args.file or len(sys.argv)>1 and sys.argv[-1]
 	if args.xml:
 		from utils.xmlextras import xml2tree
 	src=False
@@ -73,7 +73,7 @@ if __name__=="__main__":
 	elif File:
 		src=open(File,"r")
 	if not src:
-		print "JSON document source not specified. Creating ObjectPath interpreter for empty object {}."
+		print "JSON document source not specified. Working with an empty object {}."
 		tree=Tree({},a)
 	else:
 		sys.stdout.write("Loading JSON document from "+str(args.URL or File)+"...")
