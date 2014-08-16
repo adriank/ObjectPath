@@ -270,3 +270,10 @@ i.Py{
 .path .operator:hover{
 	color: inherit;
 }
+
+#TOC.affix{
+	top:60px !important;
+}
+#TOC a{
+	color: #eee;
+}

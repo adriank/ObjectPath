@@ -38,11 +38,11 @@
 		</div>
 
 		<div class="container reference">
-			<div class="col-md-9">
-				<h2>Reference Manual</h2>
-				<p>Use this page if you forgot about details of the language. If you are newcomer start with <a href="/ObjectPath/tutorial.html">tutorial</a>.</p>
+			<div id="content" class="col-md-9">
+				<h1>Reference Manual</h1>
+				<p class="lead">Use this page if you forgot about details of the language. If you are newcomer start with <a href="/ObjectPath/tutorial.html">tutorial</a>.</p>
 
-				<h3 id="Implementation">Implementation info</h3>
+				<h2 id="Implementation">Implementation info</h2>
 				<p></p>
 				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i><strong>Heads Up!</strong> ObjectPath has currently two implementations, Python and Javascript. The Python version is reference implementation. Features supported by Javascript are indicated by <i class="JS"></i>. Python specific features are indicated by <i class="Py"></i></div>
 				<div class="alert alert-warning" role="alert">
@@ -577,7 +577,7 @@
 				<pre>$.attributeName[selector].attributeName2</pre>
 				<p>where <code>$</code> is root element, <em>ns</em> is optional and defaults to local namespace (request storage in AC Runtime), . selects all direct child elements from node, <em>attributeName</em> restricts these elements to those containing attribute of name <em>attributeName</em> and [] contains selector expression which restrict results even more. <em>attributeName2</em> selects child elements from results of previous computation.</p>
 
-				<h3>Complete syntax</h3>
+				<h3 id="CompleteSyntax">Complete syntax</h3>
 				<p>Following table contains complete syntax of paths (near identical to the JSONPath table):</p>
 				<table class="table table-condensed table-stripped">
 					<thead>
@@ -612,25 +612,27 @@
 						<td>selector operator. Full documentation is available in next chapter.</td>
 					</tr>
 					<tr>
-						<td><span style="text-decoration: line-through;">[start:end:step]</span></td>
-						<td class="lft"><span style="text-decoration: line-through;">NOT IMPLEMENTED YET array slice operator borrowed from ES4.</span></td>
+						<td><s>[start:end:step]</s></td>
+						<td><s>NOT IMPLEMENTED YET array slice operator borrowed from ES4.</s></td>
 					</tr>
 					</tbody>
 				</table>
 
 				<h3 id="Selectors">Selectors</h3>
 				<p>Selector selects array elements that are satisfying expression. Expression are not restricted so one can nest paths or use comparison operators.</p>
-				<p>Selectors are written inside the [] operator.</p>
+				<p>Selectors are written inside the <code>[]</code> operator.</p>
 				<p>If selector returns N integer number, N+1th element will be returned:</p>
-				<pre>$.*[1]</code> -> <code>second element from array</pre>
+				<pre>>>> $.*[1]
+second element from array</pre>
 				<p>If selector contains a string, its behavior is similar to dot operator:</p>
-				<pre>$..*['string'] is $..string</code> -> <code>true</pre>
+				<pre>>>> $..*['string'] is $..string
+true</pre>
 				<p>Selector can use comparison operators to find elements:</p>
 				<pre>$..*[@.'attribute' is 'ok']</pre>
 				<p>and boolean operators to handle more than one condition:</p>
 				<pre>$..*[@.'attribute' is 'ok' or len(@.*[1]) is 2]</pre>
-				<p>@ operator matches current element. Selector iterates over left expression result (which is array). @ will match the element currently checked against expression.</p>
-				<p>WARNING! @ operator is slow! Try using or/and operators in conjunction with simple expression that should match some elements or other optimization techniques.</p>
+				<p>@ operator matches current element. Selector iterates over left expression result (which is array). <code>@</code> will match the element currently checked against expression.</p>
+				<p>WARNING! <code>@</code> operator is slow! Try using or/and operators in conjunction with simple expression that should match some elements or other optimization techniques.</p>
 
 				<h2>Plans to extend ObjectPath</h2>
 				<p>Most important enhancements:</p>
@@ -648,7 +650,10 @@
 
 			</div>
 
-			<div class="col-md-3">MENU</div>
+			<div class="col-md-3" >
+				<div id="TOC" class="col-md-3" data-spy="affix" data-offset-bottom="60" style="width: 264px;"></div>
+
+			</div>
 		</div>
 
 

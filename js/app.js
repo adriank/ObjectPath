@@ -46,4 +46,32 @@ $(document).ready(function(){
 			$(e).removeClass("hover")
 		})
 	})
+
+	var headers=$("#content h2, #content h3"),
+			toc=[],
+			listType="ul",
+			tocNode=$("#TOC")
+			console.log(tocNode)
+			tocNode.html("<h3>Contents</h3><"+listType+" class=\"list-unstyled\"/>")
+
+			headers.each(function(n,el){
+				//console.log(el)
+				//console.log(headers[n+1].localName)
+				var indent=""
+				if (el.localName==="h3") {
+					indent=" style=\"margin-left:20px;\""
+				}
+				toc.push("<li><a href='#"+el.id+"'"+indent+">"+$(el).html()+"</a>")
+				//if (el.next("h2,h3") && el.next("h2,h3").get("localName")=="h3"){
+				//	toc.push("<"+listType+">")
+				//	h3.each(function(sh){
+				//		if(sh.previous("h2")===el)
+				//			toc.push("<li><a href='#"+sh.getHTML()+"'>"+sh.getHTML()+"</a></li>")
+				//	})
+				//	toc.push("</"+listType+">")
+				//}
+				//toc=[]
+			})
+			$("#TOC "+listType).append(toc.join("")+"</li>")
+
 })
