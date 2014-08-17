@@ -43,7 +43,9 @@ $(document).ready(function(){
 			content:$(".hint."+e.className.split(" ")[1]).html(),
 			container: e
 		}).on('hidden.bs.popover', function () {
-			$(e).removeClass("hover")
+			console.log(e.className)
+			$(".path span."+e.className.split(" ")[1]).removeClass("hover")
+			//$(e).removeClass("hover")
 		})
 	})
 

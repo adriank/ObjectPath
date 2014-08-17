@@ -62,7 +62,7 @@ h3,h4,h5,h6{
 }
 .try-it-now{
 	font-size: 22px;
-	margin-top: 32px;
+	margin: 32px 0;
 	background: #333;
 	padding: 12px 32px;
 	transition: background-color 1s;
@@ -71,13 +71,27 @@ h3,h4,h5,h6{
 	background: #47a447;
 	transition: background-color 1s;
 }
+.tags{
+	display: block;
+	margin: 18px 0px;
+	font-size: 14px;
+	font-family: monospace;
+}
 #OPExample1{
 	margin-top: 32px;
 	margin-bottom: 166px;
+	border-top: 1px solid #666;
+	/*border-bottom: 1px solid #555;*/
 	cursor: default;
 }
 #OPExample1 .popover{
 	max-width: 400px;
+}
+#OPExample1 .example{
+	font-family: monospace;
+	padding: 8px;
+	float:left;
+	color: #888;
 }
 .content{
 	margin-top:10%;
@@ -106,6 +120,7 @@ h3,h4,h5,h6{
 	color: #888;
 }
 .code-example{
+	clear: both;
 	margin-top: 20px;
 	font-size: 23px;
 	color: white;
@@ -113,6 +128,7 @@ h3,h4,h5,h6{
 .code-example span:hover,
 .path .hover,
 .path .hover span,
+.path span.operator.hover,
 .path span.operator:hover{
 	background-color: #57A043;
 	color: white;
