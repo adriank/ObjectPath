@@ -323,6 +323,8 @@ type_map={
 
 # python tokenizer
 def tokenize_python(program):
+	if type(program) is unicode:
+		program = program.encode('utf8')
 	for t in tokenizer.generate_tokens(StringIO(program).next):
 		try:
 			#change this to output python values in correct type
@@ -375,7 +377,7 @@ def expression(rbp=0):
 	return left
 
 def parse(expr):
-	if type(expr) is not str:
+	if type(expr) not in STR_TYPES:
 		return expr
 	expr=expr.strip()
 	if not len(expr):
