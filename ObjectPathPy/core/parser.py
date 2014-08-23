@@ -38,15 +38,17 @@ class symbol_base(object):
 			elif val in NONE:
 				return None
 			return (self.id[1:-1], self.value)
+		elif self.id == "(number)":
+			return self.value
 		elif self.id == "(literal)":
 			fstLetter=self.value[0]
 			if fstLetter in ["'","\""]:
 				return self.value[1:-1]
-			elif fstLetter.isdigit():
-				try:
-					return int(self.value)
-				except:
-					return float(self.value)
+			#elif fstLetter.isdigit():
+			#	try:
+			#		return int(self.value)
+			#	except:
+			#		return float(self.value)
 			else:
 				if self.value=="True":
 					return True
@@ -81,6 +83,8 @@ class symbol_base(object):
 				#ret_append(t)
 				#return (self.id,ret[1:])
 			else:
+				if self.id=="-" and self.snd==None and type(self.fst.value) in [int, float]:
+					return -self.fst.value
 				ret_append(i.getTree())
 		if self.id is "(":
 			#this will produce ("fn","fnName",arg1,arg2,...argN)
@@ -161,6 +165,7 @@ symbol(".", 150); symbol("[", 150); symbol("(", 150)
 # additional behaviour
 symbol("(name)").nud=lambda self: self
 symbol("(literal)").nud=lambda self: self
+symbol("(number)").nud=lambda self: self
 symbol("(end)")
 symbol(")")
 
@@ -258,6 +263,7 @@ symbol("=")
 def constant(id):
 	@method(symbol(id))
 	def nud(self):
+		print self.fst
 		self.id="(literal)"
 		self.value=id
 		return self
@@ -323,7 +329,7 @@ def nud(self):
 
 import tokenize as tokenizer
 type_map={
-	tokenizer.NUMBER:"(literal)",
+	tokenizer.NUMBER:"(number)",
 	tokenizer.STRING:"(literal)",
 	tokenizer.OP:"(operator)",
 	tokenizer.NAME:"(name)",
@@ -355,6 +361,13 @@ def tokenize(program):
 			symbol=symbol_table[id]
 			s=symbol()
 			s.value=value
+		elif id=="(number)":
+			symbol=symbol_table[id]
+			s=symbol()
+			try:
+				s.value=int(value)
+			except:
+				s.value=float(value)
 		elif value is " ":
 			continue
 		else:
