@@ -263,7 +263,6 @@ symbol("=")
 def constant(id):
 	@method(symbol(id))
 	def nud(self):
-		print self.fst
 		self.id="(literal)"
 		self.value=id
 		return self
