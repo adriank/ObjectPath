@@ -6,7 +6,7 @@
 # - specialized to work with ObjectPath,
 # - optimized
 from cStringIO import StringIO
-from core import *
+#from core import *
 
 symbol_table={}
 
@@ -176,8 +176,18 @@ def nud(self):
 	self.id="(node)"
 	return self
 
+#RegEx
+@method(symbol("/"))
+def nud(self):
+	self.id="re"
+	self.fst=str(token.value)
+	advance()
+	advance("/")
+	return self
+
 @method(symbol("("))
 def nud(self):
+	advance()
 	expr=expression()
 	advance(")")
 	return expr
