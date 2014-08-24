@@ -5,7 +5,11 @@
 # relicenced to AGPL v3 by Adrian Kalbarczyk and:
 # - specialized to work with ObjectPath,
 # - optimized
-from cStringIO import StringIO
+import sys
+if sys.version >= '3':
+	from io import StringIO
+else:
+	from cStringIO import StringIO
 from core import *
 
 symbol_table={}
@@ -65,9 +69,9 @@ class symbol_base(object):
 			elif type(i) in L:
 				t=[]
 				t_append=t.append
-				if self.id is "{":
+				if self.id == "{":
 					ret={}
-					for j in self.fst.iteritems():
+					for j in list(self.fst.items()):
 						ret[j[0].getTree()]=j[1].getTree()
 					return ret
 				for j in i:
@@ -76,7 +80,7 @@ class symbol_base(object):
 					except:
 						t_append(j)
 				#TODO check if this is ever used?
-				if self.id is "[":
+				if self.id == "[":
 					return t
 				else:
 					ret.extend(t)
@@ -88,7 +92,7 @@ class symbol_base(object):
 				if self.id=="+" and self.snd==None and type(self.fst.value) in [int, float]:
 					return self.fst.value
 				ret_append(i.getTree())
-		if self.id is "(":
+		if self.id == "(":
 			#this will produce ("fn","fnName",arg1,arg2,...argN)
 			return tuple(["fn",ret[1][1]]+ret[2:])
 		return tuple(ret)
@@ -97,7 +101,7 @@ class symbol_base(object):
 		if self.id == "(name)" or self.id == "(literal)":
 			return "(%s %s)" % (self.id[1:-1], self.value)
 		out=[self.id, self.fst, self.snd, self.third]
-		out=map(str, filter(None, out))
+		out=list(map(str, filter(None, out)))
 		return "(" + " ".join(out) + ")"
 
 def symbol(id, bp=0):
@@ -141,7 +145,8 @@ def advance(id=None):
 	global token
 	if id and token.id != id:
 		raise SyntaxError("Expected %r, got %s"%(id,token.id))
-	token=next()
+	token=nextToken()
+	#print(token)
 
 def method(s):
 	# decorator
@@ -201,10 +206,10 @@ def nud(self):
 @method(symbol("."))
 def led(self, left):
 	attr=False
-	if token.id is ".":
+	if token.id == ".":
 		self.id=".."
 		advance()
-	if token.id is "@":
+	if token.id == "@":
 		attr=True
 		advance()
 	if token.id not in ["(name)","*" ]:
@@ -223,7 +228,8 @@ symbol("$")
 def nud(self):
 	global token
 	self.id="(root)"
-	if token.id is ".":
+	#print ("$.nud",token)
+	if token.id == ".":
 		self.fst="rs"
 	else:
 		self.fst=token.value
@@ -247,11 +253,11 @@ def led(self, left):
 	#self.id="fn"
 	self.fst=left
 	self.snd=[]
-	if token.id is not ")":
+	if token.id != ")":
 		self_snd_append=self.snd.append
 		while 1:
 			self_snd_append(expression())
-			if token.id is not ",":
+			if token.id != ",":
 				break
 			advance(",")
 	advance(")")
@@ -299,9 +305,9 @@ symbol("]")
 @method(symbol("["))
 def nud(self):
 	self.fst=[]
-	if token.id is not "]":
+	if token.id != "]":
 		while 1:
-			if token.id is "]":
+			if token.id == "]":
 				break
 			self.fst.append(expression())
 			if token.id not in SELECTOR_OPS+[","]:
@@ -315,14 +321,14 @@ symbol("}")
 @method(symbol("{"))
 def nud(self):
 	self.fst={}
-	if token.id is not "}":
+	if token.id != "}":
 		while 1:
-			if token.id is "}":
+			if token.id == "}":
 				break
 			key=expression()
 			advance(":")
 			self.fst[key]=expression()
-			if token.id is not ",":
+			if token.id != ",":
 				break
 			advance(",")
 	advance("}")
@@ -339,7 +345,11 @@ type_map={
 
 # python tokenizer
 def tokenize_python(program):
-	for t in tokenizer.generate_tokens(StringIO(program).next):
+	if sys.version < "3":
+		tokens=tokenizer.generate_tokens(StringIO(program).next)
+	else:
+		tokens=tokenizer.generate_tokens(StringIO(program).__next__)
+	for t in tokens:
 		try:
 			#change this to output python values in correct type
 			yield type_map[t[0]], t[1]
@@ -369,7 +379,7 @@ def tokenize(program):
 				s.value=int(value)
 			except:
 				s.value=float(value)
-		elif value is " ":
+		elif value == " ":
 			continue
 		else:
 			# name or operator
@@ -389,25 +399,32 @@ def tokenize(program):
 def expression(rbp=0):
 	global token
 	t=token
-	token=next()
+	token=nextToken()
+	#print(token)
 	left=t.nud()
+	#print("LEFT",left)
 	while rbp < token.lbp:
 		t=token
-		token=next()
+		token=nextToken()
+		#print(token)
 		left=t.led(left)
 	return left
 
-def parse(expr, D):
+def parse(expr, D=False):
 	if type(expr) is not str:
 		return expr
 	expr=expr.strip()
 	if not len(expr):
 		return Tree(True)
-	global token, next
-	next=tokenize(expr).next
-	token=next()
+	global token, nextToken
+	if sys.version >= "3":
+		nextToken=tokenize(expr).__next__
+	else:
+		nextToken=tokenize(expr).next
+	token=nextToken()
+	#print(token)
 	r=expression().getTree()
 	if D:
-		print "PARSE STAGE"
-		print r
+		print ("PARSE STAGE")
+		print (r)
 	return r

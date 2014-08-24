@@ -16,7 +16,7 @@ def loads(s,object_hook=None):
 	s=s.replace("'",'"')
 	try:
 		return json.loads(s,object_hook=object_hook)
-	except ValueError,e:
+	except ValueError as e:
 		raise Error(str(e)+" "+s)
 
 def dumps(s,default=None):

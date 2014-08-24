@@ -316,7 +316,7 @@ def tpath(root,path, default=None):
 							if t[0]=="*":
 								return ret[0][1]
 							return ret[0][1][t[0]]
-	except (AttributeError, KeyError, TypeError,IndexError),e:
+	except (AttributeError, KeyError, TypeError,IndexError) as e:
 		return default
 	return ret
 

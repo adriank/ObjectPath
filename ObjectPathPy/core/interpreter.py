@@ -34,7 +34,7 @@ class Tree(Debugger):
 			self.data=obj
 
 	def compile(self,expr):
-		if EXPR_CACHE.has_key(expr):
+		if expr in EXPR_CACHE:
 			return EXPR_CACHE[expr]
 		ret=EXPR_CACHE[expr]=parse(expr,self.D)
 		return ret
@@ -42,7 +42,11 @@ class Tree(Debugger):
 	def execute(self,expr):
 		D=self.D
 		if D: self.start("Tree.execute")
-		TYPES=(str,int,float,long,bool,generator,chain)
+		TYPES=[str,int,float,bool,generator,chain]
+		try:
+			TYPES+=[long]
+		except:
+			pass
 		#TODO change to yield?
 		def exe(node):
 			"""
@@ -54,10 +58,10 @@ class Tree(Debugger):
 			if node is None or type_node in TYPES:
 				return node
 			elif type_node is list:
-				return map(exe,node)
+				return list(map(exe,node))
 			elif type_node is dict:
 				ret={}
-				for i in node.iteritems():
+				for i in node.items():
 					ret[exe(i[0])]=exe(i[1])
 				return ret
 			op=node[0]
@@ -101,10 +105,11 @@ class Tree(Debugger):
 							return fst+float(snd)
 					if typefst in STR_TYPES or typesnd in STR_TYPES:
 						if D: self.info("doing string comparison '%s' is '%s'",fst,snd)
-						if typefst is unicode:
-							fst=fst.encode("utf-8")
-						if typesnd is unicode:
-							snd=snd.encode("utf-8")
+						if sys.version < "3":
+							if typefst is unicode:
+								fst=fst.encode("utf-8")
+							if typesnd is unicode:
+								snd=snd.encode("utf-8")
 						return str(fst)+str(snd)
 					try:
 						timeType=timeutils.datetime.time
@@ -136,6 +141,8 @@ class Tree(Debugger):
 			elif op=="%":
 				return exe(node[1]) % exe(node[2])
 			elif op=="/":
+				#print(node[1])
+				#print(exe(node[1]))
 				return exe(node[1]) / float(exe(node[2]))
 			elif op==">":
 				if D: self.debug("%s > %s", node[1],node[2])
@@ -171,14 +178,18 @@ class Tree(Debugger):
 				if D: self.debug("found operator '%s'",op)
 				try:
 					fst=exe(node[1])
-				except Exception,e:
+				except Exception as e:
 					if D: self.debug("NOT ERROR! Can't execute node[1] '%s', error: '%s'. Falling back to orginal value.",node[1],str(e))
 					fst=node[1]
 				try:
 					snd=exe(node[2])
-				except Exception,e:
+				except Exception as e:
 					if D: self.debug("NOT ERROR! Can't execute node[2] '%s', error: '%s'. Falling back to orginal value.",node[2],str(e))
 					snd=node[2]
+				if op is "is" and fst == snd:
+					return True
+				if op is "is not" and fst != snd:
+					return True
 				typefst=type(fst)
 				typesnd=type(snd)
 				if D: self.debug("type fst: '%s', type snd: '%s'",typefst,typesnd)
@@ -198,15 +209,18 @@ class Tree(Debugger):
 					if D: self.info("doing object comparison '%s' is '%s'",fst,snd)
 					ret=fst==snd
 				else:
-					global ObjectId
-					if not ObjectId:
-						from bson.objectid import ObjectId
-					if typefst is ObjectId or typesnd is ObjectId:
-						if D: self.info("doing MongoDB objectID comparison '%s' is '%s'",fst,snd)
-						ret=str(fst)==str(snd)
-					else:
-						if D: self.info("doing standard comparison '%s' is '%s'",fst,snd)
-						ret=fst is snd
+					try:
+						global ObjectId
+						if not ObjectId:
+							from bson.objectid import ObjectId
+						if typefst is ObjectId or typesnd is ObjectId:
+							if D: self.info("doing MongoDB objectID comparison '%s' is '%s'",fst,snd)
+							ret=str(fst)==str(snd)
+						else:
+							if D: self.info("doing standard comparison '%s' is '%s'",fst,snd)
+							ret=fst is snd
+					except:
+						pass
 				if op=="is not":
 					if D: self.info("'is not' found. Returning %s",not ret)
 					return not ret
@@ -257,7 +271,8 @@ class Tree(Debugger):
 					if isinstance(fst,object):
 						try:
 							return fst.__getattribute__(snd)
-						except: pass
+						except:
+							pass
 					if D: self.end(". returning '%s'",fst)
 					return fst
 			elif op=="..":
@@ -289,7 +304,7 @@ class Tree(Debugger):
 					#	for i in node[1]:
 					#		yield exe(i)
 					if D: self.debug("doing list mapping")
-					return map(exe,node[1])
+					return list(map(exe,node[1]))
 				if len_node is 3: # selector used []
 					fst=exe(node[1])
 					# check against None
@@ -326,7 +341,7 @@ class Tree(Debugger):
 										nodeList_append(i)
 										if D: self.debug("appended")
 									if D: self.debug("discarded")
-								except Exception,e:
+								except Exception as e:
 									if D: self.debug("discarded, Exception: %s",e)
 							else:
 								try:
@@ -351,7 +366,7 @@ class Tree(Debugger):
 								if n>0:
 									return skip(fst,n)
 								elif n==0:
-									return fst.next()
+									return list(next(fst))[0]
 								else:
 									fst=list(fst)
 							else:
@@ -375,8 +390,8 @@ class Tree(Debugger):
 				fnName=node[1]
 				args=None
 				try:
-					args=map(exe,node[2:])
-				except IndexError, e:
+					args=list(map(exe,node[2:]))
+				except IndexError as e:
 					if D: self.debug("NOT ERROR: can't map '%s' with '%s'",node[2:],exe)
 				#arithmetic
 				if fnName=="sum":
@@ -450,7 +465,7 @@ class Tree(Debugger):
 						from utils.xmlextras import unescape, unescapeDict
 					return unescape(args[0],unescapeDict)
 				elif fnName=="replace":
-					if type(args[0]) is unicode:
+					if sys.version < "3" and type(args[0]) is unicode:
 						args[0]=args[0].encode("utf8")
 					return str.replace(args[0],args[1],args[2])
 				elif fnName=="REsub":
@@ -524,7 +539,7 @@ class Tree(Debugger):
 				#polygons
 				elif fnName=="area":
 					def segments(p):
-						p=map(lambda x: x[0:2],p)
+						p=list(map(lambda x: x[0:2],p))
 						return zip(p, p[1:] + [p[0]])
 					return 0.5 * abs(sum(x0*y1 - x1*y0
 						for ((x0, y0), (x1, y1)) in segments(args[0])))
@@ -532,7 +547,7 @@ class Tree(Debugger):
 				elif fnName=="keys":
 					try:
 						return args[0].keys()
-					except AttributeError,e:
+					except AttributeError as e:
 						raise Exception("Argument is not object but %s in keys()"%type(args[0]).__name__)
 				elif fnName=="type":
 					ret=type(args[0])
@@ -556,7 +571,7 @@ class Tree(Debugger):
 		return ret
 
 	def __str__(self):
-		return "TreeObject(%s)"%str(self.tree)
+		return "TreeObject()"
 
 	def __repr__(self):
 		return self.__str__()

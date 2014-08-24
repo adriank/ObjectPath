@@ -27,7 +27,7 @@ try:
 		"UTC":pytz.utc
 	}
 except:
-	print "WARNING! pytz is not installed. Localized times are not supported."
+	print("WARNING! pytz is not installed. Localized times are not supported.")
 
 HOURS_IN_DAY=24
 

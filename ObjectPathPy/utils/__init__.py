@@ -13,7 +13,10 @@ from types import GeneratorType as generator
 from itertools import chain
 
 iterators=[list,generator,chain]
-
+try:
+	iterators+=[map]
+except:
+	pass
 #if hasattr(random, 'SystemRandom'):
 #	randrange=random.SystemRandom().randrange
 #else:
@@ -23,6 +26,8 @@ iterators=[list,generator,chain]
 #RE_PATH_split=re.compile("{\$[^}]+}") # {$ foobar}
 
 def skip(g,n):
+	if type(g) not in (chain,generator):
+		raise TypeError("expected generator, got %s"%type(g).__name__)
 	if type(n) is not int:
 		raise TypeError("generator indices must be integers, not %s"%type(n).__name__)
 	j=0

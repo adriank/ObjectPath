@@ -68,7 +68,7 @@ def flatten(fragment,skip=False):
 					yield j
 		elif typefrg is dict:
 			yield frg
-			for i in frg.iteritems():
+			for i in frg.items():
 				for j in rec(i[1]):
 					yield j
 

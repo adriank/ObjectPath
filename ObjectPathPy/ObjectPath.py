@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from core.interpreter import *
 import argparse
 import sys
 import readline
+from core.interpreter import *
 from utils.colorify import *
 # from types import GeneratorType as generator
 # from itertools import chain
 from utils import json_compat as json
 
-print """ObjectPath interactive shell
-	ctrl+c to exit.
-"""
+print("""ObjectPath interactive shell
+	ctrl+c to exit, documentation at http://adriank.github.io/ObjectPath.
+""")
 
 def printJSON(o):
 	depth=5
@@ -119,7 +119,10 @@ if __name__=="__main__":
 		from utils.xmlextras import xml2tree
 	src=False
 	if args.URL:
-		from urllib2 import Request,build_opener
+		if sys.version >= '3':
+			from urllib.request import Request,build_opener
+		else:
+			from urllib2 import Request,build_opener
 		request=Request(args.URL)
 		opener = build_opener()
 		request.add_header('User-Agent', 'ObjectPath/1.0 +http://objectpath.org/')
@@ -127,7 +130,7 @@ if __name__=="__main__":
 	elif File:
 		src=open(File,"r")
 	if not src:
-		print "JSON document source not specified. Working with an empty object {}."
+		print ("JSON document source not specified. Working with an empty object {}.")
 		tree=Tree({},a)
 	else:
 		sys.stdout.write("Loading JSON document from "+str(args.URL or File)+"...")
@@ -140,15 +143,16 @@ if __name__=="__main__":
 
 	try:
 		while True:
-			try:
+			#try:
 				#if fakeEnv.doDebug:
-				#	print tree.tree
-				r=tree.execute(raw_input(">>> "))
-				print printJSON(r)
-				#print json.dumps(r)
-			except Exception,e:
-				print e
+				if sys.version >= '3':
+						r=tree.execute(input(">>> "))
+				else:
+						r=tree.execute(raw_input(">>> "))
+				print(printJSON(r))
+			#except Exception as e:
+			#	print(e)
 	except KeyboardInterrupt:
 		pass
 	#new line at the end forces command prompt to apear at left
-	print
+	print()

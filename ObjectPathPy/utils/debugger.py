@@ -67,8 +67,11 @@ class Debugger(object):
 
 	def consolelog(self, lvl, s):
 		def f(x):
-			if type(x) is unicode:
-				x=x.encode("utf8")
+			try:
+				if type(x) is unicode:
+					x=x.encode("utf8")
+			except:
+				pass
 			if self.CUT_AFTER and type(x) is dict:
 				s=[]
 				for i in x.iteritems():
@@ -84,7 +87,7 @@ class Debugger(object):
 		if len(s)>1:
 			v=tuple(map(f ,s[1:]))
 			self._debugStr.append((lvl, s[0] %v))
-			print lvl, s[0] % v
+			print(lvl, s[0] % v)
 		else:
 			self._debugStr.append((lvl, s[0]))
-			print lvl, f(s[0])
+			print(lvl, f(s[0]))
