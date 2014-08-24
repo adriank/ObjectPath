@@ -85,6 +85,8 @@ class symbol_base(object):
 			else:
 				if self.id=="-" and self.snd==None and type(self.fst.value) in [int, float]:
 					return -self.fst.value
+				if self.id=="+" and self.snd==None and type(self.fst.value) in [int, float]:
+					return self.fst.value
 				ret_append(i.getTree())
 		if self.id is "(":
 			#this will produce ("fn","fnName",arg1,arg2,...argN)
@@ -395,7 +397,7 @@ def expression(rbp=0):
 		left=t.led(left)
 	return left
 
-def parse(expr):
+def parse(expr, D):
 	if type(expr) is not str:
 		return expr
 	expr=expr.strip()
@@ -404,4 +406,8 @@ def parse(expr):
 	global token, next
 	next=tokenize(expr).next
 	token=next()
-	return expression().getTree()
+	r=expression().getTree()
+	if D:
+		print "PARSE STAGE"
+		print r
+	return r

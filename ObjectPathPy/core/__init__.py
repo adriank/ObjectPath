@@ -10,3 +10,10 @@ ITER_TYPES=iterators
 
 class ProgrammingError(Exception):
 	pass
+
+PY_TYPES_MAP={
+	"int":"number",
+	"float":"number",
+	"dict":"object",
+	"list":"array"
+}

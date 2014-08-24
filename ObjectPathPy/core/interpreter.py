@@ -6,6 +6,7 @@ import sys
 import re
 from core.parser import parse
 from core import *
+from utils.colorify import *
 from utils import dicttree,timeutils,py2JSON
 from utils import iterators, generator, chain, skip
 from utils.debugger import Debugger
@@ -35,12 +36,13 @@ class Tree(Debugger):
 	def compile(self,expr):
 		if EXPR_CACHE.has_key(expr):
 			return EXPR_CACHE[expr]
-		ret=EXPR_CACHE[expr]=parse(expr)
+		ret=EXPR_CACHE[expr]=parse(expr,self.D)
 		return ret
 
 	def execute(self,expr):
 		D=self.D
 		if D: self.start("Tree.execute")
+		TYPES=(str,int,float,long,bool,generator,chain)
 		#TODO change to yield?
 		def exe(node):
 			"""
@@ -49,7 +51,7 @@ class Tree(Debugger):
 			"""
 			if D: self.start("executing node '%s'", node)
 			type_node=type(node)
-			if node is None or type_node in (str,int,float,long,bool,generator,chain):
+			if node is None or type_node in TYPES:
 				return node
 			elif type_node is list:
 				return map(exe,node)
@@ -74,10 +76,14 @@ class Tree(Debugger):
 					if snd is None:
 						return fst
 					typefst=type(fst)
-					if typefst is dict:
-						fst.update(snd)
-						return fst
 					typesnd=type(snd)
+					if typefst is dict:
+						try:
+							fst.update(snd)
+						except:
+							if type(snd) is not dict:
+								raise ProgrammingError("Can't add value of type %s to %s" % (bold(PY_TYPES_MAP.get(type(snd).__name__,type(snd).__name__)), bold("object")))
+						return fst
 					if typefst is list and typesnd is list:
 						if D: self.debug("both sides are lists, returning '%s'",fst+snd)
 						return fst+snd
