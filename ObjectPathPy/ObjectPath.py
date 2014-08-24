@@ -79,14 +79,12 @@ def printJSON(o):
 					out(",\n")
 				if len(keys) == 1:
 					ret.pop()
-					out("}")
+					#out("}")
 				else:
 					ret.pop()
 					out("\n")
 					minus()
 			out("}")
-			#out("}")
-			#return r
 		else:
 			if type(o) in [int,float]:
 				out(const(o))
