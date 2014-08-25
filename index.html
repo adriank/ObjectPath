@@ -45,7 +45,7 @@
 					<li><i class="fa-li fa fa-arrow-circle-right"></i>Graphs (upcomming)</li>
 				</ul>
 			</div>-->
-			<p class="tags">#Python #Javascript #JSON #XML #nested-list-object</p>
+			<p class="tags">#Python #Javascript #JSON #XML #nested-array-object</p>
 			<div>
 				<a href="https://github.com/adriank/ObjectPath" class="btn btn-success btn-lg try-it-now">Install</a>
 			</div>
@@ -121,7 +121,20 @@
 		</div>
 
 		<div class="container" style="margin-top:64px;">
-			<div class=""
+			<div class="col-md-4"></div>
+			<div class="col-md-8">
+				<h3>Data discovery</h3>
+				<p>So you've got that amazing set of data from an API, but all you see is a chunk of random JSON? ObjectPath
+					shell can help you with navigating this mess. Just do:</p>
+				<pre>python ObjectPath -u http://URL-to-API/call
+ObjectPath interactive shell
+        ctrl+c to exit.
+
+Loading JSON document from http://URL-to-API/call done.
+>>> $.*
+{...}
+				</pre>
+			</div>
 		</div>
 
 		<div class="container" style="margin-top:64px;">
