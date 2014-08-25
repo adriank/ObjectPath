@@ -127,20 +127,20 @@
 			<div class="col-md-8">
 				<h3>Data discovery</h3>
 				<p>So you've got that amazing set of data from an API, but all you see is a chunk of random JSON? ObjectPath
-					shell can help you with navigating this mess. Just do:</p>
-				<pre>python ObjectPath -u http://URL-to-API/call
+					shell can help you navigate this mess. Just do:</p>
+				<pre>$ ObjectPath -u http://URL-to-API/call
 ObjectPath interactive shell
         ctrl+c to exit.
 
 Loading JSON document from http://URL-to-API/call done.
 >>> $.*
 {
-	"cod":"200",
-	"calctime":0.0082,
-	"cnt":15,
-	"list":[{
-		"id":2217362,
-		"name":"Gharyan"
+  <span class="string">"cod"</span>:<span class="string">"200"</span>,
+  <span class="string">"calctime"</span>:<span class="number">0.0082</span>,
+  <span class="string">"cnt"</span> :<span class="number">15</span>,
+  <span class="string">"list"</span> :[{
+    <span class="string">"id"</span> :<span class="number">2217362</span>,
+    <span class="string">"name"</span>:<span class="string">"Gharyan"</span>
 ...</pre>
 			</div>
 		</div>

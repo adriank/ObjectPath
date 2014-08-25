@@ -271,14 +271,20 @@ i.Py{
 .path .operator {
     color: #6CAD5A;
 }
-.path .w2ildcard {
+.path .w2ildcard{
     color: #edaa36;
 }
 .path .string {
     color: #CEC73D;
 }
-.path .number {
+.path .number{
     color: #5EB4ED;
+}
+pre .number{
+	color:#216FA0;
+}
+pre .string{
+	color: #938D16;
 }
 .path .operator.property,
 .path .operator.root,
