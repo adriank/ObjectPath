@@ -1,8 +1,10 @@
 ObjectPath
 ==========
 
-The agile NoSQL query language for JSON
+The agile NoSQL query language for semi-structured data
 -----------------------------------------------
+
+**#Python #Javascript #JSON #XML #nested-array-object**
 
 ObjectPath is a query language similar to XPath or JSONPath, but much more powerful thanks to embedded arithmetic calculations, comparison mechanisms and built-in functions. This makes the language more like SQL in terms of expressiveness, but it works over JSON documents rather than relations. ObjectPath can be considered a full-featured expression language. Besides selector mechanism there is also boolean logic, type system and string concatenation available. On top of that, the language implementations (Python at the moment; Javascript is in beta!) are secure and relatively fast.
 
