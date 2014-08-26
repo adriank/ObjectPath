@@ -220,7 +220,13 @@ h3,h4,h5,h6{
 	content: "Install";
 }
 .menu .fa-download:hover:after{
-	width: 55px;
+	width: 53px;
+}
+.menu .fa-certificate:after{
+	content: "Tutorial";
+}
+.menu .fa-certificate:hover:after{
+	width: 68px;
 }
 i.JS{
 	display: inline-block;

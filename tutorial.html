@@ -17,6 +17,9 @@
 			<a href="http://adriank.github.io/ObjectPath" class="inline-block m16">
 				<i class="fa fa-home fa-2x"></i><span class="sr-only">Home</span>
 			</a><br/>
+			<a href="http://adriank.github.io/ObjectPath/tutorial.html" class="inline-block m16">
+				<i class="fa fa-certificate fa-2x"></i><span class="sr-only">Tutorial</span>
+			</a><br/>
 			<a href="http://adriank.github.io/ObjectPath/reference.html" class="inline-block m16">
 				<i class="fa fa-book fa-2x"></i><span class="sr-only">Documentation</span>
 			</a><br/>
@@ -38,32 +41,33 @@
 			<div class="logo"><a href="/ObjectPath">ObjectPath</a> <small>>> tutorial</small></div>
 		</div>
 
-		<h1>Tutorial<small>Start to use ObjectPath's interactive shell in no time</small></h1>
-		<p class="lead">We'll explore weather data from </p>
+		<div class="container tutorial">
+			<h1>Tutorial<small>Start to use ObjectPath's interactive shell in no time</small></h1>
+			<p class="lead">We'll explore weather data from </p>
 
-		<h2>Installing and running</h2>
-		<h3>Python</h3>
-		<p>Install newest version from GitHub:</p>
-		<pre>git clone https://github.com/adriank/ObjectPath.git
-cd ObjectPath/ObjectPathPy
-python ObjectPath -h
-usage: ObjectPath.py [-h] [-u URL] [-xml] [-d] [FILE]
+			<h2>Installing and running</h2>
+			<h3>Python</h3>
+			<p>Install newest version from GitHub:</p>
+			<pre>git clone https://github.com/adriank/ObjectPath.git
+	cd ObjectPath/ObjectPathPy
+	python ObjectPath -h
+	usage: ObjectPath.py [-h] [-u URL] [-xml] [-d] [FILE]
 
-Command line options
+	Command line options
 
-positional arguments:
-  FILE               File name
+	positional arguments:
+		FILE               File name
 
-optional arguments:
-  -h, --help         show this help message and exit
-  -u URL, --url URL  URL containing JSON document.
-  -xml               [EXPERIMENTAL] Expect XML input.
-  -d, --debug        Debbuging on/off.</pre>
-		<p>If you want to use localization features you need python-tz package installed on your machine.</p>
-		<p>You can also run ObjectPath in PyPy, the faster Python implementation:</p>
-		<pre>pypy ObjectPath</pre>
+	optional arguments:
+		-h, --help         show this help message and exit
+		-u URL, --url URL  URL containing JSON document.
+		-xml               [EXPERIMENTAL] Expect XML input.
+		-d, --debug        Debbuging on/off.</pre>
+			<p>If you want to use localization features you need python-tz package installed on your machine.</p>
+			<p>You can also run ObjectPath in PyPy, the faster Python implementation:</p>
+			<pre>pypy ObjectPath</pre>
 
-
+		</div>
 
 		<script src="http://code.jquery.com/jquery.min.js"></script>
 		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
