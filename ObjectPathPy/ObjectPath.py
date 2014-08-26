@@ -10,13 +10,9 @@ from utils.colorify import *
 # from itertools import chain
 from utils import json_compat as json
 
-print("""ObjectPath interactive shell
-	ctrl+c to exit, documentation at http://adriank.github.io/ObjectPath.
-""")
-
 def printJSON(o):
 	depth=5
-	length=2
+	length=5
 	spaces=2
 
 	def plus():
@@ -112,6 +108,9 @@ if __name__=="__main__":
 
 	args = parser.parse_args()
 	a={}
+
+	print(bold("ObjectPath interactive shell")+"\n"+bold("ctrl+c")+" to exit, documentation at "+const("http://adriank.github.io/ObjectPath")+".\n")
+
 	if args.debug:
 		a["debug"]=True
 	File=args.file
@@ -139,20 +138,22 @@ if __name__=="__main__":
 			tree=Tree(json.loads(json.dumps(xml2tree(src))),a)
 		else:
 			tree=Tree(json.load(src),a)
-		print(" done.")
+		print(" "+bold("done")+".")
 
 	try:
 		while True:
-			#try:
+			try:
 				#if fakeEnv.doDebug:
 				if sys.version >= '3':
 						r=tree.execute(input(">>> "))
 				else:
 						r=tree.execute(raw_input(">>> "))
+				if type(r) is unicode:
+					r=r.encode("utf8")
 				print(printJSON(r))
-			#except Exception as e:
-			#	print(e)
+			except Exception as e:
+				print(e)
 	except KeyboardInterrupt:
 		pass
 	#new line at the end forces command prompt to apear at left
-	print()
+	print(bold("\nbye!"))

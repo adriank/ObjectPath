@@ -411,6 +411,8 @@ def expression(rbp=0):
 	return left
 
 def parse(expr, D=False):
+	if sys.version < "3" and type(expr) is unicode:
+		expr=expr.encode("utf8")
 	if type(expr) is not str:
 		return expr
 	expr=expr.strip()
