@@ -9,6 +9,7 @@
 		<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 		<link href="css/ac.css" rel="stylesheet">
 		<link href="css/app.css" rel="stylesheet">
+		<link href="css/shjs/sh_style.css" rel="stylesheet">
 	</head>
 	<body>
 
@@ -37,7 +38,31 @@
 			<div class="logo"><a href="/ObjectPath">ObjectPath</a> <small>>> tutorial</small></div>
 		</div>
 
-		<h1>Tutorial</h1>
+		<h1>Tutorial<small>Start to use ObjectPath's interactive shell in no time</small></h1>
+		<p class="lead">We'll explore weather data from </p>
+
+		<h2>Installing and running</h2>
+		<h3>Python</h3>
+		<p>Install newest version from GitHub:</p>
+		<pre>git clone https://github.com/adriank/ObjectPath.git
+cd ObjectPath/ObjectPathPy
+python ObjectPath -h
+usage: ObjectPath.py [-h] [-u URL] [-xml] [-d] [FILE]
+
+Command line options
+
+positional arguments:
+  FILE               File name
+
+optional arguments:
+  -h, --help         show this help message and exit
+  -u URL, --url URL  URL containing JSON document.
+  -xml               [EXPERIMENTAL] Expect XML input.
+  -d, --debug        Debbuging on/off.</pre>
+		<p>If you want to use localization features you need python-tz package installed on your machine.</p>
+		<p>You can also run ObjectPath in PyPy, the faster Python implementation:</p>
+		<pre>pypy ObjectPath</pre>
+
 
 
 		<script src="http://code.jquery.com/jquery.min.js"></script>

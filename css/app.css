@@ -27,9 +27,7 @@ h3,h4,h5,h6{
 #steps a{
 	color: #61A8E2;
 }
-.header{
-	/*background: #333;*/
-}
+.header{}
 .header h1{
 	font-size:64px;
 	text-align:center;
@@ -274,10 +272,10 @@ i.Py{
 .path .w2ildcard{
     color: #edaa36;
 }
-.path .string {
+.string {
     color: #CEC73D;
 }
-.path .number{
+.number{
     color: #5EB4ED;
 }
 pre .number{

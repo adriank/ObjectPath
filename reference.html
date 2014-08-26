@@ -9,6 +9,7 @@
 		<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 		<link href="css/ac.css" rel="stylesheet">
 		<link href="css/app.css" rel="stylesheet">
+		<link href="css/shjs/sh_style.css" rel="stylesheet">
 	</head>
 	<body>
 
@@ -80,9 +81,9 @@
 
 				<h3 id="ComplexTypes">Complex types</h3>
 				<p>Arrays can be defined in the language by issuing:</p>
-				<pre>[ val1, val2, ..., valN]</pre>
+				<pre class="sh_python">[ val1, val2, ..., valN]</pre>
 				<p>and for objects it's:</p>
-				<pre>{ "atr1":val1, "atr2":val2, ..., "atrN":valN }<br />{ atr1:val1, atr2:val2, ..., atrN:valN }</pre>
+				<pre class="sh_python">{ "atr1":val1, "atr2":val2, ..., "atrN":valN }<br />{ atr1:val1, atr2:val2, ..., atrN:valN }</pre>
 				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i>
 					<ul>
 						<li>Attribute names can be dynamicly created.  Example: <code>{$.myCar.model: "avg temperature is "<br/> + avg($.cars[@.model is $.myCar.model].temp)} -> {"Toyota Prius": "avg temperature is 4.5"}</code></li>
@@ -96,6 +97,55 @@
 				<div class="alert alert-warning" role="alert"><i class="fa fa-warning fa-3x pull-left"></i>Operations on dates should be performed on UTC dates and then converted to local time in order to avoid locale and DST (daylight saving time) nuances.</div>
 
 				<h2 id="Operations">Operators</h2>
+				<h3 id="HowOPWorks">How operators work</h3>
+				<p>Operators take computation results from it's left and right side and do some operations on those results. While behaviour of simple operators is straight forward, operators like <code>.</code>, <code>..</code> and <code>[]</code> can be confusing.</p>
+				<p>Each of them work on arrays of objects on the left and apply to each element from this array instruction found on the right. To show what does it mean consider document:</p>
+				<pre class="sh_python">{
+  "a":1,
+  "b":{
+    "c":[1,2,3]
+  }
+}</pre>
+				<p>and path:</p>
+				<pre class="sh_python">$.b.c[@ > 2]</pre>
+				<p>It works internally like this:</p>
+				<pre class="sh_python">>>> $
+{
+  "a":1,
+  "b":{
+    "c":[1,2,3]
+  }
+}
+>>> $.b
+{
+  "c":[1,2,3]
+}
+>>> $.b.c
+[1,2,3]
+>>> $.b.c[@ > 2]
+#input | transformation | result
+#[     |                | [
+#  1   | > 2 -> false   |   #nothing
+#  2   | > 2 -> false   |   #nothing
+#  3   | > 2 -> true    |   3
+#]     |                | ]
+[3]</pre>
+				<p>The result is always an array! because ObjectPath executes <code>></code> for each element in array and filters out elements that doesn't match condition.</p>
+
+				<h3 class="OperatorPrecedence">Operator precedence</h3>
+				<p>Operations are executed in the following order:</p>
+				<p>
+					(<code>.</code> = <code>[</code> = <code>(</code>) ->
+					(<code>+ (prefix)</code> = <code>- (prefix)</code>) ->
+					(<code>*</code> = <code>/</code>) ->
+					(<code>+ (infix)</code> = <code>- (infix)</code>) ->
+					(<code>in</code> = <code>not</code> = <code>is</code> = <code><</code> = <code>></code> = <code><=</code> = <code>>=</code>) ->
+					<code>not</code> ->
+					<code>and</code> ->
+					<code>or</code>
+				</p>
+				<p>Other operators and tokens are precedence neutral.</p>
+
 				<h3 id="Arithmetic-ops">Arithmetic operators</h3>
 				<table class="table table-condensed table-striped">
 					<thead>
@@ -183,7 +233,9 @@
 				</table>
 
 				<h3 id="Comparison-ops">Comparison operators</h3>
-				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i>Comparison operators try to cast the right side expression result to type of the left expression result type. Sometimes it fails so the best practice is to use casting functions when types may be different.</div>
+				<p>ObjectPath uses algorithms that guess the types of data. In most cases you don't need to worry about issues with types (e.g. comparing string <span class="string">"2"</span> with number <span class="number">2</span> works perfectly). To check if types are the same or different you can use <code>type("2") is type(2)</code> -> <code>false</code>.</p>
+				<p>In semi-structured data a very common issue is that data is represented as a different type than it was supposed to be. For example very often we can see numbers represented as strings (like <code>["1","2","3"]</code> instead of simply <code>[1,2,3]</code>). This is caused by automatic JSON generators, especially those that convert XML data to JSON. In programming languages such as Javascript this can cause many headashes and hours wasted figuring out why the code doesn't work. That's why:</p>
+				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i>Comparison operators try to cast the right side expression result to the type of the left expression result. Sometimes it fails so best practice is to use casting functions when types may be different.</div>
 				<div class="alert alert-warning" role="alert"><i class="fa fa-warning fa-3x pull-left"></i>The comparison operators are not chainable so 1&lt;2&lt;2 will compare 2 with result of 1&lt;2 which is <em>true</em> and return <em>true</em>. Use 1&lt;2 and 2&lt;3 instead.</div>
 				<table class="table table-condensed table-striped">
 					<thead>
@@ -200,7 +252,7 @@
 							<td><code>is</code></td>
 							<td>equality</td>
 							<td><code>'3' is 3</code> -> <code>true</code></td>
-							<td><s>right expression result is casted to type of left expression result and then compared</s></td>
+							<td><s>right expression result is casted to the type of left expression result and then compared</s></td>
 							<td class="text-center"><i class="Py"></i> <i class="JS"></i></td>
 						</tr>
 						<tr>
@@ -251,11 +303,11 @@
 				</table>
 
 				<h3 id="Concatenation-ops">Concatenation operator <code>+</code></h3>
-				<p>Beside standard addition of numbers, <code>+</code> concatenates strings, arrays and objects.</p>
+				<p>Besides standard addition of numbers, <code>+</code> concatenates strings, arrays and objects.</p>
 				<p>If two arrays are concatenated, right array elements are added to the end of the left array.</p>
-				<p>If string is concatenated with array it is added to the beggining or end of array.</p>
+				<p>If string is concatenated with array, it is added to the beggining or end of array.</p>
 				<p>Objects are merged so that right object overwrites existing elements of left object. Object concatenation is not deep. It means that only direct child elements of root element are overwritten rather than <strong><a title="Leaf node" href="http://en.wikipedia.org/wiki/Leaf_node">leaf nodes</a></strong>.</p>
-				<pre>>>> [1, 2, 4] + [3, 5]
+				<pre class="sh_javascript">>>> [1, 2, 4] + [3, 5]
 [1, 2, 4, 3, 5]
 >>> "aaa"+["bbb"]
 ["aaa", "bbb"]
@@ -403,8 +455,7 @@
 						</tr>
 						<tr>
 							<td><code>split(<em>STRING</em>[, <em>sep</em>])</code></td>
-							<td><code>split('aaa bbb')</code> -> <code>['aaa','bbb']</code>,<br /><code>split('aaa,bbb','.') -&gt;
-								['aaa','bbb']</code></td>
+							<td><code>split('aaa bbb')</code> -> <code>['aaa','bbb']</code>,<br /><code>split('aaa,bbb','.')</code> -> <code>['aaa','bbb']</code></td>
 							<td>&#160;</td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
@@ -569,13 +620,12 @@
 				<h3 id="Localization-fns">Localization function</h3>
 				<p><code>Localize()</code> function tries to localize an argument. Now it works only for dates and times, but it is meant to support numbers and currencies.</p>
 				<p>It is good idea to store UTC times in the database and show localized time to the user. To show localized current time in Warsaw, Poland use <code>localize()</code> function as following:</p>
-				<pre>localize(now(),'Europe/Warsaw')</pre>
+				<pre class="sh_python">localize(now(),'Europe/Warsaw')</pre>
 
 				<h2 id="Paths">Paths</h2>
-				<p>ObjectPath aims to follow the <a href="http://goessner.net/articles/JsonPath/" target="_blank">JSONPath specification</a>, but instead copying behavior one to one, language adds its own selector syntax to significantly extend expressiveness of the language. By not relying on JavaScript, selectors are more human readable than in JSONPath.</p>
-				<p>Paths uses dot notation (JSONPath bracket-notation is dropped):</p>
-				<pre>$.attributeName[selector].attributeName2</pre>
-				<p>where <code>$</code> is root element, <em>ns</em> is optional and defaults to local namespace (request storage in AC Runtime), . selects all direct child elements from node, <em>attributeName</em> restricts these elements to those containing attribute of name <em>attributeName</em> and [] contains selector expression which restrict results even more. <em>attributeName2</em> selects child elements from results of previous computation.</p>
+				<p>Paths uses dot notation:</p>
+				<pre class="sh_python">$.attributeName[selector].attributeName2</pre>
+				<p>where <code>$</code> is root element, <!--<em>ns</em> is optional and defaults to local namespace (request storage in AC Runtime), --><code>.</code> selects all direct child elements from node, <em>attributeName</em> restricts these elements to those containing attribute of name <em>attributeName</em> and <code>[]</code> contains selector expression which restrict results even more. <em>attributeName2</em> selects child elements from results of previous computation.</p>
 
 				<h3 id="CompleteSyntax">Complete syntax</h3>
 				<p>Following table contains complete syntax of paths (near identical to the JSONPath table):</p>
@@ -619,19 +669,19 @@
 				</table>
 
 				<h3 id="Selectors">Selectors</h3>
-				<p>Selector selects array elements that are satisfying expression. Expression are not restricted so one can nest paths or use comparison operators.</p>
+				<p>Selector selects array elements that satisfy expression. You can be creative here and nest paths, use comparison operators or refer to other parts of the data set.</p>
 				<p>Selectors are written inside the <code>[]</code> operator.</p>
-				<p>If selector returns N integer number, N+1th element will be returned:</p>
-				<pre>>>> $.*[1]
-second element from array</pre>
-				<p>If selector contains a string, its behavior is similar to dot operator:</p>
-				<pre>>>> $..*['string'] is $..string
+				<p>Selectors can take number and behave as simple "give me n-th element from array":</p>
+				<pre class="sh_python">>>> $.*[1]
+# second element from array</pre>
+				<p>It also can take a string, its behavior is then similar to dot operator:</p>
+				<pre class="sh_python">>>> $..*['string'] is $..string
 true</pre>
 				<p>Selector can use comparison operators to find elements:</p>
-				<pre>$..*[@.'attribute' is 'ok']</pre>
+				<pre class="sh_python">$..*[@.attribute is 'ok']</pre>
 				<p>and boolean operators to handle more than one condition:</p>
-				<pre>$..*[@.'attribute' is 'ok' or len(@.*[1]) is 2]</pre>
-				<p>@ operator matches current element. Selector iterates over left expression result (which is array). <code>@</code> will match the element currently checked against expression.</p>
+				<pre class="sh_python">$..*[@.attribute is 'ok' or len(@.*[1]) is 2]</pre>
+				<p><code>@</code> operator matches current element. Selector iterates over left expression result (which is array). <code>@</code> will match the element currently checked against expression.</p>
 				<p>WARNING! <code>@</code> operator is slow! Try using or/and operators in conjunction with simple expression that should match some elements or other optimization techniques.</p>
 
 				<h2>Plans to extend ObjectPath</h2>
@@ -644,10 +694,9 @@ true</pre>
 
 				<h2>Optimization plans</h2>
 				<ul>
-					<li>make&#160;<em>$..*[1]</em> faster - generator will help,</li>
+					<li>make <code class="sh_python">$..*[1]</code> faster - generator will help,</li>
 					<li>replace operator names with numbers.</li>
 				</ul>
-
 			</div>
 
 			<div class="col-md-3" >
@@ -656,9 +705,6 @@ true</pre>
 			</div>
 		</div>
 
-
-		<script src="http://code.jquery.com/jquery.min.js"></script>
-		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -666,6 +712,16 @@ true</pre>
 			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 			ga('create', 'UA-36262762-3', 'adriank.github.io');
 			ga('send', 'pageview');
+		</script>
+		<script src="http://code.jquery.com/jquery.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/shjs/sh_main.min.js"></script>
+		<script type="text/javascript" src="js/shjs/sh_javascript.js"></script>
+		<script type="text/javascript" src="js/shjs/sh_python.js"></script>
+		<script>
+			$(document).ready(function(){
+				sh_highlightDocument()
+			})
 		</script>
 <!--		<script src="/js/ObjectPath/tokens.js"></script>
 		<script src="/js/ObjectPath/parse.js"></script>
