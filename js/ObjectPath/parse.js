@@ -5,7 +5,7 @@
 // This file extensively uses the work of Douglas Crockford:
 // Parser for Simplified JavaScript written in Simplified JavaScript
 // From Top Down Operator Precedence
-// http://javascript.crockford.com/tdop/index.html
+// //javascript.crockford.com/tdop/index.html
 // Douglas Crockford
 // 2010-06-26
 
