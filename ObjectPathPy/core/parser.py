@@ -168,7 +168,7 @@ infix("*", 120); infix("/", 120); infix("//", 120)
 infix("%", 120)
 prefix("-", 130); prefix("+", 130); #prefix("~", 130)
 #infix_r("**", 140)
-symbol(".", 150); symbol("[", 150); symbol("(", 150)
+symbol(".", 150); symbol("[", 150); symbol("{", 150);symbol("(", 150)
 # additional behaviour
 symbol("(name)").nud=lambda self: self
 symbol("(literal)").nud=lambda self: self
@@ -212,7 +212,8 @@ def led(self, left):
 	if token.id == "@":
 		attr=True
 		advance()
-	if token.id not in ["(name)","*" ]:
+	print(token.id)
+	if token.id not in ["(name)","*","(literal)" ]:
 		raise SyntaxError("Expected an attribute name.")
 	self.fst=left
 	if attr:

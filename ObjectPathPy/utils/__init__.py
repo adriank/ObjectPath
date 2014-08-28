@@ -25,17 +25,14 @@ except:
 #RE_PATH=re.compile("{\$([^}]+)}") # {$ foobar}
 #RE_PATH_split=re.compile("{\$[^}]+}") # {$ foobar}
 
-def skip(g,n):
-	if type(g) not in (chain,generator):
-		raise TypeError("expected generator, got %s"%type(g).__name__)
-	if type(n) is not int:
-		raise TypeError("generator indices must be integers, not %s"%type(n).__name__)
-	j=0
-	for i in g:
-		if j is n:
-			return i
-		j+=1
-	raise IndexError("generator index out of range")
+from itertools import islice
+
+# islice=islice is an optimization
+def skip(iterable, n, islice=islice):
+	try:
+		return next(islice(iterable, n, None))
+	except StopIteration:
+		raise IndexError("generator index out of range")
 
 def py2JSON(o):
 	if o is True:
