@@ -323,6 +323,9 @@ class Tree(Debugger):
 						if D: self.debug("returning '%s' objects: '%s'",len(nodeList),nodeList)
 						return nodeList
 
+					#if type(selector) is tuple and selector[0]=="fn":
+					#	for i in fst:
+
 					if type(selector) is tuple and selector[0] in SELECTOR_OPS:
 						if D: self.debug("found '%s' operator in selector",selector[0])
 						nodeList=[]
@@ -335,7 +338,9 @@ class Tree(Debugger):
 							#TODO move it to tree building phase
 							if type(selector[1]) is tuple and selector[1][0]=="name":
 								selector=(selector[0],selector[1][1],selector[2])
-							if type(selector[1]) in STR_TYPES:
+							if selector[0]=="fn":
+								nodeList_append(exe(selector))
+							elif type(selector[1]) in STR_TYPES:
 								try:
 									if exe((selector[0],i[selector[1]],selector[2])):
 										nodeList_append(i)
@@ -548,7 +553,7 @@ class Tree(Debugger):
 					try:
 						return args[0].keys()
 					except AttributeError as e:
-						raise Exception("Argument is not object but %s in keys()"%type(args[0]).__name__)
+						raise Exception("Argument is not "+bold("object")+" but %s in keys()"%bold(type(args[0]).__name__))
 				elif fnName=="type":
 					ret=type(args[0])
 					if ret in ITER_TYPES:
