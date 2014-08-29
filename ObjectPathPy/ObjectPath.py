@@ -50,8 +50,8 @@ def printJSON(o):
 				else:
 					ret.pop()
 					if len(o) > 1:
+						#minus()
 						out("\n")
-						minus()
 				if len(o) > 1:
 					minus()
 			out("]")
@@ -64,17 +64,18 @@ def printJSON(o):
 			keys=o.keys()
 			out("{")
 			if len(keys) > 0:
-				plus()
 				if len(keys) > 1:
+					plus()
 					out("\n")
 				for k in o.keys():
-					out(string('"'+k+'"')+" = ")
+					out(string('"'+str(k)+'"')+" = ")
 					rec(o[k])
 					#if type(o[k]) is list:
 					#	plus()
 					out(",\n")
 				if len(keys) == 1:
 					ret.pop()
+					minus()
 					#out("}")
 				else:
 					ret.pop()
@@ -130,8 +131,8 @@ if __name__=="__main__":
 		src=opener.open(request)
 	elif File:
 		src=open(File,"r")
-	if not src and not expr:
-		print ("JSON document source not specified. Working with an empty object {}.")
+	if not src:
+		if not expr:print ("JSON document source not specified. Working with an empty object {}.")
 		tree=Tree({},a)
 	else:
 		if not expr: sys.stdout.write("Loading JSON document from "+str(args.URL or File)+"...")
@@ -141,6 +142,9 @@ if __name__=="__main__":
 		else:
 			tree=Tree(json.load(src),a)
 		if not expr: print(" "+bold("done")+".")
+
+	print(printJSON(tree.execute(expr)))
+	exit()
 
 	if expr:
 		print(json.dumps(tree.execute(expr)))
