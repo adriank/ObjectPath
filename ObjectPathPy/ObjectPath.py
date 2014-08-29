@@ -104,12 +104,14 @@ if __name__=="__main__":
 	parser.add_argument('-u', '--url', dest='URL', help='URL containing JSON document.')
 	parser.add_argument('-xml', dest='xml', help='[EXPERIMENTAL] Expect XML input.',action='store_true')
 	parser.add_argument('-d', '--debug', dest='debug', help='Debbuging on/off.', action='store_true')
+	parser.add_argument('-e', '--expr', dest='expr', help='Expression/query to execute on file, print on stdout and exit.')
 	parser.add_argument('file', metavar='FILE', nargs="?", help='File name')
 
 	args = parser.parse_args()
 	a={}
+	expr=args.expr
 
-	print(bold("ObjectPath interactive shell")+"\n"+bold("ctrl+c")+" to exit, documentation at "+const("http://adriank.github.io/ObjectPath")+".\n")
+	if not expr: print(bold("ObjectPath interactive shell")+"\n"+bold("ctrl+c")+" to exit, documentation at "+const("http://adriank.github.io/ObjectPath")+".\n")
 
 	if args.debug:
 		a["debug"]=True
@@ -128,17 +130,21 @@ if __name__=="__main__":
 		src=opener.open(request)
 	elif File:
 		src=open(File,"r")
-	if not src:
+	if not src and not expr:
 		print ("JSON document source not specified. Working with an empty object {}.")
 		tree=Tree({},a)
 	else:
-		sys.stdout.write("Loading JSON document from "+str(args.URL or File)+"...")
+		if not expr: sys.stdout.write("Loading JSON document from "+str(args.URL or File)+"...")
 		sys.stdout.flush()
 		if args.xml:
 			tree=Tree(json.loads(json.dumps(xml2tree(src))),a)
 		else:
 			tree=Tree(json.load(src),a)
-		print(" "+bold("done")+".")
+		if not expr: print(" "+bold("done")+".")
+
+	if expr:
+		print(json.dumps(tree.execute(expr)))
+		exit()
 
 	try:
 		while True:
