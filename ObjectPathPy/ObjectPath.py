@@ -143,9 +143,6 @@ if __name__=="__main__":
 			tree=Tree(json.load(src),a)
 		if not expr: print(" "+bold("done")+".")
 
-	print(printJSON(tree.execute(expr)))
-	exit()
-
 	if expr:
 		print(json.dumps(tree.execute(expr)))
 		exit()
