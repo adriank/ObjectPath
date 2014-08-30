@@ -175,10 +175,12 @@ class Utils_interpreter(unittest.TestCase):
 	def test_membership_in(self):
 		self.assertEqual(execute("4 in [6,4,3]"),True)
 		self.assertEqual(execute("4 in {4:true}"),True)
+		self.assertEqual(execute("[2,3] in [6,4,3]"),True)
 
 	def test_membership_notin(self):
 		self.assertEqual(execute("4 not in []"), True)
 		self.assertEqual(execute("1 not in {}"), True)
+		self.assertEqual(execute("[2,5] not in [6,4,3]"),True)
 
 	def test_complex(self):
 		self.assertEqual(execute("23 is not 56 or 25 is 57"), True)

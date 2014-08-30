@@ -170,9 +170,18 @@ class Tree(Debugger):
 				if D: self.debug("doing not '%s'",fst)
 				return not fst
 			elif op=="in":
+				fst=exe(node[1])
+				snd=exe(node[2])
 				if D: self.debug("doing '%s' in '%s'",node[1],node[2])
+				if type(fst) in ITER_TYPES and type(snd) in ITER_TYPES:
+					return any(x in max(fst,snd,key=len) for x in min(fst,snd,key=len))
 				return exe(node[1]) in exe(node[2])
 			elif op=="not in":
+				fst=exe(node[1])
+				snd=exe(node[2])
+				if D: self.debug("doing '%s' not in '%s'",node[1],node[2])
+				if type(fst) in ITER_TYPES and type(snd) in ITER_TYPES:
+					return not any(x in max(fst,snd,key=len) for x in min(fst,snd,key=len))
 				return exe(node[1]) not in exe(node[2])
 			elif op in ("is","is not"):
 				if D: self.debug("found operator '%s'",op)
