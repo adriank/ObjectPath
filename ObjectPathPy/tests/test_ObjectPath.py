@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from core.interpreter import *
+from objectpath.core.interpreter import *
 from random import randint, choice
 import sys, unittest, os
 

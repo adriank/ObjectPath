@@ -4,11 +4,12 @@
 import argparse
 import sys
 import readline
-from core.interpreter import *
-from utils.colorify import *
+
+from objectpath import *
+from objectpath.utils.colorify import *
 # from types import GeneratorType as generator
 # from itertools import chain
-from utils import json_compat as json
+from objectpath.utils import json_compat as json
 
 def printJSON(o):
 	depth=5
@@ -43,8 +44,8 @@ def printJSON(o):
 				for i in o[0:length]:
 					rec(i)
 					out(",\n")
-				if o and not len(o)>length and type(o[0:length][-1]) is dict:
-					plus()
+				#if len(o)<=length and type(o[0:length][-1]) is dict:
+				#	plus()
 				if len(o)>length:
 					out("... ("+str(len(o)-length)+" more items)\n")
 				else:
@@ -73,14 +74,10 @@ def printJSON(o):
 					#if type(o[k]) is list:
 					#	plus()
 					out(",\n")
-				if len(keys) == 1:
-					ret.pop()
+				ret.pop()
+				if len(keys) > 1:
 					minus()
-					#out("}")
-				else:
-					ret.pop()
 					out("\n")
-					minus()
 			out("}")
 		else:
 			if type(o) in [int,float]:

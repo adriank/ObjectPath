@@ -20,9 +20,6 @@
 import datetime
 try:
 	import pytz
-	# TODO - make it dynamic:
-	# milestone 1: through timezone project config setting
-	# milestone 2: through HTTP Cookie (just like language settings)
 	TIMEZONE_CACHE={
 		"UTC":pytz.utc
 	}

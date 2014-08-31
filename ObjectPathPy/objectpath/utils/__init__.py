@@ -3,12 +3,6 @@
 
 import sys,time,random,base64,re
 from datetime import datetime, timedelta
-#from ACR.errors import *
-#from ACR.utils.hashcompat import md5_constructor
-#from ACR.utils.xmlextras import escapeQuotes, py2JSON
-#from ACR.utils import dicttree
-#from ACR.utils.timeutils import now
-#from ACR import acconfig
 from types import GeneratorType as generator
 from itertools import chain
 

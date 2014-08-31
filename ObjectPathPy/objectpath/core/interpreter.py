@@ -4,12 +4,12 @@
 #TODO thread safety!
 import sys
 import re
-from core.parser import parse
-from core import *
-from utils.colorify import *
-from utils import dicttree,timeutils,py2JSON
-from utils import iterators, generator, chain, skip
-from utils.debugger import Debugger
+from .parser import parse
+from objectpath.core import *
+from objectpath.utils.colorify import *
+from objectpath.utils import dicttree,timeutils,py2JSON
+from objectpath.utils import iterators, generator, chain, skip
+from objectpath.utils.debugger import Debugger
 
 EPSILON=0.0000000000000001 #this is used in float comparison
 EXPR_CACHE={}
@@ -326,6 +326,10 @@ class Tree(Debugger):
 					#if type(selector) is tuple and selector[0]=="fn":
 					#	for i in fst:
 
+					if type(selector) is tuple and selector[0] == "(current)":
+						if D: self.warning(bold("$.*[@]")+" is eqivalent to "+bold("$.*")+"!")
+						return fst
+
 					if type(selector) is tuple and selector[0] in SELECTOR_OPS:
 						if D: self.debug("found '%s' operator in selector",selector[0])
 						nodeList=[]
@@ -339,6 +343,7 @@ class Tree(Debugger):
 							if type(selector[1]) is tuple and selector[1][0]=="name":
 								selector=(selector[0],selector[1][1],selector[2])
 							if selector[0]=="fn":
+								print self.current
 								nodeList_append(exe(selector))
 							elif type(selector[1]) in STR_TYPES:
 								try:
@@ -452,7 +457,7 @@ class Tree(Debugger):
 				elif fnName=="escape":
 					global escape,escapeDict
 					if not escape:
-						from utils.xmlextras import escape, escapeDict
+						from objectpath.utils.xmlextras import escape, escapeDict
 					return escape(args[0],escapeDict)
 				elif fnName=="upper":
 					return args[0].upper()
@@ -467,7 +472,7 @@ class Tree(Debugger):
 				elif fnName=="unescape":
 					global unescape,unescapeDict
 					if not unescape:
-						from utils.xmlextras import unescape, unescapeDict
+						from objectpath.utils.xmlextras import unescape, unescapeDict
 					return unescape(args[0],unescapeDict)
 				elif fnName=="replace":
 					if sys.version < "3" and type(args[0]) is unicode:

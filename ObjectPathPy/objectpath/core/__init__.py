@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from utils import iterators
+from objectpath.utils import iterators
 
 SELECTOR_OPS=["is",">","<","is not",">=","<=","in","not in",":","and","or","fn"]
 #it must be list because of further concatenations

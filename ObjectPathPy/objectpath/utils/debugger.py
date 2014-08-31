@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # move dbgMap outside
+import inspect
 
 class Debugger(object):
 	dbg=None
@@ -65,6 +66,10 @@ class Debugger(object):
 		if self.dbgfn and self.level<= self.CRITICAL:
 			self.dbgfn("CRITICAL", s)
 
+	def lineno(self):
+			"""Returns the current line number in our program."""
+			return inspect.currentframe().f_back.f_back.f_back.f_lineno
+
 	def consolelog(self, lvl, s):
 		def f(x):
 			try:
@@ -87,7 +92,7 @@ class Debugger(object):
 		if len(s)>1:
 			v=tuple(map(f ,s[1:]))
 			self._debugStr.append((lvl, s[0] %v))
-			print(lvl, s[0] % v)
+			print(lvl + "@" + str(self.lineno()) + " " + s[0] % v)
 		else:
 			self._debugStr.append((lvl, s[0]))
-			print(lvl, f(s[0]))
+			print(lvl + "@" + str(self.lineno()) + " " + f(s[0]))

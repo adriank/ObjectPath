@@ -10,7 +10,8 @@ if sys.version >= '3':
 	from io import StringIO
 else:
 	from cStringIO import StringIO
-from core import *
+
+from objectpath.core import *
 
 symbol_table={}
 
@@ -104,47 +105,47 @@ class symbol_base(object):
 		out=list(map(str, filter(None, out)))
 		return "(" + " ".join(out) + ")"
 
-def symbol(id, bp=0):
+def symbol(ID, bp=0):
 	try:
-		s=symbol_table[id]
+		s=symbol_table[ID]
 	except KeyError:
 		class s(symbol_base):
 			pass
-		s.__name__="symbol-" + id # for debugging
-		s.id=id
+		s.__name__="symbol-" + ID # for debugging
+		s.id=ID
 		s.value=None
 		s.lbp=bp
-		symbol_table[id]=s
+		symbol_table[ID]=s
 	else:
 		s.lbp=max(bp, s.lbp)
 	return s
 
 # helpers
 
-def infix(id, bp):
+def infix(ID, bp):
 	def led(self, left):
 		self.fst=left
 		self.snd=expression(bp)
 		return self
-	symbol(id, bp).led=led
+	symbol(ID, bp).led=led
 
-def infix_r(id, bp):
+def infix_r(ID, bp):
 	def led(self, left):
 		self.fst=left
 		self.snd=expression(bp-1)
 		return self
-	symbol(id, bp).led=led
+	symbol(ID, bp).led=led
 
-def prefix(id, bp):
+def prefix(ID, bp):
 	def nud(self):
 		self.fst=expression(bp)
 		return self
-	symbol(id).nud=nud
+	symbol(ID).nud=nud
 
-def advance(id=None):
+def advance(ID=None):
 	global token
-	if id and token.id != id:
-		raise SyntaxError("Expected %r, got %s"%(id,token.id))
+	if ID and token.id != ID:
+		raise SyntaxError("Expected %r, got %s"%(ID,token.id))
 	token=nextToken()
 	#print(token)
 
