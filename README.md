@@ -12,28 +12,12 @@ More at [ObjectPath site](http://adriank.github.io/ObjectPath)
 
 ObjectPath makes it easy to find data in big nested JSON documents. It borrows the best parts from E4X, JSONPath, XPath and SQL. ObjectPath is to JSON documents what XPath is to XML. Other examples to ilustrate this kind of relationship are:
 
-<table>
-    <thead>
-       <th>Scope</th>
-       <th>Language</th>
-    </thead>
-    <tr>
-       <td>text documents</td>
-       <td>regular expression</td>
-    </tr>
-    <tr>
-       <td>XML</td>
-       <td>XPath</td>
-    </tr>
-    <tr>
-       <td>HTML</td>
-       <td>CSS selectors</td>
-    </tr>
-    <tr>
-       <td>JSON documents</td>
-       <td>ObjectPath</td>
-    </tr>
-</table>
+| Scope  | Language |
+|---|---|
+| text documents  | regular expression  |
+| XML  | XPath  |
+| HTML  | CSS selectors  |
+| JSON documents | ObjectPath |
 
 Tags
 ----
