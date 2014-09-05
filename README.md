@@ -10,6 +10,8 @@ ObjectPath is a query language similar to XPath or JSONPath, but much more power
 
 More at [ObjectPath site](http://adriank.github.io/ObjectPath)
 
+![ObjectPath img](http://adriank.github.io/ObjectPath/img/op-colors.png)
+
 ObjectPath makes it easy to find data in big nested JSON documents. It borrows the best parts from E4X, JSONPath, XPath and SQL. ObjectPath is to JSON documents what XPath is to XML. Other examples to ilustrate this kind of relationship are:
 
 | Scope  | Language |
