@@ -22,7 +22,7 @@ long_description = (
 print long_description
 
 setup(name='objectpath',
-			version='0.4',
+			version='0.4.1',
 			description='The agile query language for semi-structured data. #JSON',
 			long_description=long_description,
 			url='http://adriank.github.io/ObjectPath',

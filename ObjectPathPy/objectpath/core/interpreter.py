@@ -352,7 +352,6 @@ class Tree(Debugger):
 							if type(selector[1]) is tuple and selector[1][0]=="name":
 								selector=(selector[0],selector[1][1],selector[2])
 							if selector[0]=="fn":
-								print self.current
 								nodeList_append(exe(selector))
 							elif type(selector[1]) in STR_TYPES:
 								try:
