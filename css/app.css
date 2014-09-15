@@ -58,6 +58,21 @@ h3,h4,h5,h6{
 	font-family: "Neuton Regular","Open sans", 'Helvetica Neue', Helvetica, Arial, sans-serif;;
 	font-weight: 300;
 }
+.install{
+	margin: 32px 0 16px 0;
+}
+.install .btn{
+	margin-right: 0;
+	border-bottom-right-radius:0;
+	border-top-right-radius:0;
+}
+.install pre{
+	padding-top: 9px;
+	padding-bottom: 8px;
+	margin-left: 0;
+	border-bottom-left-radius:0;
+	border-top-left-radius:0;
+}
 .try-it-now{
 	font-size: 22px;
 	margin: 32px 0;
@@ -142,13 +157,15 @@ h3,h4,h5,h6{
 
 @media (max-width: 992px) {
 	.social{
-		text-align: center;
+		display: none;
+		/*text-align: center;*/
 	}
 	.content{
 		margin-top:0px !important;
 	}
 	.header h1{
 		font-size: 36px !important;
+		margin-top: 60px;
 	}
 	.sample-code{
 		font-size: 18px !important;
@@ -177,6 +194,9 @@ h3,h4,h5,h6{
 	border-radius: 10px;
 	transition: color 1s;
 	transition: background-color 1s;
+}
+.menu.affix i.fa{
+	border-radius: 0 10px 10px 0;
 }
 .menu i.fa:hover{
 	transition: color 1s;
@@ -228,6 +248,39 @@ h3,h4,h5,h6{
 .menu .fa-certificate:hover:after{
 	width: 68px;
 }
+.menu.affix{
+	background: #383838;
+	border-radius: 0 10px 10px 0;
+	z-index: 10;
+	margin-left: 0px;
+	margin-top: 70px;
+	padding-bottom: 0;
+	border: 1px solid #383838;
+}
+.menu.affix a{
+	position: relative;
+	margin: 10px 0 0 0;
+}
+.M{
+	text-align: center;
+	display: block;
+	font-size: 28px;
+	font-weight: bold;
+	font-family: "Neuton Regular";
+	font-style: italic;
+	padding-bottom: 5px;
+	margin-left: -5px;
+	margin-bottom: 5px;
+	border-bottom: 1px solid #888;
+}
+.M small{
+	display: block;
+	font-size: 18px;
+	font-weight: normal;
+}
+@media (max-width: 992px) {
+}
+
 i.JS{
 	display: inline-block;
 }

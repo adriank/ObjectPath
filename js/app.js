@@ -19,7 +19,9 @@ $(document).ready(function(){
 
 	//$('.tooltip-trigger').tooltip()
 
-	if (innerWidth>750) {}
+	if (innerWidth<750) {
+
+	}
 
 	$("#OPExample1 .code-example span").mouseenter(function(e){
 		$(".path ."+e.target.className).addClass("hover")
@@ -53,7 +55,6 @@ $(document).ready(function(){
 			toc=[],
 			listType="ul",
 			tocNode=$("#TOC")
-			console.log(tocNode)
 			tocNode.html("<h3>Contents</h3><"+listType+" class=\"list-unstyled\"/>")
 
 			headers.each(function(n,el){
@@ -75,5 +76,53 @@ $(document).ready(function(){
 				//toc=[]
 			})
 			$("#TOC "+listType).append(toc.join("")+"</li>")
+			$(".select").on("click",function(e){
+				$(this).selText()
+			})
 
 })
+
+jQuery.fn.selText = function() {
+	var range,
+			selection,
+			obj = this[0],
+			type = {
+					func:'function',
+					obj:'object'
+			},
+			is = function(type, o){
+					return typeof o === type;
+			};
+	if(is(type.obj, obj.ownerDocument)
+			&& is(type.obj, obj.ownerDocument.defaultView)
+			&& is(type.func, obj.ownerDocument.defaultView.getSelection)){
+			selection = obj.ownerDocument.defaultView.getSelection();
+			if(is(type.func, selection.setBaseAndExtent)){
+					// Chrome, Safari - nice and easy
+					selection.setBaseAndExtent(obj, 0, obj, $(obj).contents().size());
+			}
+			else if(is(type.func, obj.ownerDocument.createRange)){
+
+					range = obj.ownerDocument.createRange();
+
+					if(is(type.func, range.selectNodeContents)
+							&& is(type.func, selection.removeAllRanges)
+							&& is(type.func, selection.addRange)){
+							// Mozilla
+							range.selectNodeContents(obj);
+							selection.removeAllRanges();
+							selection.addRange(range);
+					}
+			}
+	}
+	else if(is(type.obj, document.body) && is(type.obj, document.body.createTextRange)) {
+			range = document.body.createTextRange();
+			if(is(type.obj, range.moveToElementText) && is(type.obj, range.select)){
+					// IE most likely
+					range.moveToElementText(obj);
+					range.select();
+			}
+	}
+	// Chainable
+	return this;
+}
