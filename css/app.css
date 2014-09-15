@@ -160,8 +160,9 @@ h3,h4,h5,h6{
 		display: none;
 		/*text-align: center;*/
 	}
-	.content{
+	.content, #content{
 		margin-top:0px !important;
+		margin-left: 30px;
 	}
 	.header h1{
 		font-size: 36px !important;
