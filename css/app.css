@@ -106,8 +106,6 @@ h3,h4,h5,h6{
 	float:left;
 	color: #888;
 }
-.content{
-}
 .sample-code{
 	font-size: 24px;
 }
@@ -159,7 +157,7 @@ h3,h4,h5,h6{
 		display: none;
 		/*text-align: center;*/
 	}
-	.content, #content{
+	body .container{
 		margin-top:0px !important;
 		margin-left: 30px;
 	}
@@ -249,13 +247,18 @@ h3,h4,h5,h6{
 	width: 68px;
 }
 .menu.affix{
-	background: #383838;
+	background: rgba(40,40,40,0.2);
 	border-radius: 0 10px 10px 0;
 	z-index: 10;
 	margin-left: 0px;
 	margin-top: 70px;
 	padding-bottom: 0;
-	border: 1px solid #383838;
+	border: 1px solid rgba(40,40,40,0.2);
+	transition: background 0.5s;
+}
+.menu.affix:hover{
+	transition: background 0.5s;
+	background: rgba(50,50,50,1);
 }
 .menu.affix a{
 	position: relative;
@@ -326,16 +329,16 @@ i.Py{
 	vertical-align: middle;
 }
 .path .operator {
-    color: #6CAD5A;
+	color: #6CAD5A;
 }
 .path .w2ildcard{
-    color: #edaa36;
+	color: #edaa36;
 }
 .string {
-    color: #CEC73D;
+	color: #CEC73D;
 }
 .number{
-    color: #5EB4ED;
+	color: #5EB4ED;
 }
 pre .number{
 	color:#216FA0;
