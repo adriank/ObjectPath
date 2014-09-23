@@ -91,6 +91,14 @@ def printJSON(o):
 	currDepth[0]=0
 	return "".join(ret)
 
+try:
+	isinstance("", unicode)
+	def isunicode(s):
+		return isinstance(s, unicode)
+except NameError:
+	def isunicode(s):
+		return isinstance(s, str)
+
 def main():
 	parser=argparse.ArgumentParser(description='Command line options')
 	#parser.add_argument('-o', '--file', dest='file', help='File containing JSON document.')
@@ -146,7 +154,7 @@ def main():
 						r=tree.execute(input(">>> "))
 				else:
 						r=tree.execute(raw_input(">>> "))
-				if type(r) is unicode:
+				if isunicode(r):
 					r=r.encode("utf8")
 				print(printJSON(r))
 			except Exception as e:
