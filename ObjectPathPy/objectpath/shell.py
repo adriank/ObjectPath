@@ -146,8 +146,12 @@ def main():
 						r=tree.execute(input(">>> "))
 				else:
 						r=tree.execute(raw_input(">>> "))
-				if type(r) is unicode:
-					r=r.encode("utf8")
+				#python 3 raises error here - unicode is not a proper type there
+				try:
+					if type(r) is unicode:
+						r=r.encode("utf8")
+				except NameError:
+					pass
 				print(printJSON(r))
 			except Exception as e:
 				print(e)
