@@ -14,7 +14,9 @@ try:
 	STR_TYPES+=[unicode]
 except:
 	pass
+
 ITER_TYPES=iterators
+NAMESPACES=('', 'mg','rs')
 
 class ProgrammingError(Exception):
 	pass

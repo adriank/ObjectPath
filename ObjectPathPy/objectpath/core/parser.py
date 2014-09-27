@@ -80,9 +80,8 @@ class symbol_base(object):
 						t_append(j.getTree())
 					except:
 						t_append(j)
-				#TODO check if this is ever used?
-				if self.id == "[":
-					return t
+				if self.id in ("[",".",".."):
+					ret.append(t)
 				else:
 					ret.extend(t)
 				#ret_append(t)
@@ -95,12 +94,15 @@ class symbol_base(object):
 				ret_append(i.getTree())
 		if self.id == "(":
 			#this will produce ("fn","fnName",arg1,arg2,...argN)
-			return tuple(["fn",ret[1][1]]+ret[2:])
+			try:
+				return tuple(["fn",ret[1][1]]+ret[2:])
+			except:
+				pass
 		return tuple(ret)
 
 	def __repr__(self):
 		if self.id == "(name)" or self.id == "(literal)":
-			return "(%s %s)" % (self.id[1:-1], self.value)
+			return "(%s:%s)" % (self.id[1:-1], self.value)
 		out=[self.id, self.fst, self.snd, self.third]
 		out=list(map(str, filter(None, out)))
 		return "(" + " ".join(out) + ")"
@@ -147,7 +149,6 @@ def advance(ID=None):
 	if ID and token.id != ID:
 		raise SyntaxError("Expected %r, got %s"%(ID,token.id))
 	token=nextToken()
-	#print(token)
 
 def method(s):
 	# decorator
@@ -169,8 +170,8 @@ infix("*", 120); infix("/", 120); infix("//", 120)
 infix("%", 120)
 prefix("-", 130); prefix("+", 130); #prefix("~", 130)
 #infix_r("**", 140)
-symbol(".", 150); symbol("[", 150); symbol("{", 150);symbol("(", 150)
-# additional behaviour
+symbol(".", 150); symbol("[", 150); symbol("{", 150); symbol("(", 150)
+# additional behavior
 symbol("(name)").nud=lambda self: self
 symbol("(literal)").nud=lambda self: self
 symbol("(number)").nud=lambda self: self
@@ -204,6 +205,8 @@ def nud(self):
 	advance(")")
 	return expr
 
+symbol(",")
+
 @method(symbol("."))
 def led(self, left):
 	attr=False
@@ -213,7 +216,20 @@ def led(self, left):
 	if token.id == "@":
 		attr=True
 		advance()
-	if token.id not in ["(name)","*","(literal)" ]:
+	if token.id == "(":
+		advance()
+		self.fst=left
+		self.snd=[]
+		if token.id != ")":
+			self_snd_append=self.snd.append
+			while 1:
+				self_snd_append(expression())
+				if token.id != ",":
+					break
+				advance(",")
+		advance(")")
+		return self
+	if token.id not in ["(name)","*","(literal)","("]:
 		raise SyntaxError("Expected an attribute name.")
 	self.fst=left
 	if attr:
@@ -229,7 +245,6 @@ symbol("$")
 def nud(self):
 	global token
 	self.id="(root)"
-	#print ("$.nud",token)
 	if token.id == ".":
 		self.fst="rs"
 	else:
@@ -245,8 +260,6 @@ def led(self, left):
 	self.snd=expression()
 	advance("]")
 	return self
-
-symbol(",")
 
 #this is for built-in functions
 @method(symbol("("))
@@ -387,7 +400,6 @@ def tokenize(program):
 			symbol=symbol_table.get(value)
 			if symbol:
 				s=symbol()
-			#elif id==" ":
 			elif id=="(name)":
 				symbol=symbol_table[id]
 				s=symbol()
@@ -401,13 +413,10 @@ def expression(rbp=0):
 	global token
 	t=token
 	token=nextToken()
-	#print(token)
 	left=t.nud()
-	#print("LEFT",left)
 	while rbp < token.lbp:
 		t=token
 		token=nextToken()
-		#print(token)
 		left=t.led(left)
 	return left
 
@@ -425,8 +434,8 @@ def parse(expr, D=False):
 	else:
 		nextToken=tokenize(expr).next
 	token=nextToken()
-	#print(token)
-	r=expression().getTree()
+	r=expression()
+	r=r.getTree()
 	if D:
 		print ("PARSE STAGE")
 		print (r)

@@ -11,6 +11,12 @@ try:
 	iterators+=[map]
 except:
 	pass
+try:
+	import pymongo
+	iterators+=[pymongo.cursor.Cursor]
+except:
+	pass
+
 #if hasattr(random, 'SystemRandom'):
 #	randrange=random.SystemRandom().randrange
 #else:

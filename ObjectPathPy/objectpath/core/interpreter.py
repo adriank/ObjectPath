@@ -8,6 +8,7 @@ from .parser import parse
 from objectpath.core import *
 from objectpath.utils.colorify import *
 from objectpath.utils import dicttree,timeutils,py2JSON
+from objectpath.utils.mongo import mongo
 from objectpath.utils import iterators, generator, chain, skip
 from objectpath.utils.debugger import Debugger
 
@@ -243,6 +244,11 @@ class Tree(Debugger):
 				elif fstLetter.isdigit:
 					return int(node[1])
 			elif op=="(root)":# this is $
+				if node[1] not in NAMESPACES:
+					print("%s namespace is not supported. Try one of '%s'."%(bold(node[1]),"', '".join(NAMESPACES)))
+				if node[1] == "mg":
+					print("WARNING! MongoDB namespace is highly experimental!")
+					return mongo.showColls()
 				return self.data
 			elif op=="(node)":# this is !
 				if D: self.debug("returning node %s",self.node)
@@ -262,13 +268,23 @@ class Tree(Debugger):
 					if D: self.end("returning '%s'",typefst in ITER_TYPES and fst or [fst])
 					return typefst in ITER_TYPES and fst or [fst]
 				snd=exe(node[2])
+				filterAttrs=type(node[2]) is list
 				if D: self.debug("right is '%s'",snd)
 				if typefst in ITER_TYPES:
 					ret=[]
 					ret_append=ret.append
 					for i in fst:
 						try:
-							ret_append(i[snd])
+							if filterAttrs and type(i) is dict:
+								d={}
+								for a in snd:
+									try:
+										d[a]=i[a]
+									except:
+										pass
+								ret.append(d)
+							else:
+								ret_append(i[snd])
 						except:
 							pass
 					if D: self.end(". returning '%s'",ret)
@@ -289,11 +305,19 @@ class Tree(Debugger):
 				if node[2][0]=="*":
 					if D: self.debug("returning '%s'",fst)
 					return fst
+				filterAttrs=type(node[2]) is list
+					#reduce objects to selected attributes
 				ret=[]
 				snd=exe(node[2])
 				for i in fst:
 					try:
-						ret.append(i[snd])
+						if filterAttrs and type(i) is dict:
+							d={}
+							for a in snd:
+								d[a]=i[a]
+							ret.append(d)
+						else:
+							ret.append(i[snd])
 					except:
 						pass
 				if D: self.debug("returning '%s'",ret)
@@ -512,6 +536,8 @@ class Tree(Debugger):
 						args=list(args)
 					args.reverse()
 					return args
+				elif fnName=="map":
+					return map(lambda x: exe(("fn",args[0],x)), args[1])
 				elif fnName in ("count","len"):
 					args=args[0]
 					if args in (True,False,None):
@@ -574,6 +600,8 @@ class Tree(Debugger):
 					if ret is dict:
 						return "object"
 					return ret.__name__
+				elif fnName.startswith("mg_"):
+					mongo.handle(fnName,args)
 				else:
 					raise ProgrammingError("Function '"+fnName+"' does not exist.")
 			else:

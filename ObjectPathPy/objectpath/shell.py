@@ -9,9 +9,9 @@ from objectpath import *
 from objectpath.utils.colorify import *
 from objectpath.utils import json_compat as json
 
-def printJSON(o):
-	depth=5
-	length=5
+LAST_LIST=None
+
+def printJSON(o, length=5,depth=5):
 	spaces=2
 
 	def plus():
@@ -21,7 +21,10 @@ def printJSON(o):
 		currDepth[0]-=1
 
 	def out(s):
-		s=str(s)
+		try:
+			s=str(s)
+		except:
+			pass
 		if not ret:
 			ret.append(s)
 		elif ret[-1][-1]=="\n":
@@ -31,7 +34,12 @@ def printJSON(o):
 
 	def rec(o):
 		if type(o) in ITER_TYPES:
-			o=list(o)
+			if length is not -1 and type(o) is pymongo.cursor.Cursor:
+				x=list(o[0:length+1])
+				#o.close()
+				o=x
+			else:
+				o=list(o)
 			if currDepth[0]>=depth:
 				out("<array of "+str(len(o))+" items>\n")
 			out("[")
@@ -44,7 +52,7 @@ def printJSON(o):
 					out(",\n")
 				#if len(o)<=length and type(o[0:length][-1]) is dict:
 				#	plus()
-				if len(o)>length:
+				if length is not -1 and len(o)>length:
 					out("... ("+str(len(o)-length)+" more items)\n")
 				else:
 					ret.pop()
@@ -141,20 +149,27 @@ def main():
 
 	try:
 		while True:
-			try:
+				limitResult=5
+			#try:
 				if sys.version >= '3':
-						r=tree.execute(input(">>> "))
+					r=input(">>> ")
 				else:
-						r=tree.execute(raw_input(">>> "))
+					r=raw_input(">>> ")
+
+				if r.startswith("all"):
+					limitResult=-1
+					r=tree.execute(r[3:].strip())
+				else:
+					r=tree.execute(r)
 				#python 3 raises error here - unicode is not a proper type there
 				try:
 					if type(r) is unicode:
 						r=r.encode("utf8")
 				except NameError:
 					pass
-				print(printJSON(r))
-			except Exception as e:
-				print(e)
+				print(printJSON(r,length=limitResult))
+			#except Exception as e:
+				#print(e)
 	except KeyboardInterrupt:
 		pass
 	#new line at the end forces command prompt to apear at left
