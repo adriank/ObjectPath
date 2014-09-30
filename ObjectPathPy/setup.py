@@ -7,7 +7,7 @@ except ImportError:
 	pandoc = None
 
 def read(*rnames):
-    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+	return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
 def md2re(s):
 	if pandoc is None:
@@ -17,11 +17,11 @@ def md2re(s):
 	return doc.rst
 
 long_description = (
-    md2re(read('../README.md'))
-    + '\n' +
-    'Download\n'
-    '********\n'
-    )
+	md2re(read('../README.md'))
+	+ '\n' +
+	'Download\n'
+	'********\n'
+	)
 
 print long_description
 
