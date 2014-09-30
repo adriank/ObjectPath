@@ -1,23 +1,27 @@
 import os
 from setuptools import setup
-import pandoc
-
-pandoc.core.PANDOC_PATH = '/usr/bin/pandoc'
+try:
+	import pandoc
+	pandoc.core.PANDOC_PATH = '/usr/bin/pandoc'
+except ImportError:
+	pandoc = None
 
 def read(*rnames):
-    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+	return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
 def md2re(s):
+	if pandoc is None:
+		return s
 	doc = pandoc.Document()
 	doc.markdown = s
 	return doc.rst
 
 long_description = (
-    md2re(read('../README.md'))
-    + '\n' +
-    'Download\n'
-    '********\n'
-    )
+	md2re(read('README.md'))
+	+ '\n' +
+	'Download\n'
+	'********\n'
+	)
 
 print long_description
 
@@ -30,6 +34,7 @@ setup(name='objectpath',
 			author_email='adrian.kalbarczyk@gmail.com',
 			license='AGPLv3',
 			packages=['objectpath','objectpath.utils','objectpath.core'],
+			package_dir={'': 'ObjectPathPy'},
 			keywords="query, tree, JSON, nested structures",
 			classifiers=[
 				"Development Status :: 6 - Mature",
