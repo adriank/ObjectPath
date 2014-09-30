@@ -1,13 +1,17 @@
 import os
 from setuptools import setup
-import pandoc
-
-pandoc.core.PANDOC_PATH = '/usr/bin/pandoc'
+try:
+	import pandoc
+	pandoc.core.PANDOC_PATH = '/usr/bin/pandoc'
+except ImportError:
+	pandoc = None
 
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
 def md2re(s):
+	if pandoc is None:
+		return s
 	doc = pandoc.Document()
 	doc.markdown = s
 	return doc.rst
