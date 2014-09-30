@@ -17,7 +17,7 @@ def md2re(s):
 	return doc.rst
 
 long_description = (
-	md2re(read('../README.md'))
+	md2re(read('README.md'))
 	+ '\n' +
 	'Download\n'
 	'********\n'
@@ -34,6 +34,7 @@ setup(name='objectpath',
 			author_email='adrian.kalbarczyk@gmail.com',
 			license='AGPLv3',
 			packages=['objectpath','objectpath.utils','objectpath.core'],
+			package_dir={'': 'ObjectPathPy'},
 			keywords="query, tree, JSON, nested structures",
 			classifiers=[
 				"Development Status :: 6 - Mature",
