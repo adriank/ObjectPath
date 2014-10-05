@@ -1,28 +1,18 @@
 import os
 from setuptools import setup
-import pandoc
-
-pandoc.core.PANDOC_PATH = '/usr/bin/pandoc'
 
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-def md2re(s):
-	doc = pandoc.Document()
-	doc.markdown = s
-	return doc.rst
-
 long_description = (
-    md2re(read('../README.md'))
+    read('README.rst')
     + '\n' +
     'Download\n'
     '********\n'
     )
 
-print long_description
-
 setup(name='objectpath',
-			version='0.4.1',
+			version=read('VER').strip(),
 			description='The agile query language for semi-structured data. #JSON',
 			long_description=long_description,
 			url='http://adriank.github.io/ObjectPath',
@@ -30,6 +20,7 @@ setup(name='objectpath',
 			author_email='adrian.kalbarczyk@gmail.com',
 			license='AGPLv3',
 			packages=['objectpath','objectpath.utils','objectpath.core'],
+			#package_dir={'': 'objectpath'},
 			keywords="query, tree, JSON, nested structures",
 			classifiers=[
 				"Development Status :: 6 - Mature",
