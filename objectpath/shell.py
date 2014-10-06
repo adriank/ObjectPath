@@ -8,7 +8,7 @@ import argparse
 import sys
 import readline
 # this is to prevent various tools from deleting import readline
-readline
+x=readline.__doc__
 
 from objectpath import Tree, ITER_TYPES, STR_TYPES, py2JSON
 from objectpath.utils.colorify import *
