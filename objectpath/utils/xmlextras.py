@@ -34,7 +34,7 @@ def py2JSON(o):
 		return str(o)
 	except UnicodeEncodeError:
 		return o.encode("utf8")
-	except:
+	except Exception:
 		return o
 
 def escapeQuotes(s):
@@ -52,16 +52,6 @@ def unescapeQuotes(s):
 	returns: string with escaped characters
 	"""
 	return unescape(s,unescapeDict)
-
-#def serialize(value,doEscape=False):
-#	typev=type(value)
-#	if typev is str:
-#		sI=value
-#		return sI
-#	elif typev is datetime:
-#		return value.strftime("%A, %d %B %Y, %X")
-#	else:
-#		return str(value)
 
 def tree2xml(root,esc=False):
 	"""
@@ -120,7 +110,8 @@ def tree2xml(root,esc=False):
 					d["minute"]=node.minute>9 and node.minute or '0'+str(node.minute)
 					d["second"]=node.second>9 and node.second or '0'+str(node.second)
 					d["ms"]=node.microsecond
-				except: pass
+				except Exception:
+					pass
 				# maybe it can be done more efficently with datetime fmt functions
 				tab.append("<"+name+" "+" ".join(map(lambda i: i[0]+"=\""+str(i[1])+"\"",d.iteritems()))+"/>")
 				return
@@ -139,7 +130,6 @@ def tree2xml(root,esc=False):
 		if attrs and len(attrs)>0:
 			for i in attrs.iteritems():
 				tab.append(" %s=\"%s\""%(i[0],escapeQuotes(i[1])))
-		nodes=[]
 		if not node:
 			tab.append("/>")
 		else:
@@ -154,7 +144,7 @@ def tree2xml(root,esc=False):
 					else:
 						try:
 							i=py2JSON(i)
-						except:
+						except Exception:
 							i=i.encode("utf8")
 						if esc:
 							i=escapeQuotes(i)
@@ -205,7 +195,7 @@ class Reader(handler.ContentHandler):
 		if not self.preserveCase:
 			name=name.lower()
 		if not len(self.path):
-			self.root=ObjectTree([name,attrs,[]])
+			#self.root=ObjectTree([name,attrs,[]])
 			self.path.append(self.root)
 		else:
 			l=self.path[-1]
@@ -224,7 +214,7 @@ class Reader(handler.ContentHandler):
 		elif " " in data:
 			self.path[-1][2].append(" ")
 
-	def endElement(self,x):
+	def endElement(self):
 		subelems=[]
 		lines=[]
 		elem=self.path[-1][2]
@@ -255,15 +245,3 @@ def xml2tree(xmlfile,newlines=False,preserveCase=True):
 	parser.setContentHandler(r)
 	parser.parse(xmlfile)
 	return r.root
-
-def NS2Tuple(s,delimiter=":"):
-	"""
-	Splits tag to namespace and name.
-	input: tag name in format "ns:name"
-	returns: tuple (namespace, name)
-	"""
-	try:
-		ns,action=s.split(delimiter,1)
-	except:
-		ns,action=(None,s)
-	return (ns,action)

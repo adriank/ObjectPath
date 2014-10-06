@@ -7,8 +7,10 @@
 import argparse
 import sys
 import readline
+# this is to prevent various tools from deleting import readline
+readline
 
-from objectpath import *
+from objectpath import Tree, ITER_TYPES, STR_TYPES, py2JSON
 from objectpath.utils.colorify import *
 from objectpath.utils import json_compat as json
 
@@ -62,7 +64,6 @@ def printJSON(o):
 		if type(o) is dict:
 			if currDepth[0]>depth:
 				out("...\n")
-			r={}
 			keys=o.keys()
 			out("{")
 			if len(keys) > 0:
@@ -87,6 +88,8 @@ def printJSON(o):
 				out(const(py2JSON(o)))
 			elif type(o) in STR_TYPES:
 				out(string('"'+o+'"'))
+			else:
+				out(string(o))
 
 	currDepth=[0]
 	ret=[]

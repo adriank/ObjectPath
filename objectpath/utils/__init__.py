@@ -11,13 +11,6 @@ try:
 	iterators+=[map]
 except:
 	pass
-#if hasattr(random, 'SystemRandom'):
-#	randrange=random.SystemRandom().randrange
-#else:
-#	randrange=random.randrange
-
-#RE_PATH=re.compile("{\$([^}]+)}") # {$ foobar}
-#RE_PATH_split=re.compile("{\$[^}]+}") # {$ foobar}
 
 from itertools import islice
 
@@ -35,7 +28,7 @@ def py2JSON(o):
 		return 'false'
 	if o is None:
 		return 'null'
-	#TODO - check if that is correct
+	# TODO - check if that is correct
 	if type(o) is tuple:
 		return list(o)
 	elif type(o) in iterators+[list,str]:
@@ -44,7 +37,7 @@ def py2JSON(o):
 		return str(o)
 	except UnicodeEncodeError:
 		return o.encode("utf8")
-	except:
+	except Exception:
 		return o
 
 def str2obj(s):

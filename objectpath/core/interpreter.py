@@ -15,8 +15,8 @@ from objectpath.utils.debugger import Debugger
 EPSILON=0.0000000000000001 #this is used in float comparison
 EXPR_CACHE={}
 
-#setting external modules to 0, thus enabling lazy loading. 0 ensures that Pythonic types are never matched.
-#this way is efficient because if statement is fast and once loaded these variables are pointing to libraries.
+# setting external modules to 0, thus enabling lazy loading. 0 ensures that Pythonic types are never matched.
+# this way is efficient because if statement is fast and once loaded these variables are pointing to libraries.
 ObjectId=generateID=calendar=escape=escapeDict=unescape=unescapeDict=0
 
 class Tree(Debugger):
@@ -48,9 +48,10 @@ class Tree(Debugger):
 		TYPES=[str,int,float,bool,generator,chain]
 		try:
 			TYPES+=[long]
-		except:
+		except NameError:
 			pass
-		#TODO change to yield?
+
+		# TODO change to yield?
 		def exe(node):
 			"""
 				node[0] - operator name
@@ -87,7 +88,7 @@ class Tree(Debugger):
 					if typefst is dict:
 						try:
 							fst.update(snd)
-						except:
+						except Exception:
 							if type(snd) is not dict:
 								raise ProgrammingError("Can't add value of type %s to %s" % (bold(PY_TYPES_MAP.get(type(snd).__name__,type(snd).__name__)), bold("object")))
 						return fst
@@ -104,7 +105,7 @@ class Tree(Debugger):
 					if typefst in (int,float):
 						try:
 							return fst+snd
-						except:
+						except Exception:
 							return fst+float(snd)
 					if typefst in STR_TYPES or typesnd in STR_TYPES:
 						if D: self.info("doing string comparison '%s' is '%s'",fst,snd)
@@ -118,20 +119,20 @@ class Tree(Debugger):
 						timeType=timeutils.datetime.time
 						if typefst is timeType and typesnd is timeType:
 							return timeutils.addTimes(fst,snd)
-					except:
+					except Exception:
 						pass
 					if D: self.debug("standard addition, returning '%s'",fst+snd)
 					return fst + snd
 				else:
 					return exe(node[1])
 			elif op=="-":
-				#TODO move -N to tree builder!
+				# TODO move -N to tree builder!
 				if len(node)>2:
 					fst=exe(node[1])
 					snd=exe(node[2])
 					try:
 						return fst-snd
-					except:
+					except Exception:
 						typefst=type(fst)
 						typesnd=type(snd)
 						timeType=timeutils.datetime.time
@@ -144,8 +145,6 @@ class Tree(Debugger):
 			elif op=="%":
 				return exe(node[1]) % exe(node[2])
 			elif op=="/":
-				#print(node[1])
-				#print(exe(node[1]))
 				return exe(node[1]) / float(exe(node[2]))
 			elif op==">":
 				if D: self.debug("%s > %s", node[1],node[2])
@@ -156,7 +155,7 @@ class Tree(Debugger):
 				return exe(node[1]) >= exe(node[2])
 			elif op=="<=":
 				return exe(node[1]) <= exe(node[2])
-			#TODO this algorithm produces 3 for 1<2<3 and should be true
+			# TODO this algorithm produces 3 for 1<2<3 and should be true
 			#elif op in "<=>=":
 			#	fst=exe(node[1])
 			#	snd=exe(node[2])
@@ -231,7 +230,7 @@ class Tree(Debugger):
 						else:
 							if D: self.info("doing standard comparison '%s' is '%s'",fst,snd)
 							ret=fst is snd
-					except:
+					except Exception:
 						pass
 				if op=="is not":
 					if D: self.info("'is not' found. Returning %s",not ret)
@@ -272,18 +271,18 @@ class Tree(Debugger):
 					for i in fst:
 						try:
 							ret_append(i[snd])
-						except:
+						except Exception:
 							pass
 					if D: self.end(". returning '%s'",ret)
 					return ret
 				try:
 					if D: self.end(". returning '%s'",fst.get(snd))
 					return fst.get(snd)
-				except:
+				except Exception:
 					if isinstance(fst,object):
 						try:
 							return fst.__getattribute__(snd)
-						except:
+						except Exception:
 							pass
 					if D: self.end(". returning '%s'",fst)
 					return fst
@@ -297,21 +296,21 @@ class Tree(Debugger):
 				for i in fst:
 					try:
 						ret.append(i[snd])
-					except:
+					except Exception:
 						pass
 				if D: self.debug("returning '%s'",ret)
 				return len(ret) is 1 and ret[0] or ret
-			#TODO move it to tree generation phase
+			# TODO move it to tree generation phase
 			elif op=="{":
 				return {}
 			elif op=="[":
 				len_node=len(node)
-				#TODO move it to tree generation phase
+				# TODO move it to tree generation phase
 				if len_node is 1: # empty list
 					if D: self.debug("returning an empty list")
 					return []
 				if len_node is 2: # list - preserved to catch possible event of leaving it as '[' operator
-					#TODO yielding is not possible here
+					# TODO yielding is not possible here
 					#if type(node[1]) in (generator,chain):
 					#	for i in node[1]:
 					#		yield exe(i)
@@ -351,7 +350,7 @@ class Tree(Debugger):
 						for i in fst:
 							if D: self.debug("setting self.current to '%s'",i)
 							self.current=i
-							#TODO move it to tree building phase
+							# TODO move it to tree building phase
 							if type(selector[1]) is tuple and selector[1][0]=="name":
 								selector=(selector[0],selector[1][1],selector[2])
 							if selector[0]=="fn":
@@ -366,12 +365,12 @@ class Tree(Debugger):
 									if D: self.debug("discarded, Exception: %s",e)
 							else:
 								try:
-									#TODO optimize an event when @ is not used. exe(selector[1]) can be cached
+									# TODO optimize an event when @ is not used. exe(selector[1]) can be cached
 									if exe((selector[0],exe(selector[1]),exe(selector[2]))):
 										nodeList_append(i)
 										if D: self.debug("appended")
 									if D: self.debug("discarded")
-								except:
+								except Exception:
 									if D: self.debug("discarded")
 						if D: self.debug("returning '%s' objects: '%s'",len(nodeList),nodeList)
 						return nodeList
@@ -393,7 +392,7 @@ class Tree(Debugger):
 							else:
 								try:
 									return fst[n]
-								except:
+								except (IndexError, TypeError):
 									return None
 						# $.*['string']==$.string
 						return exe((".",fst,snd))
@@ -401,20 +400,20 @@ class Tree(Debugger):
 						try:
 							if D: self.debug("returning '%s'",fst[snd])
 							return fst[snd]
-						except:
-							#CHECK - is it ok to do that or should it be ProgrammingError?
+						except KeyError:
+							# CHECK - is it ok to do that or should it be ProgrammingError?
 							if D: self.debug("returning an empty list")
 							return []
 				raise ProgrammingError("Wrong usage of the '[' operator")
 			elif op=="fn":
-				""" Built-in functions """
+				# Built-in functions
 				fnName=node[1]
 				args=None
 				try:
 					args=list(map(exe,node[2:]))
 				except IndexError as e:
 					if D: self.debug("NOT ERROR: can't map '%s' with '%s'",node[2:],exe)
-				#arithmetic
+				# arithmetic
 				if fnName=="sum":
 					args=args[0]
 					if type(args) in NUM_TYPES:
@@ -444,7 +443,7 @@ class Tree(Debugger):
 						return sum(args)/float(len(args))
 				elif fnName=="round":
 					return round(*args)
-				#casting
+				# casting
 				elif fnName=="int":
 					return int(args[0])
 				elif fnName=="float":
@@ -454,7 +453,7 @@ class Tree(Debugger):
 				elif fnName in ("list","array"):
 					try:
 						a=args[0]
-					except:
+					except (TypeError, IndexError):
 						return []
 					targs=type(a)
 					if targs is timeutils.datetime.datetime:
@@ -464,7 +463,7 @@ class Tree(Debugger):
 					if targs is timeutils.datetime.time:
 						return timeutils.time2list(a)
 					return list(a)
-				#string
+				# string
 				elif fnName=="escape":
 					global escape,escapeDict
 					if not escape:
@@ -491,7 +490,7 @@ class Tree(Debugger):
 					return str.replace(args[0],args[1],args[2])
 				elif fnName=="REsub":
 					return re.sub(args[1],args[2],args[0])
-				#array
+				# array
 				elif fnName=="sort":
 					if D: self.debug("doing sort on '%s'",args)
 					if not args:
@@ -525,16 +524,16 @@ class Tree(Debugger):
 				elif fnName=="join":
 					try:
 						joiner=args[1]
-					except:
+					except Exception:
 						joiner=""
 					try:
 						return joiner.join(args[0])
-					except:
+					except Exception:
 						try:
 							return joiner.join(map(str,args[0]))
-						except:
+						except Exception:
 							return args[0]
-				#time
+				# time
 				elif fnName in ("now","age","time","date","dateTime"):
 					if fnName=="now":
 						return timeutils.now()
@@ -557,14 +556,14 @@ class Tree(Debugger):
 				elif fnName=="localize":
 					if type(args[0]) is timeutils.datetime.datetime:
 						return timeutils.UTC2local(*args)
-				#polygons
+				# polygons
 				elif fnName=="area":
 					def segments(p):
 						p=list(map(lambda x: x[0:2],p))
 						return zip(p, p[1:] + [p[0]])
 					return 0.5 * abs(sum(x0*y1 - x1*y0
 						for ((x0, y0), (x1, y1)) in segments(args[0])))
-				#misc
+				# misc
 				elif fnName=="keys":
 					try:
 						return args[0].keys()
