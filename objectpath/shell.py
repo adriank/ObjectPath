@@ -116,7 +116,7 @@ def main():
 		from utils.xmlextras import xml2tree
 	src=False
 	if args.URL:
-		if sys.version >= '3':
+		if sys.version_info.major >= 3:
 			from urllib.request import Request,build_opener
 		else:
 			from urllib2 import Request,build_opener
@@ -145,7 +145,7 @@ def main():
 	try:
 		while True:
 			try:
-				if sys.version >= '3':
+				if sys.version_info.major >= 3:
 						r=tree.execute(input(">>> "))
 				else:
 						r=tree.execute(raw_input(">>> "))

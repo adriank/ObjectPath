@@ -11,7 +11,7 @@
 
 import sys
 
-if sys.version_info >= '3':
+if sys.version_info.major >= 3:
 	from io import StringIO
 else:
 	from cStringIO import StringIO
@@ -20,8 +20,8 @@ from objectpath.core import *
 
 symbol_table={}
 token=None
-#TODO optimization ('-',1) -> -1
-#TODO optimization operators should be numbers
+# TODO optimization ('-',1) -> -1
+# TODO optimization operators should be numbers
 
 TRUE=["true","t"]
 FALSE=["false","f"]
@@ -35,7 +35,7 @@ class symbol_base(object):
 	def nud(self):
 		raise SyntaxError("Syntax error (%r)." % self.id)
 
-	def led(self, left):
+	def led(self):
 		raise SyntaxError("Unknown operator (%r)." % self.id)
 
 	def getTree(self):
@@ -85,7 +85,7 @@ class symbol_base(object):
 						t_append(j.getTree())
 					except:
 						t_append(j)
-				#TODO check if this is ever used?
+				# TODO check if this is ever used?
 				if self.id == "[":
 					return t
 				else:
@@ -99,7 +99,7 @@ class symbol_base(object):
 					return self.fst.value
 				ret_append(i.getTree())
 		if self.id == "(":
-			#this will produce ("fn","fnName",arg1,arg2,...argN)
+			# this will produce ("fn","fnName",arg1,arg2,...argN)
 			return tuple(["fn",ret[1][1]]+ret[2:])
 		return tuple(ret)
 
@@ -194,7 +194,7 @@ def nud(self):
 	self.id="(node)"
 	return self
 
-#RegEx
+# RegEx
 @method(symbol("/"))
 def nud(self):
 	self.id="re"
@@ -227,8 +227,8 @@ def led(self, left):
 	advance()
 	return self
 
-#handling namespaces; e.g $.a.b.c or $ss.a.b.c
-#default storage is the request namespace
+# handling namespaces; e.g $.a.b.c or $ss.a.b.c
+# default storage is the request namespace
 symbol("$")
 @method(symbol("$"))
 def nud(self):
@@ -253,7 +253,7 @@ def led(self, left):
 
 symbol(",")
 
-#this is for built-in functions
+# this is for built-in functions
 @method(symbol("("))
 def led(self, left):
 	#self.id="fn"
@@ -285,7 +285,7 @@ constant("None")
 constant("True")
 constant("False")
 
-#multitoken operators
+# multitoken operators
 
 @method(symbol("not"))
 def led(self, left):
@@ -351,13 +351,13 @@ type_map={
 
 # python tokenizer
 def tokenize_python(program):
-	if sys.version_info < "3":
+	if sys.version_info.major < 3:
 		tokens=tokenizer.generate_tokens(StringIO(program).next)
 	else:
 		tokens=tokenizer.generate_tokens(StringIO(program).__next__)
 	for t in tokens:
 		try:
-			#change this to output python values in correct type
+			# change this to output python values in correct type
 			yield type_map[t[0]], t[1]
 		except KeyError:
 			if t[0] in [tokenizer.NL, tokenizer.COMMENT]:
@@ -392,7 +392,6 @@ def tokenize(program):
 			symbol=symbol_table.get(value)
 			if symbol:
 				s=symbol()
-			#elif id==" ":
 			elif id=="(name)":
 				symbol=symbol_table[id]
 				s=symbol()
@@ -406,24 +405,21 @@ def expression(rbp=0):
 	global token
 	t=token
 	token=nextToken()
-	#print(token)
 	left=t.nud()
-	#print("LEFT",left)
 	while rbp < token.lbp:
 		t=token
 		token=nextToken()
-		#print(token)
 		left=t.led(left)
 	return left
 
 def parse(expr, D=False):
-	if sys.version_info < "3" and type(expr) is unicode:
+	if sys.version_info.major < 3 and type(expr) is unicode:
 		expr=expr.encode("utf8")
 	if type(expr) is not str:
 		return expr
 	expr=expr.strip()
 	global token, nextToken
-	if sys.version_info >= "3":
+	if sys.version_info.major >= 3:
 		nextToken=tokenize(expr).__next__
 	else:
 		nextToken=tokenize(expr).next
