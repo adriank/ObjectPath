@@ -1,6 +1,9 @@
 ObjectPath
 ==========
 
+[![Build Status](https://travis-ci.org/adriank/ObjectPath.svg?branch=master)](https://travis-ci.org/adriank/ObjectPath)
+[![Code Health](https://landscape.io/github/adriank/ObjectPath/master/landscape.png)](https://landscape.io/github/adriank/ObjectPath/master)
+
 The agile NoSQL query language for semi-structured data
 -----------------------------------------------
 
