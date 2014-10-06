@@ -374,11 +374,11 @@ def tokenize(program):
 		source=tokenize_python(program)
 	for ID, value in source:
 		if ID=="(literal)":
-			symbol=symbol_table[id]
+			symbol=symbol_table[ID]
 			s=symbol()
 			s.value=value
 		elif ID=="(number)":
-			symbol=symbol_table[id]
+			symbol=symbol_table[ID]
 			s=symbol()
 			try:
 				s.value=int(value)
