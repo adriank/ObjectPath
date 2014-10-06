@@ -214,11 +214,9 @@ class Reader(handler.ContentHandler):
 		elif " " in data:
 			self.path[-1][2].append(" ")
 
-	def endElement(self, x):
+	def endElement(self, name):
 		subelems=[]
 		lines=[]
-		# only to score better @ landscape.io :|
-		x
 		elem=self.path[-1][2]
 		for i in elem:
 			if type(i) is tuple:
