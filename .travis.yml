@@ -13,4 +13,4 @@ deploy:
   on:
     tags: true
     repo: adriank/ObjectPath
-	distributions: "sdist bdist_wheel"
+  distributions: "sdist bdist_wheel"
