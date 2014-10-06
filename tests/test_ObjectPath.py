@@ -309,7 +309,7 @@ class Utils_Paths(unittest.TestCase):
 		self.assertIsInstance(execute("now().year"),int)
 
 	def test_complex_paths(self):
-		self.assertEqual(execute("$.._id"), [1, 2, 3, 4])
+		self.assertEqual(sorted(execute("$.._id")), [1, 2, 3, 4])
 		self.assertEqual(execute("$..l"), object1["test"]["l"])
 		self.assertEqual(execute("$..l.._id"), [3,4])
 		self.assertEqual(execute2("$.store.*"), [object2["store"]])
