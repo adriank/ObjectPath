@@ -1,21 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Asyncode Runtime - XML framework allowing developing internet
-# applications without using programming languages.
-# Copyright (C) 2008-2010  Adrian Kalbarczyk
-
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the version 3 of GNU General Public License as published by
-# the Free Software Foundation.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# This file is part of ObjectPath released under AGPL v3 license.
+# Copyright (C) 2008-2010 Adrian Kalbarczyk
 
 import datetime
 try:
@@ -34,7 +21,7 @@ def round9_10(n):
 		return i+1
 	return i
 
-#TODO its 31 minuta, should be 31 minut - probably done
+# TODO its 31 minuta, should be 31 minut - probably done
 
 def age(date,lang="en"):
 	td=now()-date
@@ -83,7 +70,7 @@ def age(date,lang="en"):
 			return (seconds, seconds is 1 and "sekunda" or 1<seconds<5 and "sekundy" or "sekund")
 		else:
 			return (seconds, seconds is 1 and "second" or "seconds")
-	#return (0,"seconds")
+	# return (0,"seconds")
 
 now=datetime.datetime.now
 
@@ -173,11 +160,11 @@ def subTimes(fst,snd):
 def dateTime(arg):
 	"""
 	d may be:
-	 - datetime()
-	 - [y,m,d,h,m,ms]
-	 - [date(),time()]
-	 - [[y,m,d],[h,m,s,ms]]
-	 and permutations of above
+		- datetime()
+		- [y,m,d,h,m,ms]
+		- [date(),time()]
+		- [[y,m,d],[h,m,s,ms]]
+		and permutations of above
 	"""
 	l=len(arg)
 	if l is 1:
@@ -204,7 +191,7 @@ def dateTime(arg):
 # dt - dateTime, tzName is e.g. 'Europe/Warsaw'
 def UTC2local(dt,tzName="UTC"):
 	try:
-		if TIMEZONE_CACHE.has_key(tzName):
+		if tzName in TIMEZONE_CACHE:
 			tz=TIMEZONE_CACHE[tzName]
 		else:
 			tz=TIMEZONE_CACHE[tzName]=pytz.timezone(tzName)

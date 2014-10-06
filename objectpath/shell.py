@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# This file is part of ObjectPath released under AGPL v3 license.
+# Copyright (C) 2010-2014 Adrian Kalbarczyk
+
 import argparse
 import sys
 import readline

@@ -1,34 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Asyncode Runtime - XML framework allowing developing internet
-# applications without using programming languages.
-# Copyright (C) 2008-2010  Adrian Kalbarczyk
-
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the version 3 of GNU General Public License as published by
-# the Free Software Foundation.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-#TODO; remove tpath
-#@marcin: functions docstrings
+# This file is part of ObjectPath released under AGPL v3 license.
+# Copyright (C) 2010-2014 Adrian Kalbarczyk
 
 from xml.sax import make_parser, handler
 from xml.sax.saxutils import escape, unescape
-#from ACR.errors import Error
 import re
 from datetime import datetime, date, time
 from types import GeneratorType as generator
 from itertools import chain
 
-#DONTDO do not change that to tuple
+# DONTDO do not change that to tuple
 iterators=[list,generator,chain]
 
 RE_ATTR=re.compile("'([^']+)': '?([^',]*)'?,*")
@@ -283,42 +266,6 @@ def xml2tree(xmlfile,newlines=False,preserveCase=True):
 	parser.setContentHandler(r)
 	parser.parse(xmlfile)
 	return r.root
-
-def tpath(root,path, default=None):
-	t=path.split("/")
-	try:
-		t.pop(0)
-		ret=root
-		if t:
-			for i in t:
-				if type(ret) is list:
-					ret=ret[0]
-				splitter=i.find("[")
-				_filter=None
-				if splitter>0:
-					_filter=i[splitter+1:-1].strip()
-					i=i[0:splitter]
-				if i=="*":
-					ret=ret[2]
-				if i=="text()":
-					ret=list(filter(lambda x: type(x[0]) is str,ret[2]))
-				else:
-					tags=i.split("|")
-					ret=list(filter(lambda x: x[0] in tags, ret[2]))
-				if _filter:
-					if _filter.isdigit():
-						ret=ret[int(filter)]
-					elif _filter[0] is "@":
-						t=_filter[1:].split("=")
-						if len(t)>1:
-							ret=list(filter(lambda x: x[1].get(attr,"ERROR")==t[1],ret))[0]
-						else:
-							if t[0]=="*":
-								return ret[0][1]
-							return ret[0][1][t[0]]
-	except (AttributeError, KeyError, TypeError,IndexError) as e:
-		return default
-	return ret
 
 def NS2Tuple(s,delimiter=":"):
 	"""

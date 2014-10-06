@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-# !!!NOT THREAD SAFE!!!
-#TODO thread safety!
+# This file is part of ObjectPath released under AGPL v3 license.
+# Copyright (C) 2010-2014 Adrian Kalbarczyk
+
 import sys
 import re
 from .parser import parse
@@ -19,7 +20,9 @@ EXPR_CACHE={}
 ObjectId=generateID=calendar=escape=escapeDict=unescape=unescapeDict=0
 
 class Tree(Debugger):
-	def __init__(self,obj,cfg={}):
+	def __init__(self,obj,cfg=None):
+		if not cfg:
+			cfg={}
 		self.D=cfg.get("debug",False)
 		self.setData(obj)
 		self.current=self.node=None
@@ -105,7 +108,7 @@ class Tree(Debugger):
 							return fst+float(snd)
 					if typefst in STR_TYPES or typesnd in STR_TYPES:
 						if D: self.info("doing string comparison '%s' is '%s'",fst,snd)
-						if sys.version < "3":
+						if sys.version_info < "3":
 							if typefst is unicode:
 								fst=fst.encode("utf-8")
 							if typesnd is unicode:
@@ -483,7 +486,7 @@ class Tree(Debugger):
 						from objectpath.utils.xmlextras import unescape, unescapeDict
 					return unescape(args[0],unescapeDict)
 				elif fnName=="replace":
-					if sys.version < "3" and type(args[0]) is unicode:
+					if sys.version_info < "3" and type(args[0]) is unicode:
 						args[0]=args[0].encode("utf8")
 					return str.replace(args[0],args[1],args[2])
 				elif fnName=="REsub":

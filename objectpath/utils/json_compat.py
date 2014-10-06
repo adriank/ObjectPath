@@ -7,7 +7,7 @@ except:
 	try:
 		import simplejson as json
 	except:
-		raise Error("JSONNotFound")
+		raise Exception("JSONNotFound")
 
 load=json.load
 def loads(s,object_hook=None):
@@ -17,7 +17,7 @@ def loads(s,object_hook=None):
 	try:
 		return json.loads(s,object_hook=object_hook)
 	except ValueError as e:
-		raise Error(str(e)+" "+s)
+		raise Exception(str(e)+" "+s)
 
 def dumps(s,default=None):
 	return json.dumps(s,default=default, indent=2, separators=(',',':'))

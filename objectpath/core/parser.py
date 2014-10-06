@@ -1,12 +1,17 @@
 #!/usr/bin/env python
 
-# code from http://effbot.org/zone/simple-top-down-parsing.htm
-# licence of original code was public domain
-# relicenced to AGPL v3 by Adrian Kalbarczyk and:
+# This file is part of ObjectPath released under AGPL v3 license.
+# Copyright (C) 2010-2014 Adrian Kalbarczyk
+
+# Code from http://effbot.org/zone/simple-top-down-parsing.htm was used in this file.
+# Licence of the code is public domain.
+# Relicenced to AGPL v3 by Adrian Kalbarczyk and:
 # - specialized to work with ObjectPath,
 # - optimized
+
 import sys
-if sys.version >= '3':
+
+if sys.version_info >= '3':
 	from io import StringIO
 else:
 	from cStringIO import StringIO
@@ -14,7 +19,7 @@ else:
 from objectpath.core import *
 
 symbol_table={}
-
+token=None
 #TODO optimization ('-',1) -> -1
 #TODO optimization operators should be numbers
 
@@ -346,7 +351,7 @@ type_map={
 
 # python tokenizer
 def tokenize_python(program):
-	if sys.version < "3":
+	if sys.version_info < "3":
 		tokens=tokenizer.generate_tokens(StringIO(program).next)
 	else:
 		tokens=tokenizer.generate_tokens(StringIO(program).__next__)
@@ -412,20 +417,17 @@ def expression(rbp=0):
 	return left
 
 def parse(expr, D=False):
-	if sys.version < "3" and type(expr) is unicode:
+	if sys.version_info < "3" and type(expr) is unicode:
 		expr=expr.encode("utf8")
 	if type(expr) is not str:
 		return expr
 	expr=expr.strip()
-	if not len(expr):
-		return Tree(True)
 	global token, nextToken
-	if sys.version >= "3":
+	if sys.version_info >= "3":
 		nextToken=tokenize(expr).__next__
 	else:
 		nextToken=tokenize(expr).next
 	token=nextToken()
-	#print(token)
 	r=expression().getTree()
 	if D:
 		print ("PARSE STAGE")
