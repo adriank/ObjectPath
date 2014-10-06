@@ -83,7 +83,7 @@ class symbol_base(object):
 				for j in i:
 					try:
 						t_append(j.getTree())
-					except:
+					except Exception:
 						t_append(j)
 				# TODO check if this is ever used?
 				if self.id == "[":
@@ -93,9 +93,9 @@ class symbol_base(object):
 				#ret_append(t)
 				#return (self.id,ret[1:])
 			else:
-				if self.id=="-" and self.snd==None and type(self.fst.value) in [int, float]:
+				if self.id=="-" and self.snd is None and type(self.fst.value) in [int, float]:
 					return -self.fst.value
-				if self.id=="+" and self.snd==None and type(self.fst.value) in [int, float]:
+				if self.id=="+" and self.snd is None and type(self.fst.value) in [int, float]:
 					return self.fst.value
 				ret_append(i.getTree())
 		if self.id == "(":
@@ -152,7 +152,6 @@ def advance(ID=None):
 	if ID and token.id != ID:
 		raise SyntaxError("Expected %r, got %s"%(ID,token.id))
 	token=nextToken()
-	#print(token)
 
 def method(s):
 	# decorator
@@ -373,12 +372,12 @@ def tokenize(program):
 		source=program
 	else:
 		source=tokenize_python(program)
-	for id, value in source:
-		if id=="(literal)":
+	for ID, value in source:
+		if ID=="(literal)":
 			symbol=symbol_table[id]
 			s=symbol()
 			s.value=value
-		elif id=="(number)":
+		elif ID=="(number)":
 			symbol=symbol_table[id]
 			s=symbol()
 			try:
@@ -392,12 +391,12 @@ def tokenize(program):
 			symbol=symbol_table.get(value)
 			if symbol:
 				s=symbol()
-			elif id=="(name)":
-				symbol=symbol_table[id]
+			elif ID=="(name)":
+				symbol=symbol_table[ID]
 				s=symbol()
 				s.value=value
 			else:
-				raise SyntaxError("Unknown operator '%s', '%s'" % (id,value))
+				raise SyntaxError("Unknown operator '%s', '%s'" % (ID,value))
 		yield s
 
 # parser engine
