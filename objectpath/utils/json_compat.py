@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-#from ACR.errors import Error
 
 try:
 	import json
-except:
+except ImportError:
 	try:
 		import simplejson as json
-	except:
+	except ImportError:
 		raise Exception("JSONNotFound")
 
 load=json.load

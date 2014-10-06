@@ -10,7 +10,7 @@ try:
 	TIMEZONE_CACHE={
 		"UTC":pytz.utc
 	}
-except:
+except ImportError:
 	print("WARNING! pytz is not installed. Localized times are not supported.")
 
 HOURS_IN_DAY=24
@@ -196,5 +196,5 @@ def UTC2local(dt,tzName="UTC"):
 		else:
 			tz=TIMEZONE_CACHE[tzName]=pytz.timezone(tzName)
 		return TIMEZONE_CACHE["UTC"].localize(dt).astimezone(tz)
-	except:
+	except Exception:
 		return dt

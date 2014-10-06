@@ -7,16 +7,16 @@
 from objectpath.utils import iterators
 
 SELECTOR_OPS=["is",">","<","is not",">=","<=","in","not in",":","and","or","fn"]
-#it must be list because of further concatenations
+# it must be list because of further concatenations
 NUM_TYPES=[int,float]
 try:
 	NUM_TYPES+=[long]
-except:
+except NameError:
 	pass
 STR_TYPES=[str]
 try:
 	STR_TYPES+=[unicode]
-except:
+except NameError:
 	pass
 ITER_TYPES=iterators
 

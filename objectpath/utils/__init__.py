@@ -21,6 +21,26 @@ def skip(iterable, n, islice=islice):
 	except StopIteration:
 		raise IndexError("generator index out of range")
 
+def flatten(fragment,skip=False):
+	def rec(frg):
+		typefrg=type(frg)
+		if typefrg in (list,generator,chain):
+			for i in frg:
+				for j in rec(i):
+					yield j
+		elif typefrg is dict:
+			yield frg
+			for i in frg.items():
+				for j in rec(i[1]):
+					yield j
+
+	g=rec(fragment)
+	if skip:
+		for i in xrange(skip):
+			g.next()
+	for i in g:
+		yield i
+
 def py2JSON(o):
 	if o is True:
 		return 'true'

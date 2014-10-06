@@ -8,7 +8,7 @@ import re
 from .parser import parse
 from objectpath.core import *
 from objectpath.utils.colorify import *
-from objectpath.utils import dicttree,timeutils,py2JSON
+from objectpath.utils import flatten, timeutils, py2JSON
 from objectpath.utils import iterators, generator, chain, skip
 from objectpath.utils.debugger import Debugger
 
@@ -287,7 +287,7 @@ class Tree(Debugger):
 					if D: self.end(". returning '%s'",fst)
 					return fst
 			elif op=="..":
-				fst=dicttree.flatten(exe(node[1]))
+				fst=flatten(exe(node[1]))
 				if node[2][0]=="*":
 					if D: self.debug("returning '%s'",fst)
 					return fst
