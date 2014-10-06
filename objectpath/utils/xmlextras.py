@@ -25,7 +25,7 @@ def py2JSON(o):
 		return 'false'
 	if o is None:
 		return 'null'
-	#TODO - check if that is correct
+	# TODO - check if that is correct
 	if type(o) is tuple:
 		return list(o)
 	elif type(o) in iterators+[list,str]:
@@ -37,14 +37,6 @@ def py2JSON(o):
 	except:
 		return o
 
-class ObjectTree(tuple):
-	def __init__(self,seq):
-		tuple.__init__(seq)
-
-	def get(self,path,default=None):
-		return tpath(self,path,default)
-
-#TO-C
 def escapeQuotes(s):
 	"""
 	Escapes characters '<', '>', '\'', '"', '&' to HTML entities.
@@ -102,9 +94,6 @@ def tree2xml(root,esc=False):
 
 	def rec(node,name=None):
 		attrs={}
-		#if type(node) is chain:
-		#	print list(node)
-		#	print
 		nodetype=type(node)
 		if nodetype is dict:
 			tag="object"
@@ -132,7 +121,7 @@ def tree2xml(root,esc=False):
 					d["second"]=node.second>9 and node.second or '0'+str(node.second)
 					d["ms"]=node.microsecond
 				except: pass
-				#maybe it can be done more efficently with datetime fmt functions
+				# maybe it can be done more efficently with datetime fmt functions
 				tab.append("<"+name+" "+" ".join(map(lambda i: i[0]+"=\""+str(i[1])+"\"",d.iteritems()))+"/>")
 				return
 			if nodetype not in (str,unicode):
@@ -175,7 +164,7 @@ def tree2xml(root,esc=False):
 	#if D: log.info("Generating XML")
 	if type(root) is dict:
 		tab=["<list>"]
-		#this is an exception. We want to have <object/>'s with name in root subnodes.
+		# this is an exception. We want to have <object/>'s with name in root subnodes.
 		for i in root.iteritems():
 			if type(i[1]) in (str,unicode):
 				tab.append('<object name="%s">%s</object>'%i)
@@ -190,7 +179,7 @@ def tree2xml(root,esc=False):
 		tuplerec(root)
 	else:
 		tab=[root]
-	#XXX delete it!!!
+	# XXX delete it!!!
 	for i in range(len(tab)):
 		if type(tab[i]) is unicode:
 			tab[i]=tab[i].encode("utf-8")
@@ -199,7 +188,7 @@ def tree2xml(root,esc=False):
 		ret=ret.encode("utf-8")
 	return ret
 
-#TODO whitespaces checkup and W3C spec verification of whitespace handling in XML and (X)HTML.
+# TODO whitespaces checkup and W3C spec verification of whitespace handling in XML and (X)HTML.
 class Reader(handler.ContentHandler):
 	def __init__(self,newlines,preserveCase=True):
 		self.root=None
@@ -229,7 +218,7 @@ class Reader(handler.ContentHandler):
 			self.path[-1][2].append(data.encode("utf-8").replace("\t",""))
 		elif self.newlines and len(data)==1 and data[0]=="\n":
 			self.path[-1][2].append("\n")
-		#TODO make it work with ANY whitespaces in XML files
+		# TODO make it work with ANY whitespaces in XML files
 		elif len(data)==1 and data[0] not in ["\t","\n"]:
 			self.path[-1][2].append(" ")
 		elif " " in data:

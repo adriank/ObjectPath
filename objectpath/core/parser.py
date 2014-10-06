@@ -382,7 +382,7 @@ def tokenize(program):
 			s=symbol()
 			try:
 				s.value=int(value)
-			except:
+			except Exception:
 				s.value=float(value)
 		elif value == " ":
 			continue
