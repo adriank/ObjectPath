@@ -35,5 +35,6 @@ setup(name='objectpath',
 				'console_scripts': [
 					'objectpath = objectpath.shell:main'
 				]
-			}
+			},
+			test_suite="tests"
 		)
