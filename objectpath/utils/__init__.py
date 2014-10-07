@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys,time,re
+import time,re
 from types import GeneratorType as generator
 from itertools import chain
 

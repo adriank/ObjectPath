@@ -47,19 +47,16 @@ def printJSON(o):
 				for i in o[0:length]:
 					rec(i)
 					out(",\n")
-				#if len(o)<=length and type(o[0:length][-1]) is dict:
-				#	plus()
+
 				if len(o)>length:
 					out("... ("+str(len(o)-length)+" more items)\n")
 				else:
 					ret.pop()
 					if len(o) > 1:
-						#minus()
 						out("\n")
 				if len(o) > 1:
 					minus()
 			out("]")
-			#return l
 
 		elif type(o) is dict:
 			if currDepth[0]>depth:
@@ -73,8 +70,6 @@ def printJSON(o):
 				for k in o.keys():
 					out(string('"'+str(k)+'"')+": ")
 					rec(o[k])
-					#if type(o[k]) is list:
-					#	plus()
 					out(",\n")
 				ret.pop()
 				if len(keys) > 1:
