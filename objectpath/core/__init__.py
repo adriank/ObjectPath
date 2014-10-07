@@ -25,6 +25,7 @@ class ProgrammingError(Exception):
 
 PY_TYPES_MAP={
 	"int":"number",
+	"str":"string",
 	"float":"number",
 	"dict":"object",
 	"list":"array"

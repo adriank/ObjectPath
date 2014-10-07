@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from objectpath.core.interpreter import *
+from objectpath.core import ProgrammingError
 from random import randint, choice
+#from bson.objectid import ObjectId
 import sys, unittest, os
 
 sys.setrecursionlimit(20000)
@@ -99,6 +101,9 @@ class Utils_interpreter(unittest.TestCase):
 		self.assertEqual(execute("2+3"), 5)
 		self.assertEqual(execute("2+3+4"), 9)
 		self.assertEqual(execute("++3"), 3)
+		# null is treated as neutral value
+		self.assertEqual(execute("null+3"), 3)
+		self.assertEqual(execute("3+null"), 3)
 
 	def test_arithm_sub(self):
 		self.assertEqual(execute("-1"), -1)
@@ -127,6 +132,7 @@ class Utils_interpreter(unittest.TestCase):
 		#self.assertEqual(execute("2//3//4//5"), ('//', ('//', ('//', 2, 3), 4), 5))
 
 	def test_arithm_parentheses(self):
+		self.assertEqual(execute("+6"), 6)
 		self.assertEqual(execute("2+2*2"), 6)
 		self.assertEqual(execute("2+(2*2)"), 6)
 		self.assertEqual(execute("(2+2)*2"), 8)
@@ -167,6 +173,10 @@ class Utils_interpreter(unittest.TestCase):
 		self.assertEqual(execute("0.1+0.2 is 0.3"), True)
 		self.assertEqual(execute("[] is []"), True)
 		self.assertEqual(execute("[1] is [1]"), True)
+		self.assertEqual(execute("{} is {}"), True)
+		self.assertEqual(execute("{'aaa':1} is {'aaa':1}"), True)
+		#oid=ObjectId()
+		#self.assertEqual(execute("ObjectID('"+str(oid)+"') is '"+str(oid)+"'"), True)
 
 	def test_comparison_isnot(self):
 		self.assertEqual(execute("3 is not 6"), True)
@@ -203,6 +213,7 @@ class Utils_interpreter(unittest.TestCase):
 		self.assertEqual(execute("5+'5'"), 10)
 		self.assertEqual(list(execute("[1,2,4] + [3,5]")), [1,2,4,3,5])
 		self.assertEqual(execute('{"a":1,"b":2} + {"a":2,"c":3}'), {"a":2,"b":2,"c":3})
+		self.assertRaises(ProgrammingError, lambda: execute('{"a":1,"b":2} + "sss"'))
 
 	def test_builtin_casting(self):
 		self.assertEqual(execute("str('foo')"), 'foo')
@@ -302,6 +313,14 @@ class Utils_interpreter(unittest.TestCase):
 		self.assertEqual(execute("type([1,2,3,4]+[2,4])"), "array")
 		self.assertEqual(execute("type({})"), "object")
 		self.assertEqual(execute("type('')"), "str")
+
+	def test_optimizations(self):
+		self.assertIsInstance(execute("$..*"), generator)
+		self.assertIsInstance(execute("$..* + $..*"), chain)
+		self.assertIsInstance(execute("$..* + 2"), chain)
+		self.assertIsInstance(execute("2 + $..*"), chain)
+		self.assertEqual(execute("$.._id[0]"), 1)
+		self.assertEqual(execute("$.._id[2]"), 3)
 
 class Utils_Paths(unittest.TestCase):
 	def test_simple_paths(self):

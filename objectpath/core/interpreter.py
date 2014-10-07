@@ -90,7 +90,7 @@ class Tree(Debugger):
 							fst.update(snd)
 						except Exception:
 							if type(snd) is not dict:
-								raise ProgrammingError("Can't add value of type %s to %s" % (bold(PY_TYPES_MAP.get(type(snd).__name__,type(snd).__name__)), bold("object")))
+								raise ProgrammingError("Can't add value of type %s to %s" % (bold(PY_TYPES_MAP.get(type(snd).__name__, type(snd).__name__)), bold("object")))
 						return fst
 					if typefst is list and typesnd is list:
 						if D: self.debug("both sides are lists, returning '%s'",fst+snd)
@@ -197,9 +197,9 @@ class Tree(Debugger):
 				except Exception as e:
 					if D: self.debug("NOT ERROR! Can't execute node[2] '%s', error: '%s'. Falling back to orginal value.",node[2],str(e))
 					snd=node[2]
-				if op is "is" and fst == snd:
+				if op == "is" and fst == snd:
 					return True
-				if op is "is not" and fst != snd:
+				if op == "is not" and fst != snd:
 					return True
 				typefst=type(fst)
 				typesnd=type(snd)
