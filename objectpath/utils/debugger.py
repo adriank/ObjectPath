@@ -75,7 +75,7 @@ class Debugger(object):
 			try:
 				if type(x) is unicode:
 					x=x.encode("utf8")
-			except:
+			except NameError:
 				pass
 			if self.CUT_AFTER and type(x) is dict:
 				s=[]

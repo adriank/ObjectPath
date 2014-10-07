@@ -183,19 +183,19 @@ symbol(")")
 
 symbol("@")
 @method(symbol("@"))
-def nud(self):
+def nud(self): # pylint: disable=E0102
 	self.id="(current)"
 	return self
 
 symbol("!")
 @method(symbol("!"))
-def nud(self):
+def nud(self): # pylint: disable=E0102
 	self.id="(node)"
 	return self
 
 # RegEx
 @method(symbol("/"))
-def nud(self):
+def nud(self): # pylint: disable=E0102
 	self.id="re"
 	self.fst=str(token.value)
 	advance()
@@ -203,13 +203,13 @@ def nud(self):
 	return self
 
 @method(symbol("("))
-def nud(self):
+def nud(self): # pylint: disable=E0102
 	expr=expression()
 	advance(")")
 	return expr
 
 @method(symbol("."))
-def led(self, left):
+def led(self, left): # pylint: disable=E0102
 	attr=False
 	if token.id == ".":
 		self.id=".."
@@ -230,7 +230,7 @@ def led(self, left):
 # default storage is the request namespace
 symbol("$")
 @method(symbol("$"))
-def nud(self):
+def nud(self): # pylint: disable=E0102
 	global token # pylint: disable=W0602
 	self.id="(root)"
 	#print ("$.nud",token)
@@ -244,7 +244,7 @@ def nud(self):
 symbol("]")
 
 @method(symbol("["))
-def led(self, left):
+def led(self, left): # pylint: disable=E0102
 	self.fst=left
 	self.snd=expression()
 	advance("]")
@@ -254,7 +254,7 @@ symbol(",")
 
 # this is for built-in functions
 @method(symbol("("))
-def led(self, left):
+def led(self, left): # pylint: disable=E0102
 	#self.id="fn"
 	self.fst=left
 	self.snd=[]
@@ -273,11 +273,11 @@ symbol("=")
 
 # constants
 
-def constant(id):
-	@method(symbol(id))
-	def nud(self):
+def constant(ID):
+	@method(symbol(ID))
+	def nud(self): # pylint: disable=W0612
 		self.id="(literal)"
-		self.value=id
+		self.value=ID
 		return self
 
 constant("None")
@@ -287,7 +287,7 @@ constant("False")
 # multitoken operators
 
 @method(symbol("not"))
-def led(self, left):
+def led(self, left): # pylint: disable=E0102
 	if token.id != "in":
 		raise SyntaxError("Invalid syntax")
 	advance()
@@ -297,7 +297,7 @@ def led(self, left):
 	return self
 
 @method(symbol("is"))
-def led(self, left):
+def led(self, left): # pylint: disable=E0102
 	if token.id == "not":
 		advance()
 		self.id="is not"
@@ -308,7 +308,7 @@ def led(self, left):
 symbol("]")
 
 @method(symbol("["))
-def nud(self):
+def nud(self): # pylint: disable=E0102
 	self.fst=[]
 	if token.id != "]":
 		while 1:
@@ -324,7 +324,7 @@ def nud(self):
 symbol("}")
 
 @method(symbol("{"))
-def nud(self):
+def nud(self): # pylint: disable=E0102
 	self.fst={}
 	if token.id != "}":
 		while 1:
