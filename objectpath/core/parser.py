@@ -19,7 +19,7 @@ else:
 from objectpath.core import SELECTOR_OPS
 
 symbol_table={}
-token=None
+token=nextToken=None
 # TODO optimization ('-',1) -> -1
 # TODO optimization operators should be numbers
 
