@@ -257,7 +257,6 @@ class Utils_interpreter(unittest.TestCase):
 	def test_builtin_time(self):
 		import datetime
 		self.assertIsInstance(execute("now()"),datetime.datetime)
-		self.assertIsInstance(execute("age(now())"),tuple)
 		self.assertIsInstance(execute("date()"), datetime.date)
 		self.assertIsInstance(execute("date(now())"), datetime.date)
 		self.assertIsInstance(execute("date([2001,12,30])"), datetime.date)
@@ -281,6 +280,14 @@ class Utils_interpreter(unittest.TestCase):
 		self.assertEqual(execute("array(time([0,0])+time([1,1,1,1]))"), [1,1,1,1])
 		self.assertEqual(execute("array(time([0,0])+time([1,2,3,4]))"), [1,2,3,4])
 		self.assertEqual(execute("array(time([23,59,59,9999])+time([0,0,0,1]))"), [0,0,0,0])
+		# age tests
+		self.assertEqual(execute("age(now())"), [0,"seconds"])
+		self.assertEqual(execute("age(dateTime([2000,1,1,1,1]),dateTime([2001,1,1,1,1]))"), [1,"year"])
+		self.assertEqual(execute("age(dateTime([2000,1,1,1,1]),dateTime([2000,2,1,1,1]))"), [1,"month"])
+		self.assertEqual(execute("age(dateTime([2000,1,1,1,1]),dateTime([2000,1,2,1,1]))"), [1,"day"])
+		self.assertEqual(execute("age(dateTime([2000,1,1,1,1]),dateTime([2000,1,1,2,1]))"), [1,"hour"])
+		self.assertEqual(execute("age(dateTime([2000,1,1,1,1]),dateTime([2000,1,1,1,2]))"), [1,"minute"])
+		self.assertEqual(execute("age(dateTime([2000,1,1,1,1,1]),dateTime([2000,1,1,1,1,2]))"), [1,"second"])
 
 	def test_localize(self):
 		pass

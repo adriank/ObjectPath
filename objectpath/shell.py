@@ -61,7 +61,7 @@ def printJSON(o):
 			out("]")
 			#return l
 
-		if type(o) is dict:
+		elif type(o) is dict:
 			if currDepth[0]>depth:
 				out("...\n")
 			keys=o.keys()
@@ -147,7 +147,7 @@ def main():
 
 	try:
 		while True:
-			try:
+			#try:
 				if sys.version_info.major >= 3:
 						r=tree.execute(input(">>> "))
 				else:
@@ -159,8 +159,8 @@ def main():
 				except NameError:
 					pass
 				print(printJSON(r))
-			except Exception as e:
-				print(e)
+			#except Exception as e:
+				#print(e)
 	except KeyboardInterrupt:
 		pass
 	#new line at the end forces command prompt to apear at left

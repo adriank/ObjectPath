@@ -543,8 +543,14 @@ class Tree(Debugger):
 						return timeutils.time(args)
 					if fnName=="dateTime":
 						return timeutils.dateTime(args)
+					# TODO move lang to localize() entirely!
 					if fnName=="age":
-						return timeutils.age(args[0],len(args)>1 and args[1] or "en")
+						a={}
+						if len(args)>1:
+							a["reference"]=args[1]
+						if len(args)>2:
+							a["lang"]=args[2]
+						return list(timeutils.age(args[0],**a))
 				elif fnName=="toMillis":
 					args=args[0]
 					if args.utcoffset() is not None:
