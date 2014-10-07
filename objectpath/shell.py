@@ -11,7 +11,7 @@ import readline
 ___x=readline.__doc__
 
 from objectpath import Tree, ITER_TYPES, STR_TYPES, py2JSON
-from objectpath.utils.colorify import *
+from objectpath.utils.colorify import * # pylint: disable=W0614
 from objectpath.utils import json_compat as json
 
 def printJSON(o):

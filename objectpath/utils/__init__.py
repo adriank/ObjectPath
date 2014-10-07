@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys,time,base64,re
+import sys,time,re
 from types import GeneratorType as generator
 from itertools import chain
 
@@ -12,8 +12,10 @@ except NameError:
 	pass
 
 from itertools import islice
-from xml.sax.saxutils import escape, unescape # pyflakes: disable=FL0001
+from xml.sax.saxutils import escape, unescape
 
+escape=escape
+unescape=unescape
 unescapeDict={"&apos;":"'","&quot;":"\""}
 escapeDict={"'":"&apos;","\"":"&quot;"}
 
