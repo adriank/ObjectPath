@@ -6,7 +6,7 @@ from itertools import chain
 
 iterators=[list,generator,chain]
 try:
-	iterators+=[map]
+	iterators+=[map, filter]
 except NameError:
 	pass
 

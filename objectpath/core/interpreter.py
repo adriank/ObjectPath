@@ -436,10 +436,12 @@ class Tree(Debugger):
 						return args
 					if type(args) not in ITER_TYPES:
 						raise Exception("Argument for avg() is not iterable")
+					else:
+						args=list(args)
 					try:
 						return sum(args)/float(len(args))
 					except TypeError:
-						args=filter(lambda x: type(x) in NUM_TYPES, args)
+						args=list(filter(lambda x: type(x) in NUM_TYPES, args))
 						self.warning("Some items in array were ommited")
 						return sum(args)/float(len(args))
 				elif fnName=="round":
