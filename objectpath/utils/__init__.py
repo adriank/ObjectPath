@@ -13,6 +13,10 @@ except NameError:
 	pass
 
 from itertools import islice
+from xml.sax.saxutils import escape, unescape
+
+unescapeDict={"&apos;":"'","&quot;":"\""}
+escapeDict={"'":"&apos;","\"":"&quot;"}
 
 # islice=islice is an optimization
 def skip(iterable, n, islice=islice):

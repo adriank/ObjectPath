@@ -464,11 +464,6 @@ class Tree(Debugger):
 						return timeutils.time2list(a)
 					return list(a)
 				# string
-				elif fnName=="escape":
-					global escape,escapeDict
-					if not escape:
-						from objectpath.utils.xmlextras import escape, escapeDict
-					return escape(args[0],escapeDict)
 				elif fnName=="upper":
 					return args[0].upper()
 				elif fnName=="lower":
@@ -479,10 +474,15 @@ class Tree(Debugger):
 					return args[0].title()
 				elif fnName=="split":
 					return args[0].split(*args[1:])
+				elif fnName=="escape":
+					global escape,escapeDict
+					if not escape:
+						from objectpath.utils import escape, escapeDict
+					return escape(args[0],escapeDict)
 				elif fnName=="unescape":
 					global unescape,unescapeDict
 					if not unescape:
-						from objectpath.utils.xmlextras import unescape, unescapeDict
+						from objectpath.utils import unescape, unescapeDict
 					return unescape(args[0],unescapeDict)
 				elif fnName=="replace":
 					if sys.version_info.major < 3 and type(args[0]) is unicode:
