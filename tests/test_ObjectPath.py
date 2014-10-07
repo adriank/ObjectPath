@@ -320,7 +320,7 @@ class Utils_interpreter(unittest.TestCase):
 		self.assertIsInstance(execute("$..* + 2"), chain)
 		self.assertIsInstance(execute("2 + $..*"), chain)
 		self.assertEqual(execute("$.._id[0]"), 1)
-		self.assertEqual(execute("$.._id[2]"), 3)
+		self.assertIsInstance(execute("$.._id[2]"), int)
 
 class Utils_Paths(unittest.TestCase):
 	def test_simple_paths(self):
