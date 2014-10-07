@@ -119,7 +119,7 @@ def main():
 	src=False
 	if args.URL:
 		if sys.version_info.major >= 3:
-			from urllib.request import Request,build_opener # NOQA
+			from urllib.request import Request,build_opener # pylint: disable=E0611
 		else:
 			from urllib2 import Request,build_opener
 		request=Request(args.URL)

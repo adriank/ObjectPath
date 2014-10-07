@@ -231,7 +231,7 @@ def led(self, left):
 symbol("$")
 @method(symbol("$"))
 def nud(self):
-	global token
+	global token # pylint: disable=W0602
 	self.id="(root)"
 	#print ("$.nud",token)
 	if token.id == ".":
