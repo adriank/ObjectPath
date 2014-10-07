@@ -245,9 +245,13 @@ class Utils_interpreter(unittest.TestCase):
 		self.assertEqual(execute("avg([1.1,1.3,1.3,1.1])"), 1.2000000000000002)
 		self.assertEqual(execute("round(2/3)"), round(2.0/3))
 		self.assertEqual(execute("round(2/3,3)"), round(2.0/3,3))
+		# edge cases
+		self.assertEqual(execute("avg(1)"), 1)
+		# should ommit 'sss'
+		self.assertEqual(execute("avg([1,'sss',3,3,1])"), 2.0)
 
 	def test_builtin_string(self):
-		self.assertEqual(execute("replace('foobar','oba','baz')"), 'fobazr')
+		self.assertEqual(execute("replace('foobar','oob','baz')"), 'fbazar')
 		self.assertEqual(execute("""escape('&lt;')"""), "&amp;lt;")
 		self.assertEqual(execute("""escape('<"&>')"""), "&lt;&quot;&amp;&gt;")
 		self.assertEqual(execute("""unescape('&lt;&quot;&amp;&gt;')"""), "<\"&>")
@@ -262,7 +266,10 @@ class Utils_interpreter(unittest.TestCase):
 
 	def test_builtin_arrays(self):
 		self.assertEqual(execute("sort([1,2,3,4]+[2,4])"), [1,2,2,3,4,4])
+		self.assertEqual(execute("sort($.._id)"), [1,2,3,4])
+		self.assertEqual(execute("sort($..l.*, _id)"), [{'_id': 3, 'aaa': 'ddd', 'false': 2}, {'_id': 4}])
 		self.assertEqual(execute("reverse([1,2,3,4]+[2,4])"), [4,2,4,3,2,1])
+		self.assertEqual(execute("reverse(sort($.._id))"), [4,3,2,1])
 		self.assertEqual(execute("len([1,2,3,4]+[2,4])"), 6)
 
 	def test_builtin_time(self):

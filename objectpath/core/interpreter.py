@@ -213,12 +213,13 @@ class Tree(Debugger):
 				elif typefst is int:
 					if D: self.info("doing integer comparison '%s is %s'",fst,snd)
 					ret=fst==int(snd)
-				elif typefst is list and typesnd is list:
-					if D: self.info("doing array comparison '%s' is '%s'",fst,snd)
-					ret=fst==snd
-				elif typefst is dict and typesnd is dict:
-					if D: self.info("doing object comparison '%s' is '%s'",fst,snd)
-					ret=fst==snd
+				# ??? L200-204 does that.
+				#elif typefst is list and typesnd is list:
+				#	if D: self.info("doing array comparison '%s' is '%s'",fst,snd)
+				#	ret=fst==snd
+				#elif typefst is dict and typesnd is dict:
+				#	if D: self.info("doing object comparison '%s' is '%s'",fst,snd)
+				#	ret=fst==snd
 				else:
 					try:
 						global ObjectId
@@ -488,14 +489,15 @@ class Tree(Debugger):
 					if sys.version_info.major < 3 and type(args[0]) is unicode:
 						args[0]=args[0].encode("utf8")
 					return str.replace(args[0],args[1],args[2])
-				elif fnName=="REsub":
-					return re.sub(args[1],args[2],args[0])
+				# TODO this should be supported by /regex/
+				#elif fnName=="REsub":
+				#	return re.sub(args[1],args[2],args[0])
 				# array
 				elif fnName=="sort":
 					if D: self.debug("doing sort on '%s'",args)
 					if not args:
 						return args
-					if type(args) in (generator,chain):
+					if type(args) in ITER_TYPES:
 						args=list(args)
 					if len(args)>1:
 						key=args[1]
