@@ -4,7 +4,7 @@ ObjectPath
 The agile NoSQL query language for semi-structured data
 -------------------------------------------------------
 
-**#Python #NoSQL #Javascript #JSON #XML #nested-array-object**
+**#Python #NoSQL #Javascript #JSON #nested-array-object**
 
 ObjectPath is a query language similar to XPath or JSONPath, but much
 more powerful thanks to embedded arithmetic calculations, comparison

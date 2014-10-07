@@ -100,7 +100,7 @@ def printJSON(o):
 def main():
 	parser=argparse.ArgumentParser(description='Command line options')
 	parser.add_argument('-u', '--url', dest='URL', help='URL containing JSON document.')
-	parser.add_argument('-xml', dest='xml', help='[EXPERIMENTAL] Expect XML input.',action='store_true')
+	#parser.add_argument('-xml', dest='xml', help='[EXPERIMENTAL] Expect XML input.',action='store_true')
 	parser.add_argument('-d', '--debug', dest='debug', help='Debbuging on/off.', action='store_true')
 	parser.add_argument('-e', '--expr', dest='expr', help='Expression/query to execute on file, print on stdout and exit.')
 	parser.add_argument('file', metavar='FILE', nargs="?", help='File name')
@@ -114,8 +114,8 @@ def main():
 	if args.debug:
 		a["debug"]=True
 	File=args.file
-	if args.xml:
-		from utils.xmlextras import xml2tree
+	#if args.xml:
+	#	from utils.xmlextras import xml2tree
 	src=False
 	if args.URL:
 		if sys.version_info.major >= 3:
@@ -134,10 +134,10 @@ def main():
 	else:
 		if not expr: sys.stdout.write("Loading JSON document from "+str(args.URL or File)+"...")
 		sys.stdout.flush()
-		if args.xml:
-			tree=Tree(json.loads(json.dumps(xml2tree(src))),a)
-		else:
-			tree=Tree(json.load(src),a)
+		#if args.xml:
+		#	tree=Tree(json.loads(json.dumps(xml2tree(src))),a)
+		#else:
+		tree=Tree(json.load(src),a)
 		if not expr: print(" "+bold("done")+".")
 
 	if expr:
