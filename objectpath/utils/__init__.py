@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import sys,time,random,base64,re
-from datetime import datetime, timedelta
+from datetime import datetime
 from types import GeneratorType as generator
 from itertools import chain
 
 iterators=[list,generator,chain]
 try:
 	iterators+=[map]
-except:
+except NameError:
 	pass
 
 from itertools import islice

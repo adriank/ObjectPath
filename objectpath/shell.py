@@ -8,7 +8,7 @@ import argparse
 import sys
 import readline
 # this is to prevent various tools from deleting import readline
-x=readline.__doc__
+___x=readline.__doc__
 
 from objectpath import Tree, ITER_TYPES, STR_TYPES, py2JSON
 from objectpath.utils.colorify import *
@@ -99,7 +99,6 @@ def printJSON(o):
 
 def main():
 	parser=argparse.ArgumentParser(description='Command line options')
-	#parser.add_argument('-o', '--file', dest='file', help='File containing JSON document.')
 	parser.add_argument('-u', '--url', dest='URL', help='URL containing JSON document.')
 	parser.add_argument('-xml', dest='xml', help='[EXPERIMENTAL] Expect XML input.',action='store_true')
 	parser.add_argument('-d', '--debug', dest='debug', help='Debbuging on/off.', action='store_true')
@@ -120,7 +119,7 @@ def main():
 	src=False
 	if args.URL:
 		if sys.version_info.major >= 3:
-			from urllib.request import Request,build_opener
+			from urllib.request import Request,build_opener # NOQA
 		else:
 			from urllib2 import Request,build_opener
 		request=Request(args.URL)
@@ -147,21 +146,21 @@ def main():
 
 	try:
 		while True:
-			#try:
+			try:
 				if sys.version_info.major >= 3:
 						r=tree.execute(input(">>> "))
 				else:
 						r=tree.execute(raw_input(">>> "))
-				#python 3 raises error here - unicode is not a proper type there
+				# python 3 raises error here - unicode is not a proper type there
 				try:
 					if type(r) is unicode:
 						r=r.encode("utf8")
 				except NameError:
 					pass
 				print(printJSON(r))
-			#except Exception as e:
-				#print(e)
+			except Exception as e:
+				print(e)
 	except KeyboardInterrupt:
 		pass
-	#new line at the end forces command prompt to apear at left
+	# new line at the end forces command prompt to apear at left
 	print(bold("\nbye!"))

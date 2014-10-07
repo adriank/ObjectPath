@@ -104,7 +104,8 @@ def tree2xml(root,esc=False):
 						"day":node.day>9 and node.day or '0'+str(node.day)
 					}
 					d.update(dt)
-				except: pass
+				except Exception:
+					pass
 				try:
 					d["hour"]=node.hour
 					d["minute"]=node.minute>9 and node.minute or '0'+str(node.minute)
