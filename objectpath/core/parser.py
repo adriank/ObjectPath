@@ -16,7 +16,7 @@ if sys.version_info.major >= 3:
 else:
 	from cStringIO import StringIO
 
-from objectpath.core import *
+from objectpath.core import SELECTOR_OPS
 
 symbol_table={}
 token=None
@@ -203,7 +203,7 @@ def nud(self): # pylint: disable=E0102
 	return self
 
 @method(symbol("("))
-def nud(self): # pylint: disable=E0102
+def nud(self): # pylint: disable=E0102,W0613
 	expr=expression()
 	advance(")")
 	return expr

@@ -7,7 +7,7 @@ import sys
 import re
 from .parser import parse
 from objectpath.core import *
-from objectpath.utils.colorify import *
+from objectpath.utils.colorify import * # pylint: disable=W0614
 from objectpath.utils import flatten, timeutils, py2JSON
 from objectpath.utils import iterators, generator, chain, skip
 from objectpath.utils.debugger import Debugger
@@ -554,7 +554,7 @@ class Tree(Debugger):
 				elif fnName=="toMillis":
 					args=args[0]
 					if args.utcoffset() is not None:
-						args=args-args.utcoffset()
+						args=args-args.utcoffset() # pylint: disable=E1103
 					global calendar
 					if not calendar:
 						import calendar
