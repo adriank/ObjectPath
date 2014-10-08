@@ -265,13 +265,23 @@ class Tree(Debugger):
 					if D: self.end("returning '%s'",typefst in ITER_TYPES and fst or [fst])
 					return typefst in ITER_TYPES and fst or [fst]
 				snd=exe(node[2])
+				filterAttrs=type(node[2]) is list
 				if D: self.debug("right is '%s'",snd)
 				if typefst in ITER_TYPES:
 					ret=[]
 					ret_append=ret.append
 					for i in fst:
 						try:
-							ret_append(i[snd])
+							if filterAttrs and type(i) is dict:
+								d={}
+								for a in snd:
+									try:
+										d[a]=i[a]
+									except:
+										pass
+								ret.append(d)
+							else:
+								ret_append(i[snd])
 						except Exception:
 							pass
 					if D: self.end(". returning '%s'",ret)
@@ -292,11 +302,19 @@ class Tree(Debugger):
 				if node[2][0]=="*":
 					if D: self.debug("returning '%s'",fst)
 					return fst
+				# reduce objects to selected attributes
+				filterAttrs=type(node[2]) is list
 				ret=[]
 				snd=exe(node[2])
 				for i in fst:
 					try:
-						ret.append(i[snd])
+						if filterAttrs and type(i) is dict:
+							d={}
+							for a in snd:
+								d[a]=i[a]
+							ret.append(d)
+						else:
+							ret.append(i[snd])
 					except Exception:
 						pass
 				if D: self.debug("returning '%s'",ret)
@@ -589,7 +607,7 @@ class Tree(Debugger):
 						return "object"
 					return ret.__name__
 				else:
-					raise ProgrammingError("Function '"+fnName+"' does not exist.")
+					raise ProgrammingError("Function '"+str(fnName)+"' does not exist.")
 			else:
 				return node
 

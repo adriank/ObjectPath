@@ -14,9 +14,9 @@ from objectpath import Tree, ITER_TYPES, STR_TYPES, py2JSON
 from objectpath.utils.colorify import * # pylint: disable=W0614
 from objectpath.utils import json_compat as json
 
-def printJSON(o):
-	depth=5
-	length=5
+LAST_LIST=None
+
+def printJSON(o, length=5,depth=5):
 	spaces=2
 
 	def plus():
@@ -26,7 +26,10 @@ def printJSON(o):
 		currDepth[0]-=1
 
 	def out(s):
-		s=str(s)
+		try:
+			s=str(s)
+		except Exception:
+			pass
 		if not ret:
 			ret.append(s)
 		elif ret[-1][-1]=="\n":

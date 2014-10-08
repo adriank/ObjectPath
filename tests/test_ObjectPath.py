@@ -348,6 +348,7 @@ class Utils_Paths(unittest.TestCase):
 		self.assertEqual(execute("$.test.l._id"), [3, 4])
 		self.assertEqual(execute("$.*[test][0].o._id"), 2)
 		self.assertEqual(execute("$.*['test'][0].o._id"), 2)
+		self.assertEqual(execute2("$.store.book.(price,title)[0]"), {"price": 8.95, "title": "Sayings of the Century"})
 		self.assertIsInstance(execute("now().year"),int)
 
 	def test_complex_paths(self):
