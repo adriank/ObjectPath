@@ -52,7 +52,7 @@ $ objectpath file.json
 `````sh
 $ git clone https://github.com/adriank/ObjectPath.git
 $ cd ObjectPath
-$ python objectpath file.json
+$ python shell.py file.json
 `````
 
 Python usage

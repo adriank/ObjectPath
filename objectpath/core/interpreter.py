@@ -4,7 +4,6 @@
 # Copyright (C) 2010-2014 Adrian Kalbarczyk
 
 import sys
-import re
 from .parser import parse
 from objectpath.core import *
 from objectpath.utils.colorify import * # pylint: disable=W0614
@@ -277,7 +276,7 @@ class Tree(Debugger):
 								for a in snd:
 									try:
 										d[a]=i[a]
-									except:
+									except KeyError:
 										pass
 								ret.append(d)
 							else:
