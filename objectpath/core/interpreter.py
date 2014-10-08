@@ -199,8 +199,9 @@ class Tree(Debugger):
 					snd=node[2]
 				if op == "is" and fst == snd:
 					return True
-				if op == "is not" and fst != snd:
-					return True
+				# this doesn't work for 3 is not '3'
+				#if op == "is not" and fst != snd:
+				#	return True
 				typefst=type(fst)
 				typesnd=type(snd)
 				if D: self.debug("type fst: '%s', type snd: '%s'",typefst,typesnd)
@@ -213,13 +214,12 @@ class Tree(Debugger):
 				elif typefst is int:
 					if D: self.info("doing integer comparison '%s is %s'",fst,snd)
 					ret=fst==int(snd)
-				# ??? L200-204 does that.
-				#elif typefst is list and typesnd is list:
-				#	if D: self.info("doing array comparison '%s' is '%s'",fst,snd)
-				#	ret=fst==snd
-				#elif typefst is dict and typesnd is dict:
-				#	if D: self.info("doing object comparison '%s' is '%s'",fst,snd)
-				#	ret=fst==snd
+				elif typefst is list and typesnd is list:
+					if D: self.info("doing array comparison '%s' is '%s'",fst,snd)
+					ret=fst==snd
+				elif typefst is dict and typesnd is dict:
+					if D: self.info("doing object comparison '%s' is '%s'",fst,snd)
+					ret=fst==snd
 				else:
 					try:
 						global ObjectId
@@ -514,10 +514,12 @@ class Tree(Debugger):
 					return args
 				elif fnName=="reverse":
 					args=args[0]
-					if type(args) in (generator,chain):
+					if type(args) in ITER_TYPES:
 						args=list(args)
 					args.reverse()
 					return args
+				elif fnName=="map":
+					return map(lambda x: exe(("fn",args[0],x)), args[1])
 				elif fnName in ("count","len"):
 					args=args[0]
 					if args in (True,False,None):
@@ -532,7 +534,7 @@ class Tree(Debugger):
 						joiner=""
 					try:
 						return joiner.join(args[0])
-					except Exception:
+					except TypeError:
 						try:
 							return joiner.join(map(str,args[0]))
 						except Exception:

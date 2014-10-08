@@ -180,7 +180,11 @@ class Utils_interpreter(unittest.TestCase):
 
 	def test_comparison_isnot(self):
 		self.assertEqual(execute("3 is not 6"), True)
+		self.assertEqual(execute("3 is not '3'"), False)
 		self.assertEqual(execute("[] is not [1]"), True)
+		self.assertEqual(execute("[] is not []"), False)
+		self.assertEqual(execute("{'aaa':2} is not {'bbb':2}"), True)
+		self.assertEqual(execute("{} is not {}"), False)
 
 	def test_membership_in(self):
 		self.assertEqual(execute("4 in [6,4,3]"),True)
@@ -263,6 +267,8 @@ class Utils_interpreter(unittest.TestCase):
 		self.assertEqual(execute("split('aaaxaaa','x')"),["aaa","aaa"])
 		self.assertEqual(execute("join(['aaą','aaę'],'ć')"),"aaąćaaę")
 		self.assertEqual(execute("join(['aaa','aaa'])"),"aaaaaa")
+		self.assertEqual(execute("join(['aaa','aaa',3,55])"),"aaaaaa355")
+		self.assertEqual(list(execute("map(upper,['aaa','aaa'])")),["AAA","AAA"])
 
 	def test_builtin_arrays(self):
 		self.assertEqual(execute("sort([1,2,3,4]+[2,4])"), [1,2,2,3,4,4])
@@ -271,6 +277,9 @@ class Utils_interpreter(unittest.TestCase):
 		self.assertEqual(execute("reverse([1,2,3,4]+[2,4])"), [4,2,4,3,2,1])
 		self.assertEqual(execute("reverse(sort($.._id))"), [4,3,2,1])
 		self.assertEqual(execute("len([1,2,3,4]+[2,4])"), 6)
+		# edge cases
+		self.assertEqual(execute("len(True)"), True)
+		self.assertEqual(execute("len('aaa')"), 3)
 
 	def test_builtin_time(self):
 		import datetime
