@@ -364,9 +364,9 @@ class Utils_Paths(unittest.TestCase):
 
 	def test_selectors(self):
 		self.assertEqual(len(execute("$..*[@._id>2]")), 2)
-		#self.assertEqual(execute("$..*[3 in @.l._id]")[0], object1.requestStorage['test'])
-		#self.assertEqual(execute2("$.store..*[4 in @.k._id]")[0], object2.requestStorage['store'])
-		#self.assertEqual(execute("$..*[@._id>1 and @._id<3][0]"), {'_id': 2})
+		self.assertEqual(execute("$..*[3 in @.l._id]")[0], object1['test'])
+		self.assertEqual(execute2("$.store..*[4 in @.k._id]")[0], object2['store'])
+		self.assertEqual(execute("$..*[@._id>1 and @._id<3][0]"), {'_id': 2})
 
 #testcase2=unittest.FunctionTestCase(test_efficiency(2))
 testcase1=unittest.TestLoader().loadTestsFromTestCase(Utils_interpreter)
