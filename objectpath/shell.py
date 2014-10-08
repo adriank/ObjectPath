@@ -82,3 +82,6 @@ def main():
 		pass
 	# new line at the end forces command prompt to apear at left
 	print(bold("\nbye!"))
+
+if __name__ == "__main__":
+	main()
