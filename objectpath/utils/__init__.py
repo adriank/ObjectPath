@@ -63,18 +63,3 @@ def py2JSON(o):
 		return o.encode("utf8")
 	except Exception:
 		return o
-
-def str2obj(s):
-	"""
-		Converts string to an object.
-		input: string
-		returns: object which was converted or the same string's object representation as in input
-	"""
-	r=s.strip().lower()
-	if r in ("true","t","y","yes"):
-		return True
-	elif r in ("false","f","no"):
-		return False
-	elif r in ("none","nil","null"):
-		return None
-	return s

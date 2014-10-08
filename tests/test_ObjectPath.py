@@ -77,7 +77,7 @@ def execute(expr):
 def execute2(expr):
 	return tree2.execute(expr)
 
-class Utils_interpreter(unittest.TestCase):
+class ObjectPath(unittest.TestCase):
 	def test_simple_types(self):
 		self.assertEqual(execute("null"), None)
 		self.assertEqual(execute("true"), True)
@@ -338,7 +338,7 @@ class Utils_interpreter(unittest.TestCase):
 		self.assertEqual(execute("$.._id[0]"), 1)
 		self.assertIsInstance(execute("$.._id[2]"), int)
 
-class Utils_Paths(unittest.TestCase):
+class ObjectPath_Paths(unittest.TestCase):
 	def test_simple_paths(self):
 		self.assertEqual(execute("$.*[0]"), object1)
 		self.assertEqual(execute("$.a.b.c"), None)
@@ -369,8 +369,8 @@ class Utils_Paths(unittest.TestCase):
 		self.assertEqual(execute("$..*[@._id>1 and @._id<3][0]"), {'_id': 2})
 
 #testcase2=unittest.FunctionTestCase(test_efficiency(2))
-testcase1=unittest.TestLoader().loadTestsFromTestCase(Utils_interpreter)
-testcase2=unittest.TestLoader().loadTestsFromTestCase(Utils_Paths)
+testcase1=unittest.TestLoader().loadTestsFromTestCase(ObjectPath)
+testcase2=unittest.TestLoader().loadTestsFromTestCase(ObjectPath_Paths)
 
-utils_interpreter=unittest.TestSuite([testcase1,testcase2])
+op_test=unittest.TestSuite([testcase1,testcase2])
 #utils_interpreter=unittest.TestSuite([testcase2])
