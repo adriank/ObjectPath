@@ -51,7 +51,7 @@ $ objectpath file.json
 
 `````sh
 $ git clone https://github.com/adriank/ObjectPath.git
-$ cd ObjectPath/ObjectPathPy
+$ cd ObjectPath
 $ python objectpath file.json
 `````
 
@@ -82,3 +82,5 @@ License
 -------
 
 AGPLv3
+
+**If you are not happy with the license, contact me directly and we'll figure something out.**
