@@ -365,6 +365,8 @@ class ObjectPath_Paths(unittest.TestCase):
 		self.assertEqual(list(execute("$..l.._id")), [3,4])
 		self.assertEqual(execute2("$.store.*"), [object2["store"]])
 		self.assertEqual(execute2("$.store.book.author"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
+		self.assertEqual(execute2("$.store.book.(author,aaa)"), [{"author": "Nigel Rees"}, {"author": "Evelyn Waugh"}, {"author": "Herman Melville"}, {"author": "J. R. R. Tolkien"}])
+		self.assertEqual(execute2("$.store.book.(author,price)"), [{'price': 8.95, 'author': 'Nigel Rees'}, {'price': 12.99, 'author': 'Evelyn Waugh'}, {'price': 8.99, 'author': 'Herman Melville'}, {'price': 22.99, 'author': 'J. R. R. Tolkien'}])
 		self.assertEqual(execute2("$.store.book.*[author]"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
 		self.assertEqual(execute2("$.store.book.*['author']"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
 		self.assertEqual(execute2("$.store.book"), object2["store"]["book"])

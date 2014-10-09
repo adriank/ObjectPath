@@ -185,16 +185,16 @@ class Tree(Debugger):
 				return exe(node[1]) not in exe(node[2])
 			elif op in ("is","is not"):
 				if D: self.debug("found operator '%s'",op)
-				try:
-					fst=exe(node[1])
-				except Exception as e:
-					if D: self.debug("NOT ERROR! Can't execute node[1] '%s', error: '%s'. Falling back to orginal value.",node[1],str(e))
-					fst=node[1]
-				try:
-					snd=exe(node[2])
-				except Exception as e:
-					if D: self.debug("NOT ERROR! Can't execute node[2] '%s', error: '%s'. Falling back to orginal value.",node[2],str(e))
-					snd=node[2]
+				#try:
+				fst=exe(node[1])
+				#except Exception as e:
+				#	if D: self.debug("NOT ERROR! Can't execute node[1] '%s', error: '%s'. Falling back to orginal value.",node[1],str(e))
+				#	fst=node[1]
+				#try:
+				snd=exe(node[2])
+				#except Exception as e:
+				#	if D: self.debug("NOT ERROR! Can't execute node[2] '%s', error: '%s'. Falling back to orginal value.",node[2],str(e))
+				#	snd=node[2]
 				if op == "is" and fst == snd:
 					return True
 				# this doesn't work for 3 is not '3'
@@ -218,31 +218,31 @@ class Tree(Debugger):
 				elif typefst is dict and typesnd is dict:
 					if D: self.info("doing object comparison '%s' is '%s'",fst,snd)
 					ret=fst==snd
-				else:
-					try:
-						global ObjectId
-						if not ObjectId:
-							from bson.objectid import ObjectId
-						if typefst is ObjectId or typesnd is ObjectId:
-							if D: self.info("doing MongoDB objectID comparison '%s' is '%s'",fst,snd)
-							ret=str(fst)==str(snd)
-						else:
-							if D: self.info("doing standard comparison '%s' is '%s'",fst,snd)
-							ret=fst is snd
-					except Exception:
-						pass
+				#else:
+				#	try:
+				#		global ObjectId
+				#		if not ObjectId:
+				#			from bson.objectid import ObjectId
+				#		if typefst is ObjectId or typesnd is ObjectId:
+				#			if D: self.info("doing MongoDB objectID comparison '%s' is '%s'",fst,snd)
+				#			ret=str(fst)==str(snd)
+				#		else:
+				#			if D: self.info("doing standard comparison '%s' is '%s'",fst,snd)
+				#			ret=fst is snd
+				#	except Exception:
+				#		pass
 				if op=="is not":
 					if D: self.info("'is not' found. Returning %s",not ret)
 					return not ret
 				else:
 					if D: self.info("returning '%s' is '%s'='%s'",fst,snd,ret)
 					return ret
-			elif op=="(literal)":
-				fstLetter=node[1][0]
-				if fstLetter is "'":
-					return node[1][1:-1]
-				elif fstLetter.isdigit:
-					return int(node[1])
+			#elif op=="(literal)":
+			#	fstLetter=node[1][0]
+			#	if fstLetter is "'":
+			#		return node[1][1:-1]
+			#	elif fstLetter.isdigit:
+			#		return int(node[1])
 			elif op=="(root)":# this is $
 				return self.data
 			#elif op=="(node)":# this is !

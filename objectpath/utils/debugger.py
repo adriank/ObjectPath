@@ -77,7 +77,7 @@ class Debugger(object):
 				pass
 			if self.CUT_AFTER and type(x) is dict:
 				s=[]
-				for i in x.iteritems():
+				for i in x.items():
 					s.append("'%s': %s"%(i[0],repr(i[1])[:self.CUT_AFTER]))
 					if len(s[-1])>self.CUT_AFTER:
 						s.append("...")
