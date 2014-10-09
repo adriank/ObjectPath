@@ -506,19 +506,16 @@ class Tree(Debugger):
 				#	return re.sub(args[1],args[2],args[0])
 				# array
 				elif fnName=="sort":
-					if D: self.debug("doing sort on '%s'",args)
 					if not args:
 						return args
-					if type(args) in ITER_TYPES:
-						args=list(args)
-					a={}
 					if len(args)>1:
 						key=args[1]
-						a["key"]=lambda x: x.get(key)
-						args=args[0]
+						a={"key":lambda x: x.get(key, 0)}
 					else:
-						args=args[0]
-					if type(args) is not list:
+						a={}
+					args=args[0]
+					if D: self.debug("doing sort on '%s'",args)
+					if type(args) not in ITER_TYPES:
 						return args
 					return sorted(args,**a)
 				elif fnName=="reverse":
