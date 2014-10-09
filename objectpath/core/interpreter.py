@@ -6,8 +6,8 @@
 import sys
 from .parser import parse
 from objectpath.core import *
-from objectpath.utils.colorify import * # pylint: disable=W0614
-from objectpath.utils import flatten, timeutils, py2JSON
+import objectpath.utils.colorify as color # pylint: disable=W0614
+from objectpath.utils import flatten, filter_dict, timeutils, py2JSON
 from objectpath.utils import iterators, generator, chain, skip
 from objectpath.utils.debugger import Debugger
 
@@ -89,7 +89,7 @@ class Tree(Debugger):
 							fst.update(snd)
 						except Exception:
 							if type(snd) is not dict:
-								raise ProgrammingError("Can't add value of type %s to %s" % (bold(PY_TYPES_MAP.get(type(snd).__name__, type(snd).__name__)), bold("object")))
+								raise ProgrammingError("Can't add value of type %s to %s" % (color.bold(PY_TYPES_MAP.get(type(snd).__name__, type(snd).__name__)), color.bold("object")))
 						return fst
 					if typefst is list and typesnd is list:
 						if D: self.debug("both sides are lists, returning '%s'",fst+snd)
@@ -125,7 +125,6 @@ class Tree(Debugger):
 				else:
 					return exe(node[1])
 			elif op=="-":
-				# TODO move -N to tree builder!
 				if len(node)>2:
 					fst=exe(node[1])
 					snd=exe(node[2])
@@ -246,11 +245,11 @@ class Tree(Debugger):
 					return int(node[1])
 			elif op=="(root)":# this is $
 				return self.data
-			elif op=="(node)":# this is !
-				if D: self.debug("returning node %s",self.node)
-				return self.node
+			#elif op=="(node)":# this is !
+			#	if D: self.debug("returning node %s",self.node)
+			#	return self.node
 			elif op=="(current)":# this is @
-				if D: self.debug("returning current node %s",self.current)
+				if D: self.debug("returning current node %s", self.current)
 				return self.current
 			elif op=="name":
 				return node[1]
@@ -261,7 +260,7 @@ class Tree(Debugger):
 				typefst=type(fst)
 				if D: self.debug("left is '%s'",fst)
 				if node[2][0] == "*":
-					if D: self.end("returning '%s'",typefst in ITER_TYPES and fst or [fst])
+					if D: self.end("returning '%s'", typefst in ITER_TYPES and fst or [fst])
 					return typefst in ITER_TYPES and fst or [fst]
 				snd=exe(node[2])
 				filterAttrs=type(node[2]) is list
@@ -283,10 +282,10 @@ class Tree(Debugger):
 								ret_append(i[snd])
 						except Exception:
 							pass
-					if D: self.end(". returning '%s'",ret)
+					if D: self.end(color.op(".")+" returning '%s'",ret)
 					return ret
 				try:
-					if D: self.end(". returning '%s'",fst.get(snd))
+					if D: self.end(color.op(".")+" returning '%s'",fst.get(snd))
 					return fst.get(snd)
 				except Exception:
 					if isinstance(fst,object):
@@ -294,30 +293,24 @@ class Tree(Debugger):
 							return fst.__getattribute__(snd)
 						except Exception:
 							pass
-					if D: self.end(". returning '%s'",fst)
+					if D: self.end(color.op(".")+" returning '%s'", color.bold(fst))
 					return fst
 			elif op=="..":
 				fst=flatten(exe(node[1]))
 				if node[2][0]=="*":
-					if D: self.debug("returning '%s'",fst)
+					if D: self.debug(color.op("..")+" returning '%s'", color.bold(fst))
 					return fst
 				# reduce objects to selected attributes
 				filterAttrs=type(node[2]) is list
-				ret=[]
 				snd=exe(node[2])
-				for i in fst:
-					try:
-						if filterAttrs and type(i) is dict:
-							d={}
-							for a in snd:
-								d[a]=i[a]
-							ret.append(d)
-						else:
-							ret.append(i[snd])
-					except Exception:
-						pass
-				if D: self.debug("returning '%s'",ret)
-				return len(ret) is 1 and ret[0] or ret
+				if D: self.debug(color.op("..")+" finding all %s in %s", color.bold(snd), color.bold(fst))
+				if type(node[2]) is list:
+					if D: self.debug(color.op("..")+" returning %s",color.bold(ret))
+					return filter_dict(fst, snd)
+				else:
+					return (e[snd] for e in fst if snd in e)
+				#if D: self.debug(color.op("..")+" returning %s",color.bold(ret))
+				#return len(ret) is 1 and ret[0] or ret
 			# TODO move it to tree generation phase
 			elif op=="{":
 				return {}
@@ -340,33 +333,33 @@ class Tree(Debugger):
 					if not fst:
 						return fst
 					selector=node[2]
-					if D: self.debug("found '%s' selector for '%s'",selector,fst)
+					if D: self.debug("found '%s' selector. executing on %s", color.bold(selector),color.bold(fst))
 
 					if type(selector) is tuple and selector[0] is "[":
 						nodeList=[]
 						nodeList_append=nodeList.append
 						for i in fst:
-							if D: self.debug("setting self.current to '%s'",i)
+							if D: self.debug("setting self.current to %s",color.bold(i))
 							self.current=i
 							nodeList_append(exe((selector[0],exe(selector[1]),exe(selector[2]))))
-						if D: self.debug("returning '%s' objects: '%s'",len(nodeList),nodeList)
+						if D: self.debug("returning %s objects: %s", color.bold(len(nodeList)),color.bold(nodeList))
 						return nodeList
 
 					#if type(selector) is tuple and selector[0]=="fn":
 					#	for i in fst:
 
 					if type(selector) is tuple and selector[0] == "(current)":
-						if D: self.warning(bold("$.*[@]")+" is eqivalent to "+bold("$.*")+"!")
+						if D: self.warning(color.bold("$.*[@]")+" is eqivalent to "+color.bold("$.*")+"!")
 						return fst
 
 					if type(selector) is tuple and selector[0] in SELECTOR_OPS:
-						if D: self.debug("found '%s' operator in selector",selector[0])
+						if D: self.debug("found %s operator in selector", color.bold(selector[0]))
 						nodeList=[]
 						nodeList_append=nodeList.append
 						if type(fst) is dict:
 							fst=[fst]
 						for i in fst:
-							if D: self.debug("setting self.current to '%s'",i)
+							if D: self.debug("setting self.current to %s",color.bold(i))
 							self.current=i
 							# TODO move it to tree building phase
 							if type(selector[1]) is tuple and selector[1][0]=="name":
@@ -380,7 +373,7 @@ class Tree(Debugger):
 										if D: self.debug("appended")
 									if D: self.debug("discarded")
 								except Exception as e:
-									if D: self.debug("discarded, Exception: %s",e)
+									if D: self.debug("discarded, Exception: %s",color.bold(e))
 							else:
 								try:
 									# TODO optimize an event when @ is not used. exe(selector[1]) can be cached
@@ -390,7 +383,7 @@ class Tree(Debugger):
 									if D: self.debug("discarded")
 								except Exception:
 									if D: self.debug("discarded")
-						if D: self.debug("returning '%s' objects: '%s'",len(nodeList),nodeList)
+						if D: self.debug("returning '%s' objects: '%s'", color.bold(len(nodeList)), color.bold(nodeList))
 						return nodeList
 					snd=exe(node[2])
 					typefst=type(fst)
@@ -399,12 +392,12 @@ class Tree(Debugger):
 						# nodes[N]
 						if typesnd in NUM_TYPES or typesnd is str and snd.isdigit():
 							n=int(snd)
-							if D: self.debug("getting %sth element from '%s'",n,snd)
+							if D: self.info("getting %sth element from '%s'", color.bold(n), color.bold(fst))
 							if typefst in (generator,chain):
 								if n>0:
 									return skip(fst,n)
 								elif n==0:
-									return list(next(fst))[0]
+									return next(fst)
 								else:
 									fst=list(fst)
 							else:
@@ -416,13 +409,13 @@ class Tree(Debugger):
 						return exe((".",fst,snd))
 					else:
 						try:
-							if D: self.debug("returning '%s'",fst[snd])
+							if D: self.debug("returning %s", color.bold(fst[snd]))
 							return fst[snd]
 						except KeyError:
 							# CHECK - is it ok to do that or should it be ProgrammingError?
 							if D: self.debug("returning an empty list")
 							return []
-				raise ProgrammingError("Wrong usage of the '[' operator")
+				raise ProgrammingError("Wrong usage of "+color.bold("[")+" operator")
 			elif op=="fn":
 				# Built-in functions
 				fnName=node[1]
@@ -436,17 +429,17 @@ class Tree(Debugger):
 					args=args[0]
 					if type(args) in NUM_TYPES:
 						return args
-					return sum(map(lambda x:type(x) in NUM_TYPES and x or exe(x), args))
+					return sum((type(x) in NUM_TYPES and x or exe(x) for x in args))
 				elif fnName=="max":
 					args=args[0]
 					if type(args) in NUM_TYPES:
 						return args
-					return max(map(lambda x:type(x) in NUM_TYPES and x or exe(x), args))
+					return max((type(x) in NUM_TYPES and x or exe(x) for x in args))
 				elif fnName=="min":
 					args=args[0]
 					if type(args) in NUM_TYPES:
 						return args
-					return min(map(lambda x:type(x) in NUM_TYPES and x or exe(x), args))
+					return min((type(x) in NUM_TYPES and x or exe(x) for x in args))
 				elif fnName=="avg":
 					args=args[0]
 					if type(args) in NUM_TYPES:
@@ -518,17 +511,16 @@ class Tree(Debugger):
 						return args
 					if type(args) in ITER_TYPES:
 						args=list(args)
+					a={}
 					if len(args)>1:
 						key=args[1]
-						a={"key":lambda x: x.get(key)}
+						a["key"]=lambda x: x.get(key)
 						args=args[0]
 					else:
-						a={}
 						args=args[0]
 					if type(args) is not list:
 						return args
-					args.sort(**a)
-					return args
+					return sorted(args,**a)
 				elif fnName=="reverse":
 					args=args[0]
 					if type(args) in ITER_TYPES:

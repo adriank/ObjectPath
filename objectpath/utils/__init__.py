@@ -25,6 +25,21 @@ def skip(iterable, n, islice=islice):
 	except StopIteration:
 		raise IndexError("generator index out of range")
 
+def filter_dict(iterable, keys):
+	"""
+	filters keys of each element of iterable
+	"""
+	if type(keys) is not list:
+		keys=[keys]
+	for i in iterable:
+		try:
+			d={}
+			for a in keys:
+				d[a]=i[a]
+			yield d
+		except Exception:
+			pass
+
 def flatten(fragment,skip=False):
 	def rec(frg):
 		typefrg=type(frg)

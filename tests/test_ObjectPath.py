@@ -272,8 +272,8 @@ class ObjectPath(unittest.TestCase):
 
 	def test_builtin_arrays(self):
 		self.assertEqual(execute("sort([1,2,3,4]+[2,4])"), [1,2,2,3,4,4])
-		self.assertEqual(execute("sort($.._id)"), [1,2,3,4])
-		self.assertEqual(execute("sort($..l.*, _id)"), [{'_id': 3, 'aaa': 'ddd', 'false': 2}, {'_id': 4}])
+		self.assertEqual(list(execute("sort($.._id)")), [1,2,3,4])
+		self.assertEqual(list(execute("sort($..l[0].*, _id)")), [{'_id': 3, 'aaa': 'ddd', 'false': 2}, {'_id': 4}])
 		self.assertEqual(execute("reverse([1,2,3,4]+[2,4])"), [4,2,4,3,2,1])
 		self.assertEqual(execute("reverse(sort($.._id))"), [4,3,2,1])
 		self.assertEqual(execute("len([1,2,3,4]+[2,4])"), 6)
@@ -336,6 +336,7 @@ class ObjectPath(unittest.TestCase):
 		self.assertIsInstance(execute("$..* + 2"), chain)
 		self.assertIsInstance(execute("2 + $..*"), chain)
 		self.assertEqual(execute("$.._id[0]"), 1)
+		self.assertEqual(execute("($.._id + $.._id)[2]"), 3)
 		self.assertIsInstance(execute("$.._id[2]"), int)
 
 class ObjectPath_Paths(unittest.TestCase):
@@ -353,14 +354,14 @@ class ObjectPath_Paths(unittest.TestCase):
 
 	def test_complex_paths(self):
 		self.assertEqual(sorted(execute("$.._id")), [1, 2, 3, 4])
-		self.assertEqual(execute("$..l"), object1["test"]["l"])
-		self.assertEqual(execute("$..l.._id"), [3,4])
+		self.assertEqual(list(execute("$..l")), [object1["test"]["l"]])
+		self.assertEqual(list(execute("$..l.._id")), [3,4])
 		self.assertEqual(execute2("$.store.*"), [object2["store"]])
 		self.assertEqual(execute2("$.store.book.author"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
 		self.assertEqual(execute2("$.store.book.*[author]"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
 		self.assertEqual(execute2("$.store.book.*['author']"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
 		self.assertEqual(execute2("$.store.book"), object2["store"]["book"])
-		self.assertEqual(execute2("$..author"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
+		self.assertEqual(list(execute2("$..author")), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
 
 	def test_selectors(self):
 		self.assertEqual(len(execute("$..*[@._id>2]")), 2)

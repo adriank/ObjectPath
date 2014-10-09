@@ -35,6 +35,7 @@ def main():
 	#if args.xml:
 	#	from utils.xmlextras import xml2tree
 	src=False
+
 	if args.URL:
 		if sys.version_info.major >= 3:
 			from urllib.request import Request,build_opener # pylint: disable=E0611
@@ -46,6 +47,7 @@ def main():
 		src=opener.open(request)
 	elif File:
 		src=open(File,"r")
+
 	if not src:
 		if not expr:print ("JSON document source not specified. Working with an empty object {}.")
 		tree=Tree({},a)
