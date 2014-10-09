@@ -23,6 +23,9 @@ ITER_TYPES=iterators
 class ProgrammingError(Exception):
 	pass
 
+class ExecutionError(Exception):
+	pass
+
 PY_TYPES_MAP={
 	"int":"number",
 	"str":"string",

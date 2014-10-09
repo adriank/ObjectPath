@@ -570,7 +570,7 @@ class Tree(Debugger):
 					global calendar
 					if not calendar:
 						import calendar
-					return int(calendar.timegm(args.timetuple()) * 1000 + args.microsnd / 1000)
+					return int(calendar.timegm(args.timetuple()) * 1000 + args.microsecond / 1000)
 				elif fnName=="localize":
 					if type(args[0]) is timeutils.datetime.datetime:
 						return timeutils.UTC2local(*args)
@@ -584,9 +584,9 @@ class Tree(Debugger):
 				# misc
 				elif fnName=="keys":
 					try:
-						return args[0].keys()
+						return list(args[0].keys())
 					except AttributeError as e:
-						raise Exception("Argument is not "+bold("object")+" but %s in keys()"%bold(type(args[0]).__name__))
+						raise ExecutionError("Argument is not "+color.bold("object")+" but %s in keys()"%color.bold(type(args[0]).__name__))
 				elif fnName=="type":
 					ret=type(args[0])
 					if ret in ITER_TYPES:
@@ -595,7 +595,7 @@ class Tree(Debugger):
 						return "object"
 					return ret.__name__
 				else:
-					raise ProgrammingError("Function '"+str(fnName)+"' does not exist.")
+					raise ProgrammingError("Function "+color.bold(fnName)+" does not exist.")
 			else:
 				return node
 

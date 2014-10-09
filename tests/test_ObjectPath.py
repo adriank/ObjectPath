@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from objectpath.core.interpreter import *
-from objectpath.core import ProgrammingError
+from objectpath.core import ProgrammingError, ExecutionError
 from random import randint, choice
 #from bson.objectid import ObjectId
 import sys, unittest, os
@@ -294,6 +294,7 @@ class ObjectPath(unittest.TestCase):
 		self.assertIsInstance(execute("dateTime(now())"), datetime.datetime)
 		self.assertIsInstance(execute("dateTime([2001,12,30,12,23])"), datetime.datetime)
 		self.assertIsInstance(execute("dateTime([2001,12,30,12,23,21,777777])"), datetime.datetime)
+		self.assertEqual(execute("toMillis(dateTime([2001,12,30,12,23,21,777777]))"), 1009715001777)
 		self.assertIsInstance(execute("dateTime(date(),time())"), datetime.datetime)
 		self.assertIsInstance(execute("dateTime(date(),[12,23])"), datetime.datetime)
 		self.assertIsInstance(execute("dateTime(date(),[12,23,21,777777])"), datetime.datetime)
@@ -330,13 +331,19 @@ class ObjectPath(unittest.TestCase):
 		self.assertEqual(execute("type({})"), "object")
 		self.assertEqual(execute("type('')"), "str")
 
+	def test_misc(self):
+		self.assertEqual(execute("$..*[10]"), None)
+		self.assertEqual(execute("keys({'a':1,'b':2})"), ['a','b'])
+		self.assertRaises(ExecutionError, lambda: execute('keys([])'))
+		self.assertRaises(ProgrammingError, lambda: execute('blah([])'))
+
 	def test_optimizations(self):
 		self.assertIsInstance(execute("$..*"), generator)
 		self.assertIsInstance(execute("$..* + $..*"), chain)
 		self.assertIsInstance(execute("$..* + 2"), chain)
 		self.assertIsInstance(execute("2 + $..*"), chain)
 		self.assertEqual(execute("$.._id[0]"), 1)
-		#self.assertEqual(execute("sort($.._id + $.._id)[2]"), 3)
+		self.assertEqual(execute("sort($.._id + $.._id)[2]"), 2)
 		self.assertIsInstance(execute("$.._id[2]"), int)
 
 class ObjectPath_Paths(unittest.TestCase):
