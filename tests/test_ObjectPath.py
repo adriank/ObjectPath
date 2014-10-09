@@ -333,7 +333,7 @@ class ObjectPath(unittest.TestCase):
 
 	def test_misc(self):
 		self.assertEqual(execute("$..*[10]"), None)
-		self.assertEqual(execute("keys({'a':1,'b':2})"), ['a','b'])
+		self.assertEqual(sorted(execute("keys({'a':1,'b':2})")), ['a','b'])
 		self.assertRaises(ExecutionError, lambda: execute('keys([])'))
 		self.assertRaises(ProgrammingError, lambda: execute('blah([])'))
 
