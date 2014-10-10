@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 
 from objectpath.utils import *
-from objectpath.utils.json_ext import py2JSON, printJSON
+from objectpath.utils.json_ext import *
 import sys, unittest, os
 
 sys.setrecursionlimit(20000)
 
 class Utils_test(unittest.TestCase):
 	def test_Utils_JSON_compat(self):
-		from objectpath.utils import json_compat
-		self.assertEqual(json_compat.loads("[u'ddd']"),['ddd'])
+		if sys.version_info.major < 3:
+			self.assertEqual(loads("[u'ddd']"),['ddd'])
 		#self.assertEqual(json_compat.dumps(['ddd']),'[\n  "ddd"\n]')
 		self.assertEqual(py2JSON(False), 'false')
 		self.assertEqual(py2JSON(None), 'null')
