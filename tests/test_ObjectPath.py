@@ -343,6 +343,7 @@ class ObjectPath(unittest.TestCase):
 		self.assertEqual(execute("type('')"), "str")
 
 	def test_misc(self):
+		self.assertEqual(execute(2), 2)
 		self.assertEqual(execute("$..*[10]"), None)
 		self.assertEqual(sorted(execute("keys({'a':1,'b':2})")), ['a','b'])
 		self.assertRaises(ExecutionError, lambda: execute('keys([])'))
@@ -369,6 +370,7 @@ class ObjectPath_Paths(unittest.TestCase):
 		self.assertEqual(execute("$.*['test'][0].o._id"), 2)
 		self.assertEqual(execute('[1,"aa",{"a":2,"c":3},{"c":3},{"a":1,"b":2}].(a,b)'), [{"a":2},{"a":1,"b":2}])
 		self.assertEqual(execute2("$.store.book.(price,title)[0]"), {"price": 8.95, "title": "Sayings of the Century"})
+		self.assertEqual(execute2("$..book[0].(price,title)[0]"), {"price": 8.95, "title": "Sayings of the Century"})
 		self.assertIsInstance(execute("now().year"),int)
 
 	def test_complex_paths(self):

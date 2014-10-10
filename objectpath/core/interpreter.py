@@ -266,7 +266,7 @@ class Tree(Debugger):
 				filterAttrs=type(node[2]) is list
 				if D: self.debug("right is '%s'",snd)
 				if typefst in ITER_TYPES:
-					if type(node[2]) is list:
+					if type(snd) is list:
 						#if D: self.debug(color.op("..")+" returning %s",color.bold(ret))
 						return filter_dict(fst, snd)
 					else:
@@ -291,8 +291,8 @@ class Tree(Debugger):
 				filterAttrs=type(node[2]) is list
 				snd=exe(node[2])
 				if D: self.debug(color.op("..")+" finding all %s in %s", color.bold(snd), color.bold(fst))
-				if type(node[2]) is list:
-					if D: self.debug(color.op("..")+" returning %s",color.bold(ret))
+				if type(snd) is list:
+					#if D: self.debug(color.op("..")+" returning %s",color.bold(ret))
 					return filter_dict(fst, snd)
 				else:
 					return (e[snd] for e in fst if snd in e)
@@ -589,8 +589,8 @@ class Tree(Debugger):
 		D=self.D
 		if type(expr) in STR_TYPES:
 			tree=self.compile(expr)
-		elif type(tree) not in (tuple,list,dict):
-			return tree
+		elif type(expr) not in (tuple,list,dict):
+			return expr
 		ret=exe(tree)
 		if D: self.end("Tree.execute with: '%s'", ret)
 		return ret
