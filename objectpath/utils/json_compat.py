@@ -1,31 +1,37 @@
 #!/usr/bin/env python
 try:
-	import ujson as json
+	import json
 except ImportError:
 	try:
-		import json
+		import simplejson as json
 	except ImportError:
-		try:
-			import simplejson as json
-		except ImportError:
-			raise Exception("JSONNotFound")
+		raise Exception("JSONNotFound")
+try:
+	import ujson as json_fast
+except ImportError:
+	json_fast=json
+
+from types import GeneratorType as generator
 
 from objectpath import ITER_TYPES, STR_TYPES, py2JSON
 from objectpath.utils.colorify import * # pylint: disable=W0614
 
-load=json.load
+load=json_fast.load
 def loads(s):
 	if s.find("u'")!=-1:
 		s=s.replace("u'","'")
 	s=s.replace("'",'"')
 	try:
-		return json.loads(s) # ,object_hook=object_hook)
+		return json_fast.loads(s) # ,object_hook=object_hook)
 	except ValueError as e:
 		raise Exception(str(e)+" "+s)
 
-#def dumps(s,default=None):
-#	return json.dumps(s,default=default, indent=2, separators=(',',':'))
-dumps=json.dumps
+def default(obj):
+	if isinstance(obj, generator):
+		return list(obj)
+
+def dumps(s,default=default,indent=None):
+	return json.dumps(s, default=default, indent=indent, separators=(',',':'))
 dump=json.dump
 
 LAST_LIST=None

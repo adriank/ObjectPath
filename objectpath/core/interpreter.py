@@ -266,24 +266,11 @@ class Tree(Debugger):
 				filterAttrs=type(node[2]) is list
 				if D: self.debug("right is '%s'",snd)
 				if typefst in ITER_TYPES:
-					ret=[]
-					ret_append=ret.append
-					for i in fst:
-						try:
-							if filterAttrs and type(i) is dict:
-								d={}
-								for a in snd:
-									try:
-										d[a]=i[a]
-									except KeyError:
-										pass
-								ret.append(d)
-							else:
-								ret_append(i[snd])
-						except Exception:
-							pass
-					if D: self.end(color.op(".")+" returning '%s'",ret)
-					return ret
+					if type(node[2]) is list:
+						#if D: self.debug(color.op("..")+" returning %s",color.bold(ret))
+						return filter_dict(fst, snd)
+					else:
+						return (e[snd] for e in fst if snd in e)
 				try:
 					if D: self.end(color.op(".")+" returning '%s'",fst.get(snd))
 					return fst.get(snd)

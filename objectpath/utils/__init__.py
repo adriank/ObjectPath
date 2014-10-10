@@ -29,6 +29,8 @@ def skip(iterable, n, islice=islice):
 def filter_dict(iterable, keys):
 	"""
 	filters keys of each element of iterable
+	$.(a,b) returns all objects from array that have at least one of the keys:
+	[1,"aa",{"a":2,"c":3},{"c":3},{"a":1,"b":2}].(a,b) -> [{"a":2},{"a":1,"b":2}]
 	"""
 	if type(keys) is not list:
 		keys=[keys]
@@ -36,8 +38,12 @@ def filter_dict(iterable, keys):
 		try:
 			d={}
 			for a in keys:
-				d[a]=i[a]
-			yield d
+				try:
+					d[a]=i[a]
+				except KeyError:
+					pass
+			if d != {}:
+				yield d
 		except Exception:
 			pass
 
