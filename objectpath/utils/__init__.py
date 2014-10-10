@@ -1,17 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from types import GeneratorType as generator
-from itertools import chain
-
-iterators=[list,generator,chain]
-try:
-	iterators+=[map, filter]
-except NameError:
-	pass
+# This file is part of ObjectPath released under AGPL v3 license.
+# Copyright (C) 2010-2014 Adrian Kalbarczyk
 
 from itertools import islice
 from xml.sax.saxutils import escape, unescape
+from objectpath.core import NUM_TYPES, ITER_TYPES, generator, chain
 
 escape=escape
 unescape=unescape
@@ -66,22 +61,3 @@ def flatten(fragment,skip=False):
 			g.next()
 	for i in g:
 		yield i
-
-def py2JSON(o):
-	if o is True:
-		return 'true'
-	if o is False:
-		return 'false'
-	if o is None:
-		return 'null'
-	# TODO - check if that is correct
-	if type(o) is tuple:
-		return list(o)
-	elif type(o) in iterators+[list,str]:
-		return o
-	try:
-		return str(o)
-	except UnicodeEncodeError:
-		return o.encode("utf8")
-	except Exception:
-		return o

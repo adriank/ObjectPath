@@ -4,7 +4,8 @@
 # This file is part of ObjectPath released under AGPL v3 license.
 # Copyright (C) 2010-2014 Adrian Kalbarczyk
 
-from objectpath.utils import iterators
+from types import GeneratorType as generator
+from itertools import chain
 
 SELECTOR_OPS=["is",">","<","is not",">=","<=","in","not in",":","and","or","fn"]
 # it must be list because of further concatenations
@@ -18,7 +19,12 @@ try:
 	STR_TYPES+=[unicode]
 except NameError:
 	pass
-ITER_TYPES=iterators
+
+ITER_TYPES=[list,generator,chain]
+try:
+	ITER_TYPES+=[map, filter]
+except NameError:
+	pass
 
 class ProgrammingError(Exception):
 	pass
@@ -28,8 +34,8 @@ class ExecutionError(Exception):
 
 PY_TYPES_MAP={
 	"int":"number",
-	"str":"string",
 	"float":"number",
+	"str":"string",
 	"dict":"object",
 	"list":"array"
 }

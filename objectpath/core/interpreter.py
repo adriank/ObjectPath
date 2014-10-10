@@ -7,8 +7,9 @@ import sys
 from .parser import parse
 from objectpath.core import *
 import objectpath.utils.colorify as color # pylint: disable=W0614
-from objectpath.utils import flatten, filter_dict, timeutils, py2JSON
-from objectpath.utils import iterators, generator, chain, skip
+from objectpath.utils import flatten, filter_dict, timeutils, skip
+from objectpath.utils.json_ext import py2JSON
+from objectpath.core import ITER_TYPES, generator, chain
 from objectpath.utils.debugger import Debugger
 
 EPSILON=0.0000000000000001 #this is used in float comparison
@@ -32,7 +33,7 @@ class Tree(Debugger):
 			pass
 
 	def setData(self,obj):
-		if type(obj) in iterators+[dict]:
+		if type(obj) in ITER_TYPES+[dict]:
 			self.data=obj
 
 	def compile(self,expr):
@@ -263,7 +264,7 @@ class Tree(Debugger):
 					if D: self.end("returning '%s'", typefst in ITER_TYPES and fst or [fst])
 					return typefst in ITER_TYPES and fst or [fst]
 				snd=exe(node[2])
-				filterAttrs=type(node[2]) is list
+				#filterAttrs=type(node[2]) is list
 				if D: self.debug("right is '%s'",snd)
 				if typefst in ITER_TYPES:
 					if type(snd) is list:
@@ -288,7 +289,7 @@ class Tree(Debugger):
 					if D: self.debug(color.op("..")+" returning '%s'", color.bold(fst))
 					return fst
 				# reduce objects to selected attributes
-				filterAttrs=type(node[2]) is list
+				#filterAttrs=type(node[2]) is list
 				snd=exe(node[2])
 				if D: self.debug(color.op("..")+" finding all %s in %s", color.bold(snd), color.bold(fst))
 				if type(snd) is list:
