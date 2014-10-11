@@ -420,29 +420,29 @@ class Tree(Debugger):
 					args=args[0]
 					if type(args) in NUM_TYPES:
 						return args
-					return sum((type(x) in NUM_TYPES and x or exe(x) for x in args))
+					return sum((x for x in args if type(x) in NUM_TYPES))
 				elif fnName=="max":
 					args=args[0]
 					if type(args) in NUM_TYPES:
 						return args
-					return max((type(x) in NUM_TYPES and x or exe(x) for x in args))
+					return max((x for x in args if type(x) in NUM_TYPES))
 				elif fnName=="min":
 					args=args[0]
 					if type(args) in NUM_TYPES:
 						return args
-					return min((type(x) in NUM_TYPES and x or exe(x) for x in args))
+					return min((x for x in args if type(x) in NUM_TYPES))
 				elif fnName=="avg":
 					args=args[0]
 					if type(args) in NUM_TYPES:
 						return args
 					if type(args) not in ITER_TYPES:
-						raise Exception("Argument for avg() is not iterable")
+						raise Exception("Argument for avg() is not an array")
 					else:
 						args=list(args)
 					try:
 						return sum(args)/float(len(args))
 					except TypeError:
-						args=list(filter(lambda x: type(x) in NUM_TYPES, args))
+						args=[x for x in args if type(x) in NUM_TYPES]
 						self.warning("Some items in array were ommited")
 						return sum(args)/float(len(args))
 				elif fnName=="round":
@@ -457,7 +457,7 @@ class Tree(Debugger):
 				elif fnName in ("list","array"):
 					try:
 						a=args[0]
-					except (TypeError, IndexError):
+					except:
 						return []
 					targs=type(a)
 					if targs is timeutils.datetime.datetime:
@@ -497,8 +497,6 @@ class Tree(Debugger):
 				#	return re.sub(args[1],args[2],args[0])
 				# array
 				elif fnName=="sort":
-					if not args:
-						return args
 					if len(args)>1:
 						key=args[1]
 						a={"key":lambda x: x.get(key, 0)}
@@ -506,15 +504,17 @@ class Tree(Debugger):
 						a={}
 					args=args[0]
 					if D: self.debug("doing sort on '%s'",args)
-					if type(args) not in ITER_TYPES:
+					try:
+						return sorted(args,**a)
+					except TypeError:
 						return args
-					return sorted(args,**a)
 				elif fnName=="reverse":
 					args=args[0]
-					if type(args) in ITER_TYPES:
-						args=list(args)
-					args.reverse()
-					return args
+					try:
+						args.reverse()
+						return args
+					except TypeError:
+						return args
 				elif fnName=="map":
 					return map(lambda x: exe(("fn",args[0],x)), args[1])
 				elif fnName in ("count","len"):
