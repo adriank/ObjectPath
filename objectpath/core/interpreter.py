@@ -337,8 +337,6 @@ class Tree(Debugger):
 
 					if type(selector) is tuple and selector[0] in SELECTOR_OPS:
 						if D: self.debug("found %s operator in selector", color.bold(selector[0]))
-						nodeList=[]
-						nodeList_append=nodeList.append
 						if type(fst) is dict:
 							fst=[fst]
 							# TODO move it to tree building phase
@@ -347,6 +345,8 @@ class Tree(Debugger):
 						selector0=selector[0]
 						selector1=selector[1]
 						selector2=selector[2]
+						nodeList=[]
+						nodeList_append=nodeList.append
 						for i in fst:
 							if D: self.debug("setting self.current to %s", color.bold(i))
 							self.current=i
@@ -396,6 +396,7 @@ class Tree(Debugger):
 						if type(snd) in STR_TYPES:
 							return exe((".",fst,snd))
 						else:
+							# $.*[@.string] - bad syntax, but allowed
 							return snd
 					else:
 						try:
@@ -411,7 +412,7 @@ class Tree(Debugger):
 				fnName=node[1]
 				args=None
 				try:
-					args=list(map(exe,node[2:]))
+					args=[exe(x) for x in node[2:]]
 				except IndexError as e:
 					if D: self.debug("NOT ERROR: can't map '%s' with '%s'",node[2:],exe)
 				# arithmetic

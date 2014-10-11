@@ -394,7 +394,7 @@ class ObjectPath_Paths(unittest.TestCase):
 		self.assertEqual(execute2("$.store..*[4 in @.k._id]")[0], object2['store'])
 		self.assertEqual(execute("$..*[@._id>1 and @._id<3][0]"), {'_id': 2})
 		# very bad syntax!!!
-		self.assertEqual(sorted(execute("$.store.book[@.price]")), sorted([8.95,12.99,8.99,22.99]))
+		self.assertEqual(sorted(execute2("$.store.book[@.price]")), sorted([8.95,12.99,8.99,22.99]))
 
 #testcase2=unittest.FunctionTestCase(test_efficiency(2))
 testcase1=unittest.TestLoader().loadTestsFromTestCase(ObjectPath)
