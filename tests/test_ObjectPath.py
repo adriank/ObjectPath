@@ -204,7 +204,7 @@ class ObjectPath(unittest.TestCase):
 
 	def test_membership_notin(self):
 		self.assertEqual(execute("4 not in []"), True)
-		self.assertEqual(execute("1 not in {}"), True)
+		self.assertEqual(execute("1 not in {'232':2}"), True)
 		self.assertEqual(execute("[2,5] not in [6,4,3]"),True)
 
 	def test_complex(self):
@@ -382,17 +382,19 @@ class ObjectPath_Paths(unittest.TestCase):
 		#print()
 		#print(execute2("$.store.book.(author,aaa)"))
 		self.assertEqual(execute2("$.store.book.(author,aaa)"), [{"author": "Nigel Rees"}, {"author": "Evelyn Waugh"}, {"author": "Herman Melville"}, {"author": "J. R. R. Tolkien"}])
-		#self.assertEqual(execute2("$.store.book.(author,price)"), [{'price': 8.95, 'author': 'Nigel Rees'}, {'price': 12.99, 'author': 'Evelyn Waugh'}, {'price': 8.99, 'author': 'Herman Melville'}, {'price': 22.99, 'author': 'J. R. R. Tolkien'}])
-		#self.assertEqual(execute2("$.store.book.*[author]"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
-		#self.assertEqual(execute2("$.store.book.*['author']"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
-		#self.assertEqual(execute2("$.store.book"), object2["store"]["book"])
-		#self.assertEqual(list(execute2("$..author")), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
+		self.assertEqual(execute2("$.store.book.(author,price)"), [{'price': 8.95, 'author': 'Nigel Rees'}, {'price': 12.99, 'author': 'Evelyn Waugh'}, {'price': 8.99, 'author': 'Herman Melville'}, {'price': 22.99, 'author': 'J. R. R. Tolkien'}])
+		self.assertEqual(execute2("$.store.book.*[author]"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
+		self.assertEqual(execute2("$.store.book.*['author']"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
+		self.assertEqual(execute2("$.store.book"), object2["store"]["book"])
+		self.assertEqual(list(execute2("$..author")), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
 
 	def test_selectors(self):
 		self.assertEqual(len(execute("$..*[@._id>2]")), 2)
 		self.assertEqual(execute("$..*[3 in @.l._id]")[0], object1['test'])
 		self.assertEqual(execute2("$.store..*[4 in @.k._id]")[0], object2['store'])
 		self.assertEqual(execute("$..*[@._id>1 and @._id<3][0]"), {'_id': 2})
+		# very bad syntax!!!
+		self.assertEqual(execute("$.store.book[@.price]"), [8.95,12.99,8.99,22.99])
 
 #testcase2=unittest.FunctionTestCase(test_efficiency(2))
 testcase1=unittest.TestLoader().loadTestsFromTestCase(ObjectPath)

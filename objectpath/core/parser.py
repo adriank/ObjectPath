@@ -16,7 +16,7 @@ if sys.version_info.major >= 3:
 else:
 	from cStringIO import StringIO
 
-from objectpath.core import SELECTOR_OPS
+from objectpath.core import SELECTOR_OPS, NUM_TYPES
 
 symbol_table={}
 token=nextToken=None
@@ -92,11 +92,16 @@ class symbol_base(object):
 				#ret_append(t)
 				#return (self.id,ret[1:])
 			else:
-				if self.id=="-" and self.snd is None and type(self.fst.value) in [int, float]:
-					return -self.fst.value
-				if self.id=="+" and self.snd is None and type(self.fst.value) in [int, float]:
-					return self.fst.value
+				if type(self.fst.value) in NUM_TYPES and self.snd is None:
+					if self.id=="-":
+						return -self.fst.value
+					if self.id=="+":
+						return self.fst.value
 				ret_append(i.getTree())
+		if self.id == "{":
+			return {}
+		#if self.id == "[" and self.fst == []:
+		#	return []
 		if self.id == "(":
 			# this will produce ("fn","fnName",arg1,arg2,...argN)
 			#try:
@@ -109,7 +114,7 @@ class symbol_base(object):
 		if self.id == "(name)" or self.id == "(literal)":
 			return "(%s:%s)" % (self.id[1:-1], self.value)
 		out=[self.id, self.fst, self.snd, self.third]
-		out=list(map(str, filter(None, out)))
+		#out=list(map(str, filter(None, out)))
 		return "(" + " ".join(out) + ")"
 
 def symbol(ID, bp=0):
