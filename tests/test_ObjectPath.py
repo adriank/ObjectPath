@@ -181,6 +181,11 @@ class ObjectPath(unittest.TestCase):
 		self.assertEqual(execute("'a' and false and 3"), False)
 		self.assertEqual(execute("true and 1 and 1.0 and 'foo' and [1] and {a:1}"), {"a":1})
 
+	def test_comparison_regex(self):
+		self.assertIsInstance(execute("/aaa/"), type(re.compile("")))
+		self.assertEqual(execute("/.*aaa/ matches 'xxxaaaadddd'"), True)
+		self.assertEqual(execute("'.*aaa' matches 'xxxaaaadddd'"), True)
+
 	def test_comparison_is(self):
 		self.assertEqual(execute("2 is 2"), True)
 		self.assertEqual(execute("'2' is 2"), True)

@@ -149,17 +149,17 @@ class Tree(Debugger):
 			elif op=="<=":
 				return exe(node[1]) <= exe(node[2])
 			# TODO this algorithm produces 3 for 1<2<3 and should be true
-			#elif op in "<=>=":
-			#	fst=exe(node[1])
-			#	snd=exe(node[2])
-			#	if op==">":
-			#		return fst > snd and snd or False
-			#	elif op=="<":
-			#		return fst < snd and snd or False
-			#	elif op==">=":
-			#		return fst >= snd and snd or False
-			#	elif op=="<=":
-			#		return fst <= snd and snd or False
+			# elif op in "<=>=":
+			# 	fst=exe(node[1])
+			# 	snd=exe(node[2])
+			# 	if op==">":
+			# 		return fst > snd and snd or False
+			# 	elif op=="<":
+			# 		return fst < snd and snd or False
+			# 	elif op==">=":
+			# 		return fst >= snd and snd or False
+			# 	elif op=="<=":
+			# 		return fst <= snd and snd or False
 			elif op=="not":
 				fst=exe(node[1])
 				if D: self.debug("doing not '%s'",fst)
@@ -180,21 +180,21 @@ class Tree(Debugger):
 				return exe(node[1]) not in exe(node[2])
 			elif op in ("is","is not"):
 				if D: self.debug("found operator '%s'",op)
-				#try:
+				# try:
 				fst=exe(node[1])
-				#except Exception as e:
+				# except Exception as e:
 				#	if D: self.debug("NOT ERROR! Can't execute node[1] '%s', error: '%s'. Falling back to orginal value.",node[1],str(e))
-				#	fst=node[1]
-				#try:
+				# 	fst=node[1]
+				# try:
 				snd=exe(node[2])
-				#except Exception as e:
+				# except Exception as e:
 				#	if D: self.debug("NOT ERROR! Can't execute node[2] '%s', error: '%s'. Falling back to orginal value.",node[2],str(e))
-				#	snd=node[2]
+				# 	snd=node[2]
 				if op == "is" and fst == snd:
 					return True
 				# this doesn't work for 3 is not '3'
-				#if op == "is not" and fst != snd:
-				#	return True
+				# if op == "is not" and fst != snd:
+				# 	return True
 				typefst=type(fst)
 				typesnd=type(snd)
 				if D: self.debug("type fst: '%s', type snd: '%s'",typefst,typesnd)
@@ -232,8 +232,10 @@ class Tree(Debugger):
 				else:
 					if D: self.info("returning '%s' is '%s'='%s'",fst,snd,ret)
 					return ret
+			elif op=="re":
+				return re.compile(exe(node[1]))
 			elif op=="matches":
-				return not not re.match(exe(node[1][1]), exe(node[2]))
+				return not not re.match(exe(node[1]), exe(node[2]))
 			# elif op=="(literal)":
 			# 	fstLetter=node[1][0]
 			# 	if fstLetter is "'":
