@@ -73,17 +73,22 @@ tree2=Tree(object2)
 
 def execute_raw(expr):
 	return tree1.execute(expr)
+TYPES=[generator,chain]
+if sys.version_info.major>2:
+	TYPES+=[map]
+
+TYPES=tuple(TYPES)
 
 def execute(expr):
 	r=tree1.execute(expr)
-	if isinstance(r, generator):
+	if isinstance(r, TYPES):
 		return list(r)
 	else:
 		return r
 
 def execute2(expr):
 	r=tree2.execute(expr)
-	if isinstance(r, generator):
+	if isinstance(r, TYPES):
 		return list(r)
 	else:
 		return r
@@ -283,12 +288,12 @@ class ObjectPath(unittest.TestCase):
 		self.assertEqual(execute("join(['aaą','aaę'],'ć')"),"aaąćaaę")
 		self.assertEqual(execute("join(['aaa','aaa'])"),"aaaaaa")
 		self.assertEqual(execute("join(['aaa','aaa',3,55])"),"aaaaaa355")
-		self.assertEqual(list(execute("map(upper,['aaa','aaa'])")),["AAA","AAA"])
+		self.assertEqual(execute("map(upper,['aaa','aaa'])"),["AAA","AAA"])
 
 	def test_builtin_arrays(self):
 		self.assertEqual(execute("sort([1,2,3,4]+[2,4])"), [1,2,2,3,4,4])
 		self.assertEqual(execute("sort($.._id)"), [1,2,3,4])
-		self.assertEqual(list(execute("sort($..l[0].*, _id)")), [{'_id': 3, 'aaa': 'ddd', 'false': 2}, {'_id': 4}])
+		self.assertEqual(execute("sort($..l.*, _id)"), [{'_id': 3, 'aaa': 'ddd', 'false': 2}, {'_id': 4}])
 		self.assertEqual(execute("reverse([1,2,3,4]+[2,4])"), [4,2,4,3,2,1])
 		self.assertEqual(execute("reverse(sort($.._id))"), [4,3,2,1])
 		self.assertEqual(execute("len([1,2,3,4]+[2,4])"), 6)
@@ -374,12 +379,12 @@ class ObjectPath_Paths(unittest.TestCase):
 		self.assertEqual(execute("$.*['test'][0].o._id"), 2)
 		self.assertEqual(execute('[1,"aa",{"a":2,"c":3},{"c":3},{"a":1,"b":2}].(a,b)'), [{"a":2},{"a":1,"b":2}])
 		self.assertEqual(execute2("$.store.book.(price,title)[0]"), {"price": 8.95, "title": "Sayings of the Century"})
-		self.assertEqual(execute2("$..book[0].(price,title)[0]"), {"price": 8.95, "title": "Sayings of the Century"})
+		self.assertEqual(execute2("$..book.(price,title)"), [{'price': 8.95, 'title': 'Sayings of the Century'}, {'price': 12.99, 'title': 'Sword of Honour'}, {'price': 8.99, 'title': 'Moby Dick'}, {'price': 22.99, 'title': 'The Lord of the Rings'}])
 		self.assertIsInstance(execute("now().year"),int)
 
 	def test_complex_paths(self):
 		self.assertEqual(sorted(execute("$.._id")), [1, 2, 3, 4])
-		self.assertEqual(execute("$..l"), [object1["test"]["l"]])
+		self.assertEqual(execute("$..l"), object1["test"]["l"])
 		self.assertEqual(execute("$..l.._id"), [3,4])
 		self.assertEqual(execute2("$.store.*"), [object2["store"]])
 		self.assertEqual(execute2("$.store.book.author"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])

@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 try:
-	import json
+	import simplejson as json
 except ImportError:
 	try:
-		import simplejson as json
+		import json
 	except ImportError:
 		raise Exception("JSONNotFound")
 try:
@@ -92,8 +92,11 @@ def printJSON(o, length=5,depth=5):
 				for i in o[0:length]:
 					rec(i)
 					out(",\n")
+				if length is -1:
+					rec(o[-1])
+					out(",\n")
 
-				if len(o)>length:
+				if length is not -1 and len(o)>length:
 					out("... ("+str(len(o)-length)+" more items)\n")
 				else:
 					ret.pop()

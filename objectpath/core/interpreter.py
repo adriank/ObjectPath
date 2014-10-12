@@ -259,22 +259,21 @@ class Tree(Debugger):
 				if type(fst) is tuple:
 					fst=exe(fst)
 				typefst=type(fst)
-				if D: self.debug("left is '%s'",fst)
-				if D: self.debug("node is '%s'",node)
+				if D: self.debug(color.op(".")+" left is '%s'", fst)
 				try:
 					if node[2][0] == "*":
-						if D: self.end("returning '%s'", typefst in ITER_TYPES and fst or [fst])
+						if D: self.end(color.op(".")+" returning '%s'", typefst in ITER_TYPES and fst or [fst])
 						return typefst in ITER_TYPES and fst or [fst]
 				except:
 					pass
 				snd=exe(node[2])
-				#filterAttrs=type(node[2]) is list
-				if D: self.debug("right is '%s'",snd)
+				if D: self.debug(color.op(".")+" right is '%s'",snd)
 				if typefst in ITER_TYPES:
-					if D: self.debug(color.op("..")+" filtering %s by %s",color.bold(fst),color.bold(snd))
+					if D: self.debug(color.op(".")+" filtering %s by %s",color.bold(fst),color.bold(snd))
 					if type(snd) in ITER_TYPES:
 						return filter_dict(fst, list(snd))
 					else:
+						#if D: self.debug(list(fst))
 						return (e[snd] for e in fst if type(e) is dict and snd in e)
 				try:
 					if D: self.end(color.op(".")+" returning '%s'",fst.get(snd))
@@ -293,14 +292,17 @@ class Tree(Debugger):
 					if D: self.debug(color.op("..")+" returning '%s'", color.bold(fst))
 					return fst
 				# reduce objects to selected attributes
-				#filterAttrs=type(node[2]) is list
 				snd=exe(node[2])
 				if D: self.debug(color.op("..")+" finding all %s in %s", color.bold(snd), color.bold(fst))
-				if type(snd) is list:
-					#if D: self.debug(color.op("..")+" returning %s",color.bold(ret))
-					return filter_dict(fst, snd)
+				if type(snd) in ITER_TYPES:
+					ret=filter_dict(fst, snd)
+					if D: self.debug(color.op("..")+" returning %s",color.bold(ret))
+					return ret
 				else:
-					return (e[snd] for e in fst if snd in e)
+					ret=chain(*(type(x) in ITER_TYPES and x or [x] for x in (e[snd] for e in fst if snd in e)))
+					#print list(chain(*(type(x) in ITER_TYPES and x or [x] for x in (e[snd] for e in fst if snd in e))))
+					if D: self.debug(color.op("..")+" returning %s",color.bold(ret))
+					return ret
 			elif op=="[":
 				len_node=len(node)
 				# TODO move it to tree generation phase
@@ -317,8 +319,9 @@ class Tree(Debugger):
 						return fst
 					selector=node[2]
 					if D: self.debug("found '%s' selector. executing on %s", color.bold(selector),color.bold(fst))
+					selectorIsTuple=type(selector) is tuple
 
-					if type(selector) is tuple and selector[0] is "[":
+					if selectorIsTuple and selector[0] is "[":
 						nodeList=[]
 						nodeList_append=nodeList.append
 						for i in fst:
@@ -328,49 +331,47 @@ class Tree(Debugger):
 						if D: self.debug("returning %s objects: %s", color.bold(len(nodeList)),color.bold(nodeList))
 						return nodeList
 
-					#if type(selector) is tuple and selector[0]=="fn":
-					#	for i in fst:
-
-					if type(selector) is tuple and selector[0] == "(current)":
+					if selectorIsTuple and selector[0] == "(current)":
 						if D: self.warning(color.bold("$.*[@]")+" is eqivalent to "+color.bold("$.*")+"!")
 						return fst
 
-					if type(selector) is tuple and selector[0] in SELECTOR_OPS:
+					if selectorIsTuple and selector[0] in SELECTOR_OPS:
 						if D: self.debug("found %s operator in selector", color.bold(selector[0]))
 						if type(fst) is dict:
 							fst=[fst]
-							# TODO move it to tree building phase
+						# TODO move it to tree building phase
 						if type(selector[1]) is tuple and selector[1][0]=="name":
 							selector=(selector[0],selector[1][1],selector[2])
 						selector0=selector[0]
 						selector1=selector[1]
 						selector2=selector[2]
-						nodeList=[]
-						nodeList_append=nodeList.append
-						for i in fst:
-							if D: self.debug("setting self.current to %s", color.bold(i))
-							self.current=i
-							if selector0=="fn":
-								nodeList_append(exe(selector))
-							elif type(selector1) in STR_TYPES:
-								try:
-									if exe((selector0,i[selector1],selector2)):
-										nodeList_append(i)
-										if D: self.debug("appended")
-									if D: self.debug("discarded")
-								except Exception as e:
-									if D: self.debug("discarded, Exception: %s",color.bold(e))
-							else:
-								try:
-									# TODO optimize an event when @ is not used. exe(selector1) can be cached
-									if exe((selector0,exe(selector1),exe(selector2))):
-										nodeList_append(i)
-										if D: self.debug("appended")
-									if D: self.debug("discarded")
-								except Exception:
-									if D: self.debug("discarded")
+
+						def exeSelector(fst):
+							for i in fst:
+								if D: self.debug("setting self.current to %s", color.bold(i))
+								self.current=i
+								if selector0=="fn":
+									yield exe(selector)
+								elif type(selector1) in STR_TYPES:
+									try:
+										if exe((selector0,i[selector1],selector2)):
+											yield i
+											if D: self.debug("appended")
+										if D: self.debug("discarded")
+									except Exception as e:
+										if D: self.debug("discarded, Exception: %s",color.bold(e))
+								else:
+									try:
+										# TODO optimize an event when @ is not used. exe(selector1) can be cached
+										if exe((selector0,exe(selector1),exe(selector2))):
+											yield i
+											if D: self.debug("appended")
+										if D: self.debug("discarded")
+									except Exception:
+										if D: self.debug("discarded")
+
 						if D: self.debug("returning '%s' objects: '%s'", color.bold(len(nodeList)), color.bold(nodeList))
-						return nodeList
+						return exeSelector(fst)
 					self.current=fst
 					snd=exe(node[2])
 					typefst=type(fst)

@@ -10,16 +10,17 @@ import readline
 # this is to prevent various tools from deleting import readline
 ___x=readline.__doc__
 
-from objectpath import Tree
+from objectpath import Tree, ITER_TYPES
 from objectpath.utils.colorify import * # pylint: disable=W0614
-from objectpath.utils import json_compat as json
-from objectpath.utils.json_compat import printJSON
+from objectpath.utils import json_ext as json
+from objectpath.utils.json_ext import printJSON
 
 def main():
 	parser=argparse.ArgumentParser(description='Command line options')
 	parser.add_argument('-u', '--url', dest='URL', help='URL containing JSON document.')
 	#parser.add_argument('-xml', dest='xml', help='[EXPERIMENTAL] Expect XML input.',action='store_true')
 	parser.add_argument('-d', '--debug', dest='debug', help='Debbuging on/off.', action='store_true')
+	parser.add_argument('-p', '--profile', dest='profile', help='Profiling on/off.', action='store_true')
 	parser.add_argument('-e', '--expr', dest='expr', help='Expression/query to execute on file, print on stdout and exit.')
 	parser.add_argument('file', metavar='FILE', nargs="?", help='File name')
 
@@ -31,6 +32,11 @@ def main():
 
 	if args.debug:
 		a["debug"]=True
+	if args.profile:
+		try:
+			from guppy import hpy
+		except:
+			pass
 	File=args.file
 	#if args.xml:
 	#	from utils.xmlextras import xml2tree
@@ -61,23 +67,48 @@ def main():
 		if not expr: print(" "+bold("done")+".")
 
 	if expr:
-		print(json.dumps(tree.execute(expr)))
-		exit()
+		if args.profile:
+			import cProfile, pstats, StringIO
+			pr = cProfile.Profile()
+			pr.enable()
+		ret=tree.execute(expr)
+		if type(ret) in ITER_TYPES:
+			ret=list(ret)
+		print(json.dumps(ret))
+		if args.profile:
+			pr.disable()
+			s = StringIO.StringIO()
+			sortby = 'cumulative'
+			ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+			ps.print_stats()
+			print s.getvalue()
+		return
 
 	try:
 		while True:
+			limitResult=5
 			try:
-				if sys.version_info.major >= 3:
-						r=tree.execute(input(">>> "))
+				if sys.version >= '3':
+					r=input(">>> ")
 				else:
-						r=tree.execute(raw_input(">>> "))
+					r=raw_input(">>> ")
+
+				if r.startswith("all"):
+					limitResult=-1
+					r=tree.execute(r[3:].strip())
+				else:
+					r=tree.execute(r)
+
 				# python 3 raises error here - unicode is not a proper type there
 				try:
 					if type(r) is unicode:
 						r=r.encode("utf8")
 				except NameError:
 					pass
-				print(printJSON(r))
+				print(printJSON(r,length=limitResult))
+				if args.profile:
+					h = hpy()
+					print h.heap()
 			except Exception as e:
 				print(e)
 	except KeyboardInterrupt:
