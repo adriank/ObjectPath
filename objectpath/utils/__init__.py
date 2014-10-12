@@ -19,7 +19,7 @@ def skip(iterable, n, islice=islice):
 		return next(islice(iterable, n, None))
 	except StopIteration:
 		return None
-		#raise IndexError("generator index out of range")
+		# raise IndexError("generator index out of range")
 
 def filter_dict(iterable, keys):
 	"""

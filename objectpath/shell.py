@@ -18,7 +18,7 @@ from objectpath.utils.json_ext import printJSON
 def main():
 	parser=argparse.ArgumentParser(description='Command line options')
 	parser.add_argument('-u', '--url', dest='URL', help='URL containing JSON document.')
-	#parser.add_argument('-xml', dest='xml', help='[EXPERIMENTAL] Expect XML input.',action='store_true')
+	# parser.add_argument('-xml', dest='xml', help='[EXPERIMENTAL] Expect XML input.',action='store_true')
 	parser.add_argument('-d', '--debug', dest='debug', help='Debbuging on/off.', action='store_true')
 	parser.add_argument('-p', '--profile', dest='profile', help='Profiling on/off.', action='store_true')
 	parser.add_argument('-e', '--expr', dest='expr', help='Expression/query to execute on file, print on stdout and exit.')
@@ -38,8 +38,8 @@ def main():
 		except:
 			pass
 	File=args.file
-	#if args.xml:
-	#	from utils.xmlextras import xml2tree
+	# if args.xml:
+	# 	from utils.xmlextras import xml2tree
 	src=False
 
 	if args.URL:
@@ -60,9 +60,9 @@ def main():
 	else:
 		if not expr: sys.stdout.write("Loading JSON document from "+str(args.URL or File)+"...")
 		sys.stdout.flush()
-		#if args.xml:
-		#	tree=Tree(json.loads(json.dumps(xml2tree(src))),a)
-		#else:
+		# if args.xml:
+		# 	tree=Tree(json.loads(json.dumps(xml2tree(src))),a)
+		# else:
 		tree=Tree(json.load(src),a)
 		if not expr: print(" "+bold("done")+".")
 

@@ -3,7 +3,7 @@
 # This file is part of ObjectPath released under AGPL v3 license.
 # Copyright (C) 2010-2014 Adrian Kalbarczyk
 
-import sys
+import sys, re
 from .parser import parse
 from objectpath.core import *
 import objectpath.utils.colorify as color # pylint: disable=W0614
@@ -26,11 +26,7 @@ class Tree(Debugger):
 		self.D=cfg.get("debug",False)
 		self.setData(obj)
 		self.current=self.node=None
-		try:
-			if self.D:
-				super(Tree, self).__init__()
-		except (KeyError, TypeError):
-			pass
+		if self.D: super(Tree, self).__init__()
 
 	def setData(self,obj):
 		if type(obj) in ITER_TYPES+[dict]:
@@ -79,10 +75,8 @@ class Tree(Debugger):
 				if len(node)>2:
 					fst=exe(node[1])
 					snd=exe(node[2])
-					if fst is None:
-						return snd
-					if snd is None:
-						return fst
+					if None in (fst,snd):
+						return fst or snd
 					typefst=type(fst)
 					typesnd=type(snd)
 					if typefst is dict:
@@ -219,37 +213,39 @@ class Tree(Debugger):
 				elif typefst is dict and typesnd is dict:
 					if D: self.info("doing object comparison '%s' is '%s'",fst,snd)
 					ret=fst==snd
-				#else:
-				#	try:
-				#		global ObjectId
-				#		if not ObjectId:
-				#			from bson.objectid import ObjectId
-				#		if typefst is ObjectId or typesnd is ObjectId:
-				#			if D: self.info("doing MongoDB objectID comparison '%s' is '%s'",fst,snd)
-				#			ret=str(fst)==str(snd)
-				#		else:
-				#			if D: self.info("doing standard comparison '%s' is '%s'",fst,snd)
-				#			ret=fst is snd
-				#	except Exception:
-				#		pass
+				# else:
+				# 	try:
+				# 		global ObjectId
+				# 		if not ObjectId:
+				# 			from bson.objectid import ObjectId
+				# 		if typefst is ObjectId or typesnd is ObjectId:
+				# 			if D: self.info("doing MongoDB objectID comparison '%s' is '%s'",fst,snd)
+				# 			ret=str(fst)==str(snd)
+				# 		else:
+				# 			if D: self.info("doing standard comparison '%s' is '%s'",fst,snd)
+				# 			ret=fst is snd
+				# 	except Exception:
+				# 		pass
 				if op=="is not":
 					if D: self.info("'is not' found. Returning %s",not ret)
 					return not ret
 				else:
 					if D: self.info("returning '%s' is '%s'='%s'",fst,snd,ret)
 					return ret
-			#elif op=="(literal)":
-			#	fstLetter=node[1][0]
-			#	if fstLetter is "'":
-			#		return node[1][1:-1]
-			#	elif fstLetter.isdigit:
-			#		return int(node[1])
-			elif op=="(root)":# this is $
+			elif op=="matches":
+				return not not re.match(exe(node[1][1]), exe(node[2]))
+			# elif op=="(literal)":
+			# 	fstLetter=node[1][0]
+			# 	if fstLetter is "'":
+			# 		return node[1][1:-1]
+			# 	elif fstLetter.isdigit:
+			# 		return int(node[1])
+			elif op=="(root)": # this is $
 				return self.data
-			#elif op=="(node)":# this is !
-			#	if D: self.debug("returning node %s",self.node)
-			#	return self.node
-			elif op=="(current)":# this is @
+			# elif op=="(node)":# this is !
+			# 	if D: self.debug("returning node %s",self.node)
+			# 	return self.node
+			elif op=="(current)": # this is @
 				if D: self.debug("returning current node %s", self.current)
 				return self.current
 			elif op=="name":
@@ -300,7 +296,7 @@ class Tree(Debugger):
 					return ret
 				else:
 					ret=chain(*(type(x) in ITER_TYPES and x or [x] for x in (e[snd] for e in fst if snd in e)))
-					#print list(chain(*(type(x) in ITER_TYPES and x or [x] for x in (e[snd] for e in fst if snd in e))))
+					# print list(chain(*(type(x) in ITER_TYPES and x or [x] for x in (e[snd] for e in fst if snd in e))))
 					if D: self.debug(color.op("..")+" returning %s",color.bold(ret))
 					return ret
 			elif op=="[":
@@ -494,9 +490,8 @@ class Tree(Debugger):
 						args[0]=args[0].encode("utf8")
 					return str.replace(args[0],args[1],args[2])
 				# TODO this should be supported by /regex/
-				#elif fnName=="REsub":
-				#	return re.sub(args[1],args[2],args[0])
-				# array
+				# elif fnName=="REsub":
+				# 	return re.sub(args[1],args[2],args[0])
 				elif fnName=="sort":
 					if len(args)>1:
 						key=args[1]

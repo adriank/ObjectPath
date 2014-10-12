@@ -127,9 +127,9 @@ def addTimes(fst,snd):
 		if i>=60:
 			t2.append(i-60)
 			one=1
-		#elif i==60:
-		#	t2.append(0)
-		#	one=1
+		# elif i==60:
+		# 	t2.append(0)
+		# 	one=1
 		else:
 			t2.append(i)
 	hour=t[0]+one

@@ -54,11 +54,11 @@ class symbol_base(object):
 			fstLetter=self.value[0]
 			if fstLetter in ["'","\""]:
 				return self.value[1:-1]
-			#elif fstLetter.isdigit():
-			#	try:
-			#		return int(self.value)
-			#	except:
-			#		return float(self.value)
+			# elif fstLetter.isdigit():
+			# 	try:
+			# 		return int(self.value)
+			# 	except:
+			# 		return float(self.value)
 			else:
 				if self.value=="True":
 					return True
@@ -89,8 +89,8 @@ class symbol_base(object):
 					ret.append(t)
 				else:
 					ret.extend(t)
-				#ret_append(t)
-				#return (self.id,ret[1:])
+				# ret_append(t)
+				# return (self.id,ret[1:])
 			else:
 				if type(self.fst.value) in NUM_TYPES and self.snd is None:
 					if self.id=="-":
@@ -100,21 +100,21 @@ class symbol_base(object):
 				ret_append(i.getTree())
 		if self.id == "{":
 			return {}
-		#if self.id == "[" and self.fst == []:
-		#	return []
+		# if self.id == "[" and self.fst == []:
+		# 	return []
 		if self.id == "(":
 			# this will produce ("fn","fnName",arg1,arg2,...argN)
-			#try:
+			# try:
 				return tuple(["fn",ret[1][1]]+ret[2:])
-			#except:
-			#	pass
+			# except:
+			# 	pass
 		return tuple(ret)
 
 	def __repr__(self):
 		if self.id == "(name)" or self.id == "(literal)":
 			return "(%s:%s)" % (self.id[1:-1], self.value)
 		out=[self.id, self.fst, self.snd, self.third]
-		#out=list(map(str, filter(None, out)))
+		# out=list(map(str, filter(None, out)))
 		return "(" + " ".join(out) + ")"
 
 def symbol(ID, bp=0):
@@ -169,17 +169,17 @@ def method(s):
 
 infix_r("or", 30); infix_r("and", 40); prefix("not", 50)
 infix("in", 60); infix("not", 60) # not in
-infix("is", 60);
+infix("is", 60); infix("matches",60)
 infix("<", 60); infix("<=", 60)
 infix(">", 60); infix(">=", 60)
-#infix("	", 60); infix("!=", 60); infix("==", 60)
-#infix("|", 70); infix("^", 80); infix("&", 90)
-#infix("<<", 100); infix(">>", 100)
+# infix("	", 60); infix("!=", 60); infix("==", 60)
+# infix("|", 70); infix("^", 80); infix("&", 90)
+# infix("<<", 100); infix(">>", 100)
 infix("+", 110); infix("-", 110)
 infix("*", 120); infix("/", 120); infix("//", 120)
 infix("%", 120)
 prefix("-", 130); prefix("+", 130); #prefix("~", 130)
-#infix_r("**", 140)
+# infix_r("**", 140)
 symbol(".", 150); symbol("[", 150); symbol("{", 150); symbol("(", 150)
 # additional behavior
 symbol("(name)").nud=lambda self: self
@@ -204,8 +204,18 @@ def nud(self): # pylint: disable=E0102
 @method(symbol("/"))
 def nud(self): # pylint: disable=E0102
 	self.id="re"
-	self.fst=str(token.value)
-	advance()
+	regex=[]
+	if token.id != "/":
+		self_fst_append=regex.append
+		while 1:
+			if token.id == "/":
+				break
+			if token.id == "(name)":
+				self_fst_append(token.value)
+			else:
+				self_fst_append(token.id)
+			advance()
+	self.fst="".join(regex)
 	advance("/")
 	return self
 
@@ -276,7 +286,7 @@ symbol(",")
 # this is for built-in functions
 @method(symbol("("))
 def led(self, left): # pylint: disable=E0102
-	#self.id="fn"
+	# self.id="fn"
 	self.fst=left
 	self.snd=[]
 	if token.id != ")":
