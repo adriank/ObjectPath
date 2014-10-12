@@ -293,7 +293,7 @@ class Tree(Debugger):
 				snd=exe(node[2])
 				if D: self.debug(color.op("..")+" finding all %s in %s", color.bold(snd), color.bold(fst))
 				if type(snd) in ITER_TYPES:
-					ret=filter_dict(fst, snd)
+					ret=filter_dict(fst, list(snd))
 					if D: self.debug(color.op("..")+" returning %s",color.bold(ret))
 					return ret
 				else:

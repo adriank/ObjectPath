@@ -127,7 +127,7 @@ def printJSON(o, length=5,depth=5):
 					out("\n")
 			out("}")
 		else:
-			if type(o) in [int,float]:
+			if type(o) in NUM_TYPES:
 				out(const(o))
 			elif o in [None, False, True]:
 				out(const(py2JSON(o)))
