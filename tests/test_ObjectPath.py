@@ -364,6 +364,7 @@ class ObjectPath(unittest.TestCase):
 		self.assertRaises(ProgrammingError, lambda: execute('blah([])'))
 
 	def test_optimizations(self):
+		self.assertEqual(execute("$.*[@]"), execute("$.*"))
 		self.assertIsInstance(execute_raw("$..*"), generator)
 		self.assertIsInstance(execute_raw("$..* + $..*"), chain)
 		self.assertIsInstance(execute_raw("$..* + 2"), chain)
@@ -374,14 +375,14 @@ class ObjectPath(unittest.TestCase):
 
 class ObjectPath_Paths(unittest.TestCase):
 	def test_simple_paths(self):
-		self.assertEqual(execute("$.*[0]"), object1)
+		self.assertEqual(execute("$.*"), object1)
 		self.assertEqual(execute("$.a.b.c"), None)
 		self.assertEqual(execute("$.a.b.c[0]"), None)
 		self.assertEqual(execute("$.__lang__"), "en")
 		self.assertEqual(execute("$.test.o._id"), 2)
 		self.assertEqual(execute("$.test.l._id"), [3, 4])
-		self.assertEqual(execute("$.*[test][0].o._id"), 2)
-		self.assertEqual(execute("$.*['test'][0].o._id"), 2)
+		self.assertEqual(execute("$.*[test].o._id"), 2)
+		self.assertEqual(execute("$.*['test'].o._id"), 2)
 		self.assertEqual(execute('[1,"aa",{"a":2,"c":3},{"c":3},{"a":1,"b":2}].(a,b)'), [{"a":2},{"a":1,"b":2}])
 		self.assertEqual(execute2("$.store.book.(price,title)[0]"), {"price": 8.95, "title": "Sayings of the Century"})
 		self.assertEqual(execute2("$..book.(price,title)"), [{'price': 8.95, 'title': 'Sayings of the Century'}, {'price': 12.99, 'title': 'Sword of Honour'}, {'price': 8.99, 'title': 'Moby Dick'}, {'price': 22.99, 'title': 'The Lord of the Rings'}])
@@ -392,7 +393,7 @@ class ObjectPath_Paths(unittest.TestCase):
 		self.assertEqual(sorted(execute("$.._id")), [1, 2, 3, 4])
 		self.assertEqual(execute("$..l"), object1["test"]["l"])
 		self.assertEqual(execute("$..l.._id"), [3,4])
-		self.assertEqual(execute2("$.store.*"), [object2["store"]])
+		self.assertEqual(execute2("$.store.*"), object2["store"])
 		self.assertEqual(execute2("$.store.book.author"), ['Nigel Rees', 'Evelyn Waugh', 'Herman Melville', 'J. R. R. Tolkien'])
 		#print()
 		#print(execute2("$.store.book.(author,aaa)"))

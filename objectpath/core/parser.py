@@ -173,7 +173,7 @@ infix("is", 60); infix("matches",60)
 infix("<", 60); infix("<=", 60)
 infix(">", 60); infix(">=", 60)
 # infix("	", 60); infix("!=", 60); infix("==", 60)
-# infix("|", 70); infix("^", 80); infix("&", 90)
+# infix("&", 90)
 # infix("<<", 100); infix(">>", 100)
 infix("+", 110); infix("-", 110)
 infix("*", 120); infix("/", 120); infix("//", 120)
@@ -187,6 +187,12 @@ symbol("(literal)").nud=lambda self: self
 symbol("(number)").nud=lambda self: self
 symbol("(end)")
 symbol(")")
+
+# REGEX
+infix("|", 0);
+infix("^", 0);
+infix("?", 0);
+infix("\\", 0);
 
 symbol("@")
 @method(symbol("@"))
@@ -210,12 +216,12 @@ def nud(self): # pylint: disable=E0102
 		while 1:
 			if token.id == "/":
 				break
-			if token.id == "(name)":
-				self_fst_append(token.value)
+			if token.id in ["(name)","(number)"]:
+				self_fst_append(str(token.value))
 			else:
 				self_fst_append(token.id)
 			advance()
-	self.fst="".join(regex)
+	self.fst="".join(regex).replace("\\","\\\\")
 	advance("/")
 	return self
 
@@ -386,6 +392,7 @@ def tokenize_python(program):
 	else:
 		tokens=tokenizer.generate_tokens(StringIO(program).__next__)
 	for t in tokens:
+		# print type_map[t[0]], t[1]
 		try:
 			# change this to output python values in correct type
 			yield type_map[t[0]], t[1]

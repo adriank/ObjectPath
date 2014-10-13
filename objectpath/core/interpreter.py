@@ -183,12 +183,12 @@ class Tree(Debugger):
 				# try:
 				fst=exe(node[1])
 				# except Exception as e:
-				#	if D: self.debug("NOT ERROR! Can't execute node[1] '%s', error: '%s'. Falling back to orginal value.",node[1],str(e))
+				# 	if D: self.debug("NOT ERROR! Can't execute node[1] '%s', error: '%s'. Falling back to orginal value.",node[1],str(e))
 				# 	fst=node[1]
 				# try:
 				snd=exe(node[2])
 				# except Exception as e:
-				#	if D: self.debug("NOT ERROR! Can't execute node[2] '%s', error: '%s'. Falling back to orginal value.",node[2],str(e))
+				# 	if D: self.debug("NOT ERROR! Can't execute node[2] '%s', error: '%s'. Falling back to orginal value.",node[2],str(e))
 				# 	snd=node[2]
 				if op == "is" and fst == snd:
 					return True
@@ -261,7 +261,7 @@ class Tree(Debugger):
 				try:
 					if node[2][0] == "*":
 						if D: self.end(color.op(".")+" returning '%s'", typefst in ITER_TYPES and fst or [fst])
-						return typefst in ITER_TYPES and fst or [fst]
+						return fst # typefst in ITER_TYPES and fst or [fst]
 				except:
 					pass
 				snd=exe(node[2])
@@ -271,7 +271,7 @@ class Tree(Debugger):
 					if type(snd) in ITER_TYPES:
 						return filter_dict(fst, list(snd))
 					else:
-						#if D: self.debug(list(fst))
+						# if D: self.debug(list(fst))
 						return (e[snd] for e in fst if type(e) is dict and snd in e)
 				try:
 					if D: self.end(color.op(".")+" returning '%s'",fst.get(snd))
@@ -412,7 +412,7 @@ class Tree(Debugger):
 				args=None
 				try:
 					args=[exe(x) for x in node[2:]]
-				except IndexError as e:
+				except IndexError:
 					if D: self.debug("NOT ERROR: can't map '%s' with '%s'",node[2:],exe)
 				# arithmetic
 				if fnName=="sum":
@@ -456,7 +456,7 @@ class Tree(Debugger):
 				elif fnName in ("list","array"):
 					try:
 						a=args[0]
-					except:
+					except IndexError:
 						return []
 					targs=type(a)
 					if targs is timeutils.datetime.datetime:
@@ -574,7 +574,7 @@ class Tree(Debugger):
 				elif fnName=="keys":
 					try:
 						return list(args[0].keys())
-					except AttributeError as e:
+					except AttributeError:
 						raise ExecutionError("Argument is not "+color.bold("object")+" but %s in keys()"%color.bold(type(args[0]).__name__))
 				elif fnName=="type":
 					ret=type(args[0])

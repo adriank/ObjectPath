@@ -6,7 +6,7 @@
 
 from itertools import islice
 from xml.sax.saxutils import escape, unescape
-from objectpath.core import NUM_TYPES, ITER_TYPES, generator, chain
+from objectpath.core import NUM_TYPES, generator, chain
 
 escape=escape
 unescape=unescape
