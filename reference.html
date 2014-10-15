@@ -102,7 +102,7 @@
 
 				<h2 id="Operations">Operators</h2>
 				<h3 id="HowOPWorks">How operators work</h3>
-				<p>Operators take computation results from it's left and right side and do some operations on those results. While behaviour of simple operators is straight forward, operators like <code>.</code>, <code>..</code> and <code>[]</code> can be confusing.</p>
+				<p>Operators take computation results from it's left and right side and do  an operation on those results. While behaviour of simple operators is straight forward, operators like <code>.</code>, <code>..</code> and <code>[]</code> are more advanced.</p>
 				<p>Each of them work on arrays of objects on the left and apply to each element from this array instruction found on the right. To show what does it mean consider document:</p>
 				<pre class="sh_python">{
   "a":1,
@@ -127,12 +127,12 @@
 >>> $.b.c
 [1,2,3]
 >>> $.b.c[@ > 2]
-#input | transformation | result
-#[     |                | [
-#  1   | > 2 -> false   |   #nothing
-#  2   | > 2 -> false   |   #nothing
-#  3   | > 2 -> true    |   3
-#]     |                | ]
+# left  | right          | result
+# [     |                | [
+#   1   | > 2 -> false   |   #nothing
+#   2   | > 2 -> false   |   #nothing
+#   3   | > 2 -> true    |   3
+# ]     |                | ]
 [3]</pre>
 				<p>The result is always an array! because ObjectPath executes <code>></code> for each element in array and filters out elements that doesn't match condition.</p>
 
@@ -166,7 +166,7 @@
 							<td><code>+</code></td>
 							<td>addition</td>
 							<td><code>2 + 3</code> -> <code>5</code></td>
-							<td><code>+</code> is also concatenation operator</td>
+							<td><code>+</code> is also a <a href="#Concatenation-ops">concatenation operator</a></td>
 							<td class="text-center"><i class="Py"></i> <i class="JS"></i></td>
 						</tr>
 						<tr>
@@ -194,7 +194,7 @@
 							<td><code>%</code></td>
 							<td>modulo</td>
 							<td><code>10%3</code> -> <code>1</code></td>
-							<td>&#160;</td>
+							<td></td>
 							<td class="text-center"><i class="Py"></i> <i class="JS"></i></td>
 						</tr>
 					</tbody>
@@ -237,10 +237,10 @@
 				</table>
 
 				<h3 id="Comparison-ops">Comparison operators</h3>
-				<p>ObjectPath uses algorithms that guess the types of data. In most cases you don't need to worry about issues with types (e.g. comparing string <span class="string">"2"</span> with number <span class="number">2</span> works perfectly). To check if types are the same or different you can use <code>type("2") is type(2)</code> -> <code>false</code>.</p>
-				<p>In semi-structured data a very common issue is that data is represented as a different type than it was supposed to be. For example very often we can see numbers represented as strings (like <code>["1","2","3"]</code> instead of simply <code>[1,2,3]</code>). This is caused by automatic JSON generators, especially those that convert XML data to JSON. In programming languages such as Javascript this can cause many headashes and hours wasted figuring out why the code doesn't work. That's why:</p>
+				<p>ObjectPath uses algorithms that guess types of data. In most cases you don't need to worry about issues with types (e.g. comparing string <span class="string">"2"</span> with number <span class="number">2</span> works as <span class="number">2</span> was a string). To check if types are the same or different you can use <code>type("2") is type(2)</code> -> <code>false</code>.</p>
+				<p>In semi-structured data a very common issue is that data is represented as a different type than it was supposed to be. For example very often we can see numbers represented as strings (like <code>["1","2","3"]</code> instead of simply <code>[1,2,3]</code>). This is caused by automatic JSON generators, especially those that convert XML data into JSON. In programming languages such as Javascript this can cause many headashes and hours wasted figuring out why the code doesn't work. That's why:</p>
 				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i>Comparison operators try to cast the right side expression result to the type of the left expression result. Sometimes it fails so best practice is to use casting functions when types may be different.</div>
-				<div class="alert alert-warning" role="alert"><i class="fa fa-warning fa-3x pull-left"></i>The comparison operators are not chainable so 1&lt;2&lt;2 will compare 2 with result of 1&lt;2 which is <em>true</em> and return <em>true</em>. Use 1&lt;2 and 2&lt;3 instead.</div>
+				<div class="alert alert-warning" role="alert"><i class="fa fa-warning fa-3x pull-left"></i>The comparison operators are not chainable so <code>1&lt;2&lt;2</code> will compare <span class="number">2</span> with result of <code>1&lt;2</code> which is <em>true</em> and return <em>true</em>. Use <code>1&lt;2 and 2&lt;3</code> instead.</div>
 				<table class="table table-condensed table-striped">
 					<thead>
 						<tr>
@@ -270,7 +270,7 @@
 							<td><code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code></td>
 							<td>grater than, grater than or equal, less than, less than or equal</td>
 							<td><code>1&gt;0 -&gt;true</code></td>
-							<td><!--<div class="alert alert-warning" role="alert"><i class="fa fa-warning fa-2x pull-left"></i>if these operators are used inside BLSL XML container characters &lt; and &gt; must be escaped to &amp;lt; and &amp;gt; respectively. Alternate option is to wrap whole expression in CDATA section.</div>-->
+							<td>
 							</td>
 							<td class="text-center"><i class="Py"></i> <i class="JS"></i></td>
 						</tr>
@@ -293,14 +293,14 @@
 							<td><code>in</code></td>
 							<td>Checks if result of left side of expression is in <em>array</em>, <em>object</em> or <em>string</em></td>
 							<td><code>3 in [1,2,4]</code> -> <code>false</code>, <br /><code>"ia" in "Adrian"</code> -> <code>true</code></td>
-							<td>In objects, keys will be matched.</td>
+							<td>In objects, keys are matched.</td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
 							<td><code>not in</code></td>
-							<td>Opposite behavior to in; Equivalent to <code>not expr in array</code></td>
+							<td>Opposite behavior to <code>in</code>; Equivalent to <code>not expr in array</code></td>
 							<td><code>1 not in [1,2,3]</code> -> <code>false</code></td>
-							<td>&#160;</td>
+							<td></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 					</tbody>
@@ -309,7 +309,7 @@
 				<h3 id="Concatenation-ops">Concatenation operator <code>+</code></h3>
 				<p>Besides standard addition of numbers, <code>+</code> concatenates strings, arrays and objects.</p>
 				<p>If two arrays are concatenated, right array elements are added to the end of the left array.</p>
-				<p>If string is concatenated with array, it is added to the beggining or end of array.</p>
+				<p>If string is concatenated with array, it is added to the beggining or end of array depending on the order:</p>
 				<p>Objects are merged so that right object overwrites existing elements of left object. Object concatenation is not deep. It means that only direct child elements of root element are overwritten rather than <strong><a title="Leaf node" href="//en.wikipedia.org/wiki/Leaf_node">leaf nodes</a></strong>.</p>
 				<pre class="sh_javascript">>>> [1, 2, 4] + [3, 5]
 [1, 2, 4, 3, 5]
@@ -348,12 +348,12 @@
 						<tr>
 							<td><code>float(<em>NUMBER/STRING</em>)</code></td>
 							<td><code>float('123.45')</code> -> <code>123.45</code></td>
-							<td>&#160;</td>
+							<td></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
 							<td><code>array(<em>ANY</em>)</code></td>
-							<td><code>array(now())</code> -> <code>[2011,4,8,13,3,55,747070]</code></td>
+							<td><code>array(now())</code> -> <code>[2011, 4, 8, 13, 3, 55, 747070]</code></td>
 							<td></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
@@ -380,25 +380,25 @@
 						<tr>
 							<td><code>max(<em>ARRAY</em>)</code></td>
 							<td><code>max([2, 4, 1, 3])</code> -> <code>4</code></td>
-							<td>&#160;</td>
+							<td></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
 							<td><code>min(<em>ARRAY</em>)</code></td>
 							<td><code>min([2, 4, 1, 3])</code> -> <code>1</code></td>
-							<td>&#160;</td>
+							<td></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
 							<td><code>avg(<em>ARRAY</em>)</code></td>
 							<td><code>avg([2, 4, 1, 3])</code> -> <code>2.5</code></td>
-							<td>equivalent to <code>sum(array)/len(array)</code></td>
+							<td>Equivalent to <code>sum(array)/len(array)</code></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
 							<td><code>round(<em>FLOAT</em>, <em>INTEGER</em>)</code></td>
 							<td><code>round(0.55, 1)</code> -> <code>0.5</code></td>
-							<td>Returns always float. Second argument defines the precision of round.</td>
+							<td>Always returns float. Second argument defines the precision of round.</td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 					</tbody>
@@ -418,53 +418,75 @@
 						<tr>
 							<td><code>replace(<em>STRING</em>, <em>toReplace</em>, <em>replacement</em>)</code></td>
 							<td><code>replace('abcd','b','a')</code> -> <code>'aacd'</code></td>
-							<td>&#160;</td>
+							<td></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
 							<td><code>escape(<em>STRING</em>)</code></td>
-							<td><code>escape('')</code> -> <code>''</code></td>
-							<td>The / character escapes ' because it is reserved as end of string sign.</td>
+							<td><code>escape('<>&\'"')</code> -> <code>"&amp;lt;&amp;gt;&amp;amp;&amp;apos;&amp;quot;"</code></td>
+							<td>Converts HTML reserved characters to their HTML equivalents.</td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
 							<td><code>unescape(<em>STRING</em>)</code></td>
-							<td><code>unescape('')</code> -> <code>''</code></td>
+							<td><code>unescape("&amp;lt;&amp;gt;&amp;amp;&amp;apos;&amp;quot;")</code> -> <code>'<>&\'"'</code></td>
 							<td>Reverse to the escape.</td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
 							<td><code>upper(<em>STRING</em>)</code></td>
 							<td><code>upper('AaA')</code> -> <code>'AAA'</code></td>
-							<td>&#160;</td>
+							<td></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
 							<td><code>lower(<em>STRING</em>)</code></td>
 							<td><code>lower('AaA')</code> -> <code>'aaa'</code></td>
-							<td>&#160;</td>
+							<td></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
 							<td><code>capitalize(<em>STRING</em>)</code></td>
 							<td><code>capitalize('AaA')</code> -> <code>'Aaa'</code></td>
-							<td>&#160;</td>
+							<td></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
 							<td><code>title(<em>STRING</em>)</code></td>
 							<td><code>title('aaa bbb')</code> -> <code>'Aaa Bbb'</code></td>
-							<td>&#160;</td>
+							<td></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
-							<td><code>split(<em>STRING</em>[, <em>sep</em>])</code></td>
-							<td><code>split('aaa bbb')</code> -> <code>['aaa','bbb']</code>,<br /><code>split('aaa,bbb','.')</code> -> <code>['aaa','bbb']</code></td>
-							<td>&#160;</td>
+							<td><code>split(<em>STRING</em> <, <em>sep</em>>)</code></td>
+							<td>
+								<code>split('aaa bbb')</code> -> <code>['aaa', 'bbb']</code>,<br />
+								<code>split('aaa,bbb','.')</code> -> <code>['aaa', 'bbb']</code>
+							</td>
+							<td></td>
+							<td class="text-center"><i class="Py"></i></td>
+						</tr>
+						<tr>
+							<td>
+								<code>slice(<em>STRING</em>, [<em>start</em>, <em>end</em>])</code>,<br>
+								<code>slice(<em>STRING</em>, [[<em>start</em>, <em>end</em>], [<em>start</em>,<em>end</em>], ...])</code></td>
+							<td>
+								<code>slice('Hello world!', [[0, 5], [6, 11]])</code> -> <code>["Hello", "world"])</code> -> <code>['aaa', 'bbb']</code>,<br />
+								<code>slice('Hello world!', [0, 5])</code> -> <code>'Hello'</code>
+							</td>
+							<td>added in ObjectPath 0.5 <a href="#slice_fn">read more</a></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 					</tbody>
 				</table>
+
+				<h4 id="slice_fn">The slice() function (added in ObjectPath 0.5)</h4>
+				<p>Extracts a section of a string and returns a new string. The usage is:</p>
+				<pre class="sh_python">slice(string, [start, end])
+slice(string, [[start, end], [start2, end2], ...])</pre>
+				<p>The first argument is always a string. The second argument can be either an array of two numbers (<em>start</em> and <em>end</em> positions) or an array of arrays of two numbers (<em>start</em> and <em>end</em> position). If position is negative, then position is counted starting from the end of the string. Examples:</p>
+				<pre class="sh_python">slice("Hello world!", [6, 11]) -&gt; "world"<br />slice("Hello world!", [6, -1]) -&gt; "world"<br />slice("Hello world!", [[0, 5], [6, 11]]) -&gt; ["Hello", "world"]
+				</pre>
 
 				<h3 id="Array-fns">Array functions</h3>
 				<table class="table table-condensed table-striped">
@@ -478,16 +500,19 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><code>sort(<em>ARRAY</em>[, key])</code></td>
-							<td><code>sort(['c', 'b', 'a'])</code> -> <code>['a', 'b', 'c']</code>,<br /><code>sort([{v:'c', x:1},{v:'b', x:2},{v:'a', x:3}],'v')</code> -&gt;
-								<code>[{v:'a', x:3},{v:'b', x:2},{v:'c', x:1}]</code></td>
+							<td><code>sort(<em>ARRAY</em> <, key>)</code></td>
+							<td>
+								<code>sort(['c', 'b', 'a'])</code> -> <code>['a', 'b', 'c']</code>,<br />
+								<code>sort([{v:'c', x:1},{v:'b', x:2},{v:'a', x:3}], 'v')</code> -&gt;
+								<code>[{v:'a', x:3}, {v:'b', x:2}, {v:'c', x:1}]</code>
+							</td>
 							<td>If key is provided, will sort array of objects by key.</td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
-							<td><code>reverse(<em>ARRAY</em>)</code></td>
-							<td><code>reverse([1, 2, 3])</code> -> <code>[3, 2, 1]</code></td>
-							<td>&#160;</td>
+							<td><code>reverse(array)</code></td>
+							<td><code>reverse([1,3,2,2,5])</code> -> <code>[5,2,2,3,1]</code></td>
+							<td><span style="color: #d9534f;"><i class="fa fa-warning"></i> Reverse may be very slow for large data.</span></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
@@ -497,11 +522,11 @@
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
-							<td><code>join(<em>ARRAY</em>[, <em>joiner</em>])</code></td>
+							<td><code>join(<em>ARRAY</em> <, <em>joiner</em>>)</code></td>
 							<td>
 								<code>join(['c', 'b', 'a'])</code> -> <code>'cba'</code>,<br />
 								<code>join(['c', 'b', 'a'], '.')</code> -> <code>'c.b.a'</code></td>
-							<td>&#160;</td>
+							<td></td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 					</tbody>
@@ -550,7 +575,7 @@
 							<td>
 								<code>dateTime(now())</code> -> <code>'2011-04-08 13:03:55.747070'</code>,<br />
 								<code>dateTime([2011, 4, 8, 13, 3, 55, 747070])</code> -> <code>'2011-04-08 13:03:55.747070'</code>,<br />
-								<code>dateTime(date(),time())</code> -> <code>'2011-04-08 13:03:55.747070'</code>,<br />
+								<code>dateTime(date(), time())</code> -> <code>'2011-04-08 13:03:55.747070'</code>,<br />
 								<code>dateTime([2011, 4, 8], time())</code> -> <code>'2011-04-08 13:03:55.747070'</code>
 							</td>
 							<td><em>args</em>: if one argument is specified then it need to be <em>datetime</em> object or <em>[yyyy, mm, dd, hh, mm, ss, mmmmmm]</em> where <em>year</em>, <em>month</em>, <em>day</em>, <em>hour</em> and <em>minute</em> are required. If two arguments are specified, the first argument can be <em>date</em> object or <em>[yyyy, mm, dd]</em> array, second can be <em>time</em> object or <em>[hh, mm, ss, mmmmmm]</em> array where only hour is required.</td>
@@ -595,29 +620,17 @@
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
 						<tr>
-							<td><code>sort(array)</code></td>
-							<td><code>sort([1,3,2,2,5])</code> -> <code>[1,2,2,3,5]</code></td>
-							<td>Sorts elements in an array.<br /><span style="color: #d9534f;"><i class="fa fa-warning"></i> Sort may be very slow for large data.</span></td>
-							<td class="text-center"><i class="Py"></i></td>
-						</tr>
-						<tr>
-							<td><code>reverse(array)</code></td>
-							<td><code>reverse([1,3,2,2,5])</code> -> <code>[5,2,2,3,1]</code></td>
-							<td><span style="color: #d9534f;"><i class="fa fa-warning"></i> Reverse may be very slow for large data.</span></td>
-							<td class="text-center"><i class="Py"></i></td>
-						</tr>
-						<tr>
 							<td><code>generateID()</code></td>
 							<td></td>
-							<td>Generates unique ID. Since ACR 1.0.4</td>
+							<td>Generates unique ID</td>
 							<td class="text-center"><i class="Py"></i></td>
 						</tr>
-						<tr>
+<!--						<tr>
 							<td><code>objectID(oidString)</code>, <code>ObjectId(oidString)</code></td>
-							<td>&#160;</td>
+							<td></td>
 							<td>MongoDB helper function.</td>
 							<td class="text-center"><i class="Py"></i></td>
-						</tr>
+						</tr>-->
 					</tbody>
 				</table>
 
