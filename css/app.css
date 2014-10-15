@@ -359,3 +359,6 @@ pre .string{
 #TOC a{
 	color: #eee;
 }
+.reference code{
+	white-space: normal;
+}

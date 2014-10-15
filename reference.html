@@ -238,9 +238,9 @@
 
 				<h3 id="Comparison-ops">Comparison operators</h3>
 				<p>ObjectPath uses algorithms that guess types of data. In most cases you don't need to worry about issues with types (e.g. comparing string <span class="string">"2"</span> with number <span class="number">2</span> works as <span class="number">2</span> was a string). To check if types are the same or different you can use <code>type("2") is type(2)</code> -> <code>false</code>.</p>
-				<p>In semi-structured data a very common issue is that data is represented as a different type than it was supposed to be. For example very often we can see numbers represented as strings (like <code>["1","2","3"]</code> instead of simply <code>[1,2,3]</code>). This is caused by automatic JSON generators, especially those that convert XML data into JSON. In programming languages such as Javascript this can cause many headashes and hours wasted figuring out why the code doesn't work. That's why:</p>
+				<p>In semi-structured data a very common issue is that data is represented as a different type than it was supposed to be. For example very often we can see numbers represented as strings (like <code>["1", "2", "3"]</code> instead of simply <code>[1,2,3]</code>). This is caused by automatic JSON generators, especially those that convert XML data into JSON. In programming languages such as Javascript this can cause many headashes and hours wasted figuring out why the code doesn't work. That's why:</p>
 				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i>Comparison operators try to cast the right side expression result to the type of the left expression result. Sometimes it fails so best practice is to use casting functions when types may be different.</div>
-				<div class="alert alert-warning" role="alert"><i class="fa fa-warning fa-3x pull-left"></i>The comparison operators are not chainable so <code>1&lt;2&lt;2</code> will compare <span class="number">2</span> with result of <code>1&lt;2</code> which is <em>true</em> and return <em>true</em>. Use <code>1&lt;2 and 2&lt;3</code> instead.</div>
+				<div class="alert alert-warning" role="alert"><i class="fa fa-warning fa-3x pull-left"></i>The comparison operators are not chainable so <code>1 &lt; 2 &lt; 2</code> will compare <span class="number">2</span> with result of <code>1 &lt; 2</code> which is <em>true</em> and return <em>true</em>. Use <code>1 &lt; 2 and 2 &lt; 3</code> instead.</div>
 				<table class="table table-condensed table-striped">
 					<thead>
 						<tr>
@@ -269,7 +269,7 @@
 						<tr>
 							<td><code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code></td>
 							<td>grater than, grater than or equal, less than, less than or equal</td>
-							<td><code>1&gt;0 -&gt;true</code></td>
+							<td><code>1 &gt; 0</code> -&gt; <code>true</code></td>
 							<td>
 							</td>
 							<td class="text-center"><i class="Py"></i> <i class="JS"></i></td>
