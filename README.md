@@ -81,6 +81,13 @@ $ python
 License
 -------
 
-AGPLv3
+**AGPLv3**
 
-**If you are not happy with the license, contact me directly and we'll figure something out.**
+Using ObjectPath language in your project does not mean that your project is a derivative work, provided that you do
+- extend the language itself,
+- make optimizations,
+- sub-class any of it's modules.
+
+AGPL v3 license has been chosen to ensure language consistency and provide a way to finance its development. 
+
+**If AGPL v3 is too restrictive for you, please consider buying a commercial licenses provided by Asyncode. This is the preffered way of supporting this project financially.**
