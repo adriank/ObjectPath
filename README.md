@@ -83,8 +83,8 @@ License
 
 **AGPLv3**
 
-Using ObjectPath language in your project does not mean that your project is a derivative work, provided that you do
-- extend the language itself,
+Using ObjectPath language in your project does not mean that your project is a derivative work, provided that you don't
+- extend the language functionality,
 - make optimizations,
 - sub-class any of it's modules.
 
