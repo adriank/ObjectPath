@@ -12,7 +12,7 @@ script:
   - coverage run --source=objectpath setup.py test
 deploy:
   provider: pypi
-  user: adriank
+  user: adriankal
   password:
     secure: JrHBeECZVcMCznq/eWMPaEPjpBgd1D3OjDyU3nH2bwbNqGPQ0uW9xsPWumZSiY0OhTFgpwGMrhBdTwix10dCH4LY7zLK7TTQUH4MHbQLoUgL8uxKyPyMe9MJ4eXVy8FhPl1EdFWvsNwVSkobUTD/qs1/zJZOpuGA9QC0xqN8ezc=
   on:
