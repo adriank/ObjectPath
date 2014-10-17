@@ -17,6 +17,7 @@ deploy:
     secure: JrHBeECZVcMCznq/eWMPaEPjpBgd1D3OjDyU3nH2bwbNqGPQ0uW9xsPWumZSiY0OhTFgpwGMrhBdTwix10dCH4LY7zLK7TTQUH4MHbQLoUgL8uxKyPyMe9MJ4eXVy8FhPl1EdFWvsNwVSkobUTD/qs1/zJZOpuGA9QC0xqN8ezc=
   on:
     tags: true
+    all_branches: true
     repo: adriank/ObjectPath
   distributions: "sdist bdist_wheel"
 after_success:
