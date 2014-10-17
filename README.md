@@ -15,7 +15,7 @@ The agile NoSQL query language for semi-structured data
 
 ObjectPath is a query language similar to XPath or JSONPath, but much more powerful thanks to embedded arithmetic calculations, comparison mechanisms and built-in functions. This makes the language more like SQL in terms of expressiveness, but it works over JSON documents rather than relations. ObjectPath can be considered a full-featured expression language. Besides selector mechanism there is also boolean logic, type system and string concatenation available. On top of that, the language implementations (Python at the moment; Javascript is in beta!) are secure and relatively fast.
 
-More at [ObjectPath site](http://adriank.github.io/ObjectPath)
+More at [ObjectPath site](http://objectpath.org/)
 
 ![ObjectPath img](http://adriank.github.io/ObjectPath/img/op-colors.png)
 
@@ -32,7 +32,7 @@ ObjectPath makes it easy to find data in big nested JSON documents. It borrows t
 Documentation
 -------------
 
-[ObjectPath Reference](http://adriank.github.io/ObjectPath/reference.html)
+[ObjectPath Reference](http://objectpath.org/reference.html)
 
 What's in this repo?
 --------------------
@@ -81,6 +81,13 @@ $ python
 License
 -------
 
-AGPLv3
+**AGPLv3**
 
-**If you are not happy with the license, contact me directly and we'll figure something out.**
+Using ObjectPath language in your project does not mean that your project is a derivative work, provided that you don't
+- extend the language functionality,
+- make optimizations,
+- sub-class any of it's modules.
+
+AGPL v3 license has been chosen to ensure language consistency and provide a way to finance its development. 
+
+**If AGPL v3 is too restrictive for you, please consider buying a commercial licenses provided by Asyncode. This is the preffered way of supporting this project financially.**
