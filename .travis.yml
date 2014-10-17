@@ -1,24 +1,22 @@
 language: python
 python:
-  - '2.7'
-  - '3.2'
-  - '3.3'
-  - 'pypy'
+- '2.7'
+- '3.2'
+- '3.3'
+- pypy
 install:
-  - pip install -r requirements.txt
-  - pip install coveralls
+- pip install -r requirements.txt
+- pip install coveralls
 script:
-  - nosetests
-  - coverage run --source=objectpath setup.py test
+- nosetests
+- coverage run --source=objectpath setup.py test
 deploy:
   provider: pypi
   user: adriankal
   password:
-    secure: JrHBeECZVcMCznq/eWMPaEPjpBgd1D3OjDyU3nH2bwbNqGPQ0uW9xsPWumZSiY0OhTFgpwGMrhBdTwix10dCH4LY7zLK7TTQUH4MHbQLoUgL8uxKyPyMe9MJ4eXVy8FhPl1EdFWvsNwVSkobUTD/qs1/zJZOpuGA9QC0xqN8ezc=
+    secure: bWTP43XxjAIwC6PMmfjt4/dCBenky+zF7empMgzfmkUq5jCoQjCJm4IUdYIdjCKLYEIU1DaOTp7+rqmIZf2d8wWvGAc4+k3vinV9k8WzycpBM+YgnW2knQ5eko93H0lpNOIrat4J0wvc51JjHfj4uqib6SCTaXmBS/kRHmiRkx8=
   on:
     tags: true
-    all_branches: true
     repo: adriank/ObjectPath
-  distributions: "sdist bdist_wheel"
 after_success:
-  - coveralls
+- coveralls
