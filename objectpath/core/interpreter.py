@@ -477,6 +477,15 @@ class Tree(Debugger):
 					return args[0].title()
 				elif fnName=="split":
 					return args[0].split(*args[1:])
+				elif fnName=="slice":
+					try:
+						pos=list(args[1])
+						if type(pos[0]) in ITER_TYPES:
+							if D: self.debug("run slice() for a list of slicers")
+							return (args[0][x[0]:x[1]] for x in pos)
+						return args[0][pos[0]:pos[1]]
+					except IndexError:
+						return ""
 				elif fnName=="escape":
 					global escape,escapeDict
 					if not escape:
