@@ -17,6 +17,7 @@ deploy:
     secure: bWTP43XxjAIwC6PMmfjt4/dCBenky+zF7empMgzfmkUq5jCoQjCJm4IUdYIdjCKLYEIU1DaOTp7+rqmIZf2d8wWvGAc4+k3vinV9k8WzycpBM+YgnW2knQ5eko93H0lpNOIrat4J0wvc51JjHfj4uqib6SCTaXmBS/kRHmiRkx8=
   on:
     tags: true
+    all_branches: true
     repo: adriank/ObjectPath
 after_success:
 - coveralls
