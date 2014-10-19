@@ -180,14 +180,14 @@
 							<td><code>*</code></td>
 							<td>multiplication</td>
 							<td><code>2 * 3</code> -> <code>6</code></td>
-							<td>Alternate usage is select all objects from array</td>
+							<td>Alternative use is <em>select all objects from array</em></td>
 							<td class="text-center"><i class="Py"></i> <i class="JS"></i></td>
 						</tr>
 						<tr>
 							<td><code>/</code></td>
 							<td>division</td>
 							<td><code>2/3</code> -> <code>0.6666666666666666</code></td>
-							<td>Integer division results in floating point number. Use int() built-in function to make it integer again.</td>
+							<td>Integer division results in floating point number. Use int() built-in function to turn it into integer again.</td>
 							<td class="text-center"><i class="Py"></i> <i class="JS"></i></td>
 						</tr>
 						<tr>
@@ -223,23 +223,23 @@
 							<td><code>and</code></td>
 							<td>conjunction</td>
 							<td><code>true and false</code> -> <code>false</code></td>
-							<td><em>and</em> evaluates left expression, if negative it is returned and right expression is not evaluated.</td>
+							<td><em>and</em> evaluates expression on the left-hand side, if negative it is returned; expression on the right-hand side is not evaluated.</td>
 							<td class="text-center"><i class="Py"></i> <i class="JS"></i></td>
 						</tr>
 						<tr>
 							<td><code>or</code></td>
 							<td>alternation</td>
 							<td><code>true or false</code> -> <code>true</code></td>
-							<td><em>or</em> evaluates left expression if positive it is returned and right expression is not evaluated.</td>
+							<td><em>or</em> evaluates expression on the left-hand side, if positive it is returned; expression on the right-hand side is not evaluated.</td>
 							<td class="text-center"><i class="Py"></i> <i class="JS"></i></td>
 						</tr>
 					</tbody>
 				</table>
 
 				<h3 id="Comparison-ops">Comparison operators</h3>
-				<p>ObjectPath uses algorithms that guess types of data. In most cases you don't need to worry about issues with types (e.g. comparing string <span class="string">"2"</span> with number <span class="number">2</span> works as <span class="number">2</span> was a string). To check if types are the same or different you can use <code>type("2") is type(2)</code> -> <code>false</code>.</p>
-				<p>In semi-structured data a very common issue is that data is represented as a different type than it was supposed to be. For example very often we can see numbers represented as strings (like <code>["1", "2", "3"]</code> instead of simply <code>[1,2,3]</code>). This is caused by automatic JSON generators, especially those that convert XML data into JSON. In programming languages such as Javascript this can cause many headashes and hours wasted figuring out why the code doesn't work. That's why:</p>
-				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i>Comparison operators try to cast the right side expression result to the type of the left expression result. Sometimes it fails so best practice is to use casting functions when types may be different.</div>
+				<p>ObjectPath uses algorithms that guess types of data. In most cases you don't need to worry about issues with types (e.g. comparing string <span class="string">"2"</span> with number <span class="number">2</span> works as if <span class="number">2</span> was a string). To check if types are the same or different you can use <code>type("2") is type(2)</code> -> <code>false</code>.</p>
+				<p>In semi-structured data a very common issue is that the data are represented as a different type than it was supposed to be. For example very often we can see numbers represented as strings (like <code>["1", "2", "3"]</code> instead of simply <code>[1,2,3]</code>). This is caused by automatic JSON generators, especially those that convert XML data into JSON. In programming languages such as Javascript this can cause many headashes and hours wasted figuring out why the code doesn't work. That's why:</p>
+				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i>Comparison operators try to cast the right-hand side expression result to the type of the left-hand side expression result. Sometimes it fails so best practice is to use casting functions when types might be different.</div>
 				<div class="alert alert-warning" role="alert"><i class="fa fa-warning fa-3x pull-left"></i>The comparison operators are not chainable so <code>1 &lt; 2 &lt; 2</code> will compare <span class="number">2</span> with result of <code>1 &lt; 2</code> which is <em>true</em> and return <em>true</em>. Use <code>1 &lt; 2 and 2 &lt; 3</code> instead.</div>
 				<table class="table table-condensed table-striped">
 					<thead>
@@ -291,7 +291,7 @@
 					<tbody>
 						<tr>
 							<td><code>in</code></td>
-							<td>Checks if result of left side of expression is in <em>array</em>, <em>object</em> or <em>string</em></td>
+							<td>Checks if the result of the left side of expression is in <em>array</em>, <em>object</em> or <em>string</em></td>
 							<td><code>3 in [1,2,4]</code> -> <code>false</code>, <br /><code>"ia" in "Adrian"</code> -> <code>true</code></td>
 							<td>In objects, keys are matched.</td>
 							<td class="text-center"><i class="Py"></i></td>
