@@ -68,16 +68,16 @@
 					<li><i class="Py"></i><em>number</em> is split into <em>integer</em> and <em>float</em>:
 						<ul>
 							<li><em>integer</em> is a fast and small integer number</li>
-							<li><em>float</em> is slow and very accurate real number</li>
+							<li><em>float</em> is a slow and very accurate real number</li>
 						</ul>
-						Python implementation of ObjectPath tries to determine which one to use. Sometimes number is converted into Python's <em>long</em> type. Javascript has one uniform <em>number</em> type (with <a href="//www.ecma-international.org/ecma-262/5.1/#sec-15.7.3.2" target="_blank">limit on number size</a>).
+						Python implementation of ObjectPath tries to determine which one to use. Sometimes <em>number</em> is converted into Python's <em>long</em> type. Javascript has one uniform <em>number</em> type (with <a href="//www.ecma-international.org/ecma-262/5.1/#sec-15.7.3.2" target="_blank">limit on <em>number</em> size</a>).
 					</li>
 					<li>Strings are encoded in UTF-8,</li>
 					<li><i class="Py"></i>Added the <code>datetime</code>, <code>date</code> and <code>time</code> types to handle dates and times,</li>
 					<li>Boolean types and null are case insensitive and can be written in several ways:</li>
 					<ul>
 						<li><code>true</code> can be written as: <code>t</code>, <code>true</code> (or <code>trUe</code>),</li>
-						<li><code>false</code> as: <code>f</code> and <code>false</code>,</li>
+						<li><code>false</code> as: <code>f</code> or <code>false</code>,</li>
 						<li><code>null</code> as: <code>n</code>, <code>none</code>, <code>null</code>, <code>nil</code>.</li>
 					</ul>
 					<li>Negative are: <code>false</code>, <code>null</code>, <code>0</code>, <code>""</code>, <code>[]</code>, <code>{}</code>. Any other value is positive.</li>
@@ -86,12 +86,12 @@
 				<h3 id="ComplexTypes">Complex types</h3>
 				<p>Arrays can be defined in the language by issuing:</p>
 				<pre class="sh_python">[ val1, val2, ..., valN]</pre>
-				<p>and for objects it's:</p>
+				<p>and for objects it is:</p>
 				<pre class="sh_python">{ "atr1":val1, "atr2":val2, ..., "atrN":valN }<br />{ atr1:val1, atr2:val2, ..., atrN:valN }</pre>
 				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i>
 					<ul>
-						<li>Attribute names can be dynamicly created.  Example: <code>{$.myCar.model: "avg temperature is "<br/> + avg($.cars[@.model is $.myCar.model].temp)} -> {"Toyota Prius": "avg temperature is 4.5"}</code></li>
-						<li>When expression returns value other than string it is casted to a string. Example: <code>{2+2:"4"} -> {"4":"4"}</code></li>
+						<li>Attribute names can be dynamically created.  Example: <code>{$.myCar.model: "avg temperature is "<br/> + avg($.cars[@.model is $.myCar.model].temp)} -> {"Toyota Prius": "avg temperature is 4.5"}</code></li>
+						<li>When an expression returns a value other than string, it is casted to a string. Example: <code>{2+2:"4"} -> {"4":"4"}</code></li>
 						<li>Names can be written without quotes, but in that case they cannot start with an operator. ObjectPath raises an exception if name is not valid.</li>
 					</ul>
 				</div>
