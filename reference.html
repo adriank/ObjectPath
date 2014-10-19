@@ -91,7 +91,7 @@
 				<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-3x pull-left"></i>
 					<ul>
 						<li>Attribute names can be dynamically created.  Example: <code>{$.myCar.model: "avg temperature is "<br/> + avg($.cars[@.model is $.myCar.model].temp)} -> {"Toyota Prius": "avg temperature is 4.5"}</code></li>
-						<li>When an expression returns a value other than string, it is casted to a string. Example: <code>{2+2:"4"} -> {"4":"4"}</code></li>
+						<li>When an expression returns a value other than string, it is casted to string. Example: <code>{2+2:"4"} -> {"4":"4"}</code></li>
 						<li>Names can be written without quotes, but in that case they cannot start with an operator. ObjectPath raises an exception if name is not valid.</li>
 					</ul>
 				</div>
@@ -102,8 +102,8 @@
 
 				<h2 id="Operations">Operators</h2>
 				<h3 id="HowOPWorks">How operators work</h3>
-				<p>Operators take computation results from it's left and right side and do  an operation on those results. While behaviour of simple operators is straight forward, operators like <code>.</code>, <code>..</code> and <code>[]</code> are more advanced.</p>
-				<p>Each of them work on arrays of objects on the left and apply to each element from this array instruction found on the right. To show what does it mean consider document:</p>
+				<p>Operators take computation results from their left and right side and perform an operation on these results. While behaviour of simple operators is straightforward, operators such as <code>.</code>, <code>..</code> and <code>[]</code> are more advanced.</p>
+				<p>Each of them works on arrays of objects on the left and apply to each element from this array the instruction found on the right. To better understand what it means, consider a document:</p>
 				<pre class="sh_python">{
   "a":1,
   "b":{
@@ -134,7 +134,7 @@
 #   3   | > 2 -> true    |   3
 # ]     |                | ]
 [3]</pre>
-				<p>The result is always an array! because ObjectPath executes <code>></code> for each element in array and filters out elements that doesn't match condition.</p>
+				<p>The result is always an array! because ObjectPath executes <code>></code> for each element in the array and filters out elements that do not match the condition.</p>
 
 				<h3 class="OperatorPrecedence">Operator precedence</h3>
 				<p>Operations are executed in the following order:</p>
@@ -148,7 +148,7 @@
 					<code>and</code> ->
 					<code>or</code>
 				</p>
-				<p>Other operators and tokens are precedence neutral.</p>
+				<p>Other operators and tokens are precedence-neutral.</p>
 
 				<h3 id="Arithmetic-ops">Arithmetic operators</h3>
 				<table class="table table-condensed table-striped">
