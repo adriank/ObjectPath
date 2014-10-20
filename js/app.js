@@ -1,3 +1,5 @@
+if (window.location.host !== "objectpath.org")
+	window.location = "objectpath.org"
 $(document).ready(function(){
 	$('#tree-structures').popover({
 		html:true,
