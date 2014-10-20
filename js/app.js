@@ -1,5 +1,5 @@
 if (window.location.host !== "objectpath.org")
-	window.location = "http://objectpath.org/"
+	window.location = "//objectpath.org"+window.location.pathname
 $(document).ready(function(){
 	$('#tree-structures').popover({
 		html:true,
