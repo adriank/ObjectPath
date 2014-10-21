@@ -9,9 +9,11 @@ sys.setrecursionlimit(20000)
 
 class Utils_test(unittest.TestCase):
 	def test_Utils_JSON_compat(self):
+		self.assertEqual(loads("['ddd']"),['ddd'])
 		if sys.version_info.major < 3:
 			self.assertEqual(loads("[u'ddd']"),['ddd'])
-		#self.assertEqual(json_compat.dumps(['ddd']),'[\n  "ddd"\n]')
+		self.assertRaises(Exception, lambda: loads(['ddd}']))
+		self.assertEqual(dumps(['ddd']),'["ddd"]')
 		self.assertEqual(py2JSON(False), 'false')
 		self.assertEqual(py2JSON(None), 'null')
 		self.assertEqual(py2JSON((2,3,4)), [2,3,4])

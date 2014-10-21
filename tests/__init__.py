@@ -9,6 +9,5 @@ import unittest
 
 def doTests():
 	print ('Started ObjectPath Python implementation testing.\n')
-	#print ('utils/interpreter.py')
 	unittest.TextTestRunner(verbosity = 2).run(op_test)
 	unittest.TextTestRunner(verbosity = 2).run(utils_test)
