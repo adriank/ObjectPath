@@ -367,6 +367,8 @@ class ObjectPath(unittest.TestCase):
 
 	def test_misc(self):
 		self.assertEqual(execute(2), 2)
+		self.assertEqual(execute('{"@aaa":1}.@aaa'), 1)
+		self.assertEqual(execute('$ss.a'), None)
 		self.assertEqual(execute("$..*[10]"), None)
 		self.assertEqual(sorted(execute("keys({'a':1,'b':2})")), ['a','b'])
 		self.assertRaises(ExecutionError, lambda: execute('keys([])'))
@@ -381,6 +383,7 @@ class ObjectPath(unittest.TestCase):
 		self.assertEqual(execute("$.._id[0]"), 1)
 		self.assertEqual(execute("sort($.._id + $.._id)[2]"), 2)
 		self.assertIsInstance(execute("$.._id[2]"), int)
+		self.assertEqual(execute2("$.store.book.(price)[0].price"), execute2("$.store.book[0].price"))
 
 class ObjectPath_Paths(unittest.TestCase):
 	def test_simple_paths(self):
