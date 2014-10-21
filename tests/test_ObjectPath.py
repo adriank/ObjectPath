@@ -300,6 +300,8 @@ class ObjectPath(unittest.TestCase):
 		self.assertEqual(execute('slice("Hello world!", [6, 11])'), "world")
 		self.assertEqual(execute('slice("Hello world!", [6, -1])'), "world")
 		self.assertEqual(execute('slice("Hello world!", [[0,5], [6, 11]])'), ["Hello", "world"])
+		self.assertRaises(ProgrammingError, lambda: execute('slice()'))
+		self.assertRaises(ProgrammingError, lambda: execute('slice("",{})'))
 
 	def test_builtin_arrays(self):
 		self.assertEqual(execute("sort([1,2,3,4]+[2,4])"), [1,2,2,3,4,4])

@@ -485,7 +485,12 @@ class Tree(Debugger):
 							return (args[0][x[0]:x[1]] for x in pos)
 						return args[0][pos[0]:pos[1]]
 					except IndexError:
-						return ""
+						if 'pos' not in locals():
+							pos=[]
+						if len(pos)!=2:
+							raise ProgrammingError("Wrong usage of slice(STRING, ARRAY). Provided %s argument, should be exactly 2."%len(pos))
+						elif type(pos[1]) not in ITER_TYPES:
+							raise ProgrammingError("Wrong usage of slice(STRING, ARRAY). Second argument is not an array."%len(pos))
 				elif fnName=="escape":
 					global escape,escapeDict
 					if not escape:
