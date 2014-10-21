@@ -264,14 +264,18 @@ class ObjectPath(unittest.TestCase):
 	def test_builtin_arithmetic(self):
 		self.assertEqual(execute("sum([1,2,3,4])"), sum([1,2,3,4]))
 		self.assertEqual(execute("sum([2,3,4,'333',[]])"), 9)
+		self.assertEqual(execute("sum(1)"), 1)
 		self.assertEqual(execute("min([1,2,3,4])"), min([1,2,3,4]))
 		self.assertEqual(execute("min([2,3,4,'333',[]])"), 2)
+		self.assertEqual(execute("min(1)"), 1)
 		self.assertEqual(execute("max([1,2,3,4])"), max([1,2,3,4]))
 		self.assertEqual(execute("max([2,3,4,'333',[]])"), 4)
+		self.assertEqual(execute("max(1)"), 1)
 		self.assertEqual(execute("avg([1,2,3,4])"), 2.5)
 		self.assertEqual(execute("avg([1,3,3,1])"), 2.0)
 		self.assertEqual(execute("avg([1.1,1.3,1.3,1.1])"), 1.2000000000000002)
 		self.assertEqual(execute("avg([2,3,4,'333',[]])"), 3)
+		self.assertEqual(execute("avg(1)"), 1)
 		self.assertEqual(execute("round(2/3)"), round(2.0/3))
 		self.assertEqual(execute("round(2/3,3)"), round(2.0/3,3))
 		# edge cases

@@ -48,7 +48,7 @@ Command line usage
 $ sudo pip install objectpath
 $ objectpath file.json
 `````
-
+or
 `````sh
 $ git clone https://github.com/adriank/ObjectPath.git
 $ cd ObjectPath
@@ -70,6 +70,7 @@ $ python
 
 `````sh
 $ git clone https://github.com/adriank/ObjectPath.git
+$ cd ObjectPath
 $ python
 >>> from objectpath import *
 >>> tree=Tree({"a":1})
@@ -88,6 +89,6 @@ Using ObjectPath language in your project does not mean that your project is a d
 - make optimizations,
 - sub-class any of it's modules.
 
-AGPL v3 license has been chosen to ensure language consistency and provide a way to finance its development. 
+AGPL v3 license has been chosen to ensure language consistency and provide a way to finance its development.
 
 **If AGPL v3 is too restrictive for you, please consider buying a commercial licenses provided by Asyncode. This is the preffered way of supporting this project financially.**

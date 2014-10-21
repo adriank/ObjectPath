@@ -1,5 +1,5 @@
 #!/bin/sh
-pandoc -f markdown -t rst -o README.rst ../README.md
+pandoc -f markdown -t rst -o README.rst README.md
 mdTable="aaa Scope aaa Language aaa aaa---aaa---aaa aaa text documents aaa regular
 expression aaa aaa XML aaa XPath aaa aaa HTML aaa CSS selectors aaa aaa JSON
 documents aaa ObjectPath aaa"

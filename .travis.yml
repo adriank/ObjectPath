@@ -19,5 +19,6 @@ deploy:
     tags: true
     all_branches: true
     repo: adriank/ObjectPath
+  distributions: "sdist bdist_wheel"
 after_success:
 - coveralls

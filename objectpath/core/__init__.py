@@ -10,21 +10,19 @@ from itertools import chain
 SELECTOR_OPS=["is",">","<","is not",">=","<=","in","not in",":","and","or","fn"]
 # it must be list because of further concatenations
 NUM_TYPES=[int,float]
-try:
-	NUM_TYPES+=[long]
-except NameError:
-	pass
+
+try: NUM_TYPES+=[long]
+except NameError: pass
+
 STR_TYPES=[str]
-try:
-	STR_TYPES+=[unicode]
-except NameError:
-	pass
+
+try: STR_TYPES+=[unicode]
+except NameError: pass
 
 ITER_TYPES=[list,generator,chain]
-try:
-	ITER_TYPES+=[map, filter]
-except NameError:
-	pass
+
+try: ITER_TYPES+=[map, filter]
+except NameError: pass
 
 class ProgrammingError(Exception):
 	pass

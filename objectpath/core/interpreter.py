@@ -258,12 +258,12 @@ class Tree(Debugger):
 					fst=exe(fst)
 				typefst=type(fst)
 				if D: self.debug(color.op(".")+" left is '%s'", fst)
-				try:
-					if node[2][0] == "*":
-						if D: self.end(color.op(".")+" returning '%s'", typefst in ITER_TYPES and fst or [fst])
-						return fst # typefst in ITER_TYPES and fst or [fst]
-				except:
-					pass
+				# try:
+				if node[2][0] == "*":
+					if D: self.end(color.op(".")+" returning '%s'", typefst in ITER_TYPES and fst or [fst])
+					return fst # typefst in ITER_TYPES and fst or [fst]
+				# except:
+				# 	pass
 				snd=exe(node[2])
 				if D: self.debug(color.op(".")+" right is '%s'",snd)
 				if typefst in ITER_TYPES:

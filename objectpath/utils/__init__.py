@@ -6,7 +6,7 @@
 
 from itertools import islice
 from xml.sax.saxutils import escape, unescape
-from objectpath.core import NUM_TYPES, generator, chain
+from objectpath.core import NUM_TYPES, generator, chain, ITER_TYPES
 
 escape=escape
 unescape=unescape
@@ -45,7 +45,7 @@ def filter_dict(iterable, keys):
 def flatten(fragment,skip=False):
 	def rec(frg):
 		typefrg=type(frg)
-		if typefrg in (list,generator,chain):
+		if typefrg in ITER_TYPES:
 			for i in frg:
 				for j in rec(i):
 					yield j
