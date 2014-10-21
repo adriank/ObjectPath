@@ -71,7 +71,11 @@ def main():
 			import cProfile, pstats, StringIO
 			pr = cProfile.Profile()
 			pr.enable()
-		ret=tree.execute(expr)
+		try:
+			ret=tree.execute(expr)
+		except Exception as e:
+			print(e.__class__.__name__+": "+str(e))
+			exit(1)
 		if type(ret) in ITER_TYPES:
 			ret=list(ret)
 		print(json.dumps(ret))
