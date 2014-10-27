@@ -2,10 +2,11 @@ ObjectPath
 ==========
 
 `|Downloads| <https://pypi.python.org/pypi/objectpath/>`_
-`|License| <https://pypi.python.org/pypi/objectpath/>`_
-`|Build Status| <https://travis-ci.org/adriank/ObjectPath>`_
-`|Code Health| <https://landscape.io/github/adriank/ObjectPath/master>`_
-`|Coverage Status| <https://coveralls.io/r/adriank/ObjectPath?branch=master>`_
+`|License| <https://pypi.python.org/pypi/objectpath/>`_ `|Build
+Status| <https://travis-ci.org/adriank/ObjectPath>`_ `|Code
+Health| <https://landscape.io/github/adriank/ObjectPath/master>`_
+`|Coverage
+Status| <https://coveralls.io/r/adriank/ObjectPath?branch=master>`_
 
 The agile NoSQL query language for semi-structured data
 -------------------------------------------------------
@@ -104,7 +105,7 @@ AGPL v3 license has been chosen to ensure language consistency and
 provide a way to finance its development.
 
 **If AGPL v3 is too restrictive for you, please consider buying a
-commercial licenses provided by Asyncode. This is the preffered way of
+commercial licenses provided by Asyncode. This is the preferred way of
 supporting this project financially.**
 
 .. |Downloads| image:: https://pypip.in/download/objectpath/badge.svg
