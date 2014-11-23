@@ -90,8 +90,14 @@ optional arguments:
 		<h2>Working with strings</h2>
 		<p>ObjectPath provides some tools to manipulate strings. Strings are written as:</p>
 		<pre class="sh sh_python">"text" or 'text'</pre>
-		<p>Strings can be concatenated by <code>+</code> operator:</p>
+		<p>Strings can be concatenated by <code>+</code> sign:</p>
 		<pre class="sh sh_python">"Hello "+"World!" -> "Hello World!"</pre>
+		<p>Numbers can be concatenated with strings if string is on the left of + sign</p>
+		<pre class="sh sh_python">"Hello "+2+"!" -> "Hello World!"
+2+" Hello!" -> error (in JS you'll see NaN which is a bug)
+""+2+" Hello!" -> "2 Hello!"</pre>
+		<p></p>
+
 		</div>
 
 		<script src="//code.jquery.com/jquery.min.js"></script>
