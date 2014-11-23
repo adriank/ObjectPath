@@ -71,11 +71,69 @@ optional arguments:
 		<p>If you want to use localization features you need python-tz package installed on your machine.</p>
 		<p>You can also run ObjectPath in PyPy, the faster Python implementation:</p>
 		<pre>pypy objectpath</pre>
+		
+		<div role="alert" class="alert alert-warning">
+			<i class="fa fa-warning fa-3x pull-left"></i><strong>Heads up!</strong> For a limited set of ObjectPath functionality you can open developer console of your choice (right click here and click on <em>inspect element</em> and then on <em>console</em>) and use ObjectPath JavaScript implementation to test the language without installing it on your box. Just write:
+			<pre>op.exe("2+2")</pre>
+		</div>
+		
+		<h2>Basic arithmetics</h2>
+		<p>ObjectPath supports common arithmetics:</p>
+		<ul>
+			<li>addition (+)</li>
+			<li>subtraction (-)</li>
+			<li>multiplication (*)</li>
+			<li>division (/)</li>
+		</ul>
+		<pre class="sh sh_python">2+2*2 -> 6
+(2+2)*2 -> 8</pre>
+		
 
 		</div>
 
 		<script src="//code.jquery.com/jquery.min.js"></script>
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+		<script src="//acf.acimg.eu/js/op.min.js"></script>
+		<script>
+		
+object={
+"store": {
+"book": [
+{ "category": "reference",
+"author": "Nigel Rees",
+"title": "Sayings of the Century",
+"price": 8.95
+},
+{ "category": "fiction",
+"author": "Evelyn Waugh",
+"title": "Sword of Honour",
+"price": 12.99
+},
+{ "category": "fiction",
+"author": "Herman Melville",
+"title": "Moby Dick",
+"isbn": "0-553-21311-3",
+"price": 8.99
+},
+{ "category": "fiction",
+"author": "J. R. R. Tolkien",
+"title": "The Lord of the Rings",
+"isbn": "0-395-19395-8",
+"price": 22.99
+}
+],
+"bicycle": {
+"color": "red",
+"price": 19.95
+},
+"k":[
+{
+"_id":4
+}
+]
+}
+}
+		op=new ObjectPath(object)</script>
 
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
