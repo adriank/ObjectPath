@@ -68,16 +68,16 @@ optional arguments:
 	-u URL, --url URL  URL containing JSON document.
 	-xml               [EXPERIMENTAL] Expect XML input.
 	-d, --debug        Debbuging on/off.</pre>
-		<p>If you want to use localization features you need python-tz package installed on your machine.</p>
+		<p>To use localization features you need python-tz package installed on your machine.</p>
 		<p>You can also run ObjectPath in PyPy, the faster Python implementation:</p>
 		<pre>pypy objectpath</pre>
 		
 		<div role="alert" class="alert alert-warning">
-			<i class="fa fa-warning fa-3x pull-left"></i><strong>Heads up!</strong> For a limited set of ObjectPath functionality you can open developer console of your choice (right click here and click on <em>inspect element</em> and then on <em>console</em>) and use ObjectPath JavaScript implementation to test the language without installing it on your box. Just write:
+			<i class="fa fa-warning fa-3x pull-left"></i><strong>Heads up!</strong> You can try ObjectPath without installing it on your box (though with limited functionality!). Open a developer console of your choice (right click here and click <em>inspect element</em>, then <em>console</em>) and use ObjectPath JavaScript implementation to test the language . Just write:
 			<pre>op.exe("2+2")</pre>
 		</div>
 		<h2>Basics</h2>
-		<p>Before getting dirty, here are some language basics. Even if you're experienced programmer read it through since some sugar can be found here.</p>
+		<p>Before getting your hands dirty read through the language basics, even if you're an experienced programmer - some sugar can be found here.</p>
 		<h2>Basic arithmetics</h2>
 		<p>ObjectPath supports common arithmetics:</p>
 		<ul>
@@ -89,9 +89,9 @@ optional arguments:
 		<pre class="sh sh_python">2+2*2 -> 6
 (2+2)*2 -> 8
 8/5 -> 1.6 
-17 % 3 -> 2 #reminder of division</pre>
+17 % 3 -> 2 #remainder of division</pre>
 		<h2>Working with strings</h2>
-		<p>ObjectPath provides some tools to manipulate strings. Strings are written as:</p>
+		<p>ObjectPath provides a range of tools to manipulate strings. Strings are written as:</p>
 		<pre class="sh_python">"text" or 'text'</pre>
 		<p>Strings can be concatenated by <code>+</code> sign:</p>
 		<pre class="sh_python">"Hello "+"World!" -> "Hello World!"</pre>
