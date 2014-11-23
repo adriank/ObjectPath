@@ -76,7 +76,7 @@ optional arguments:
 			<i class="fa fa-warning fa-3x pull-left"></i><strong>Heads up!</strong> For a limited set of ObjectPath functionality you can open developer console of your choice (right click here and click on <em>inspect element</em> and then on <em>console</em>) and use ObjectPath JavaScript implementation to test the language without installing it on your box. Just write:
 			<pre>op.exe("2+2")</pre>
 		</div>
-		
+		<h2>Basics</h2>
 		<h2>Basic arithmetics</h2>
 		<p>ObjectPath supports common arithmetics:</p>
 		<ul>
@@ -87,8 +87,11 @@ optional arguments:
 		</ul>
 		<pre class="sh sh_python">2+2*2 -> 6
 (2+2)*2 -> 8</pre>
-		
-
+		<h2>Working with strings</h2>
+		<p>ObjectPath provides some tools to manipulate strings. Strings are written as:</p>
+		<pre class="sh sh_python">"text" or 'text'</pre>
+		<p>Strings can be concatenated by <code>+</code> operator:</p>
+		<pre class="sh sh_python">"Hello "+"World!" -> "Hello World!"</pre>
 		</div>
 
 		<script src="//code.jquery.com/jquery.min.js"></script>
@@ -133,7 +136,8 @@ object={
 ]
 }
 }
-		op=new ObjectPath(object)</script>
+		op=new ObjectPath(object)
+		op.exe=op.execute</script>
 
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
