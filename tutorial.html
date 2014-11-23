@@ -95,23 +95,23 @@ optional arguments:
 		<pre class="sh_python">"text" or 'text'</pre>
 		<p>Strings can be concatenated by <code>+</code> sign:</p>
 		<pre class="sh_python">"Hello "+"World!" -> "Hello World!"</pre>
-		<p>Numbers can be concatenated with strings if string is on the left of + sign</p>
+		<p>Numbers can be concatenated with strings if string is on the left-hand side of + sign</p>
 		<pre class="sh_python">"Hello "+2+"!" -> "Hello World!"
-2+" Hello!" -> error (in JS you'll see NaN which is a bug)
+2+" Hello!" -> error (in JS you'll see NaN, which is a bug)
 ""+2+" Hello!" -> "2 Hello!"</pre>
-		<p>In Python version it's also possible to do some crazy things like:</p>
+		<p>In the Python version of ObjectPath it's also possible to do some crazy things like:</p>
 		<pre class="sh_python">3*"a" -> "aaa"
 "Hello %s"%"World!" -> "Hello World!"</pre>
-		<p>To access specific parts of the string use the following:</p>
-		<pre class="sh_python"># To get first character of the string
-"Hello World!"[0] -> "H" # We're counting letters from 0!
-# To get the last character of the string:
+		<p>To access specific parts of the string, use the following:</p>
+		<pre class="sh_python"># To get the first character of the string
+"Hello World!"[0] -> "H" # We count letters starting from 0!
+# To get the last character of a string:
 "Hello World!"[-1] -> "!"
-# To get substring "Word"
+# To get the substring "Word"
 slice("Hello World!",[6,11]) -> "World"
-# or in Javascript version:
+# or in the Javascript version:
 "Hello World!"[6:11] -> "World"</pre>
-			<p>You also have vast of functions that do something with strings in your arsenal (currently available only in Python version):</p>
+			<p>ObjectPath also offers a vast range of functions that can do the following tricks on strings (currently available only in the Python version):</p>
 			<pre class="sh_python">len("Hello") -> 5
 upper("Hello") -> "HELLO"
 lower("Hello") -> "hello"
