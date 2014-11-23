@@ -77,6 +77,7 @@ optional arguments:
 			<pre>op.exe("2+2")</pre>
 		</div>
 		<h2>Basics</h2>
+		<p>Before getting dirty, here are some language basics. Even if you're experienced programmer read it through since some sugar can be found here.</p>
 		<h2>Basic arithmetics</h2>
 		<p>ObjectPath supports common arithmetics:</p>
 		<ul>
@@ -86,7 +87,9 @@ optional arguments:
 			<li>division (/)</li>
 		</ul>
 		<pre class="sh sh_python">2+2*2 -> 6
-(2+2)*2 -> 8</pre>
+(2+2)*2 -> 8
+8/5 -> 1.6 
+17 % 3 -> 2 #reminder of division</pre>
 		<h2>Working with strings</h2>
 		<p>ObjectPath provides some tools to manipulate strings. Strings are written as:</p>
 		<pre class="sh sh_python">"text" or 'text'</pre>
@@ -96,8 +99,10 @@ optional arguments:
 		<pre class="sh sh_python">"Hello "+2+"!" -> "Hello World!"
 2+" Hello!" -> error (in JS you'll see NaN which is a bug)
 ""+2+" Hello!" -> "2 Hello!"</pre>
-		<p></p>
-
+		<p>In Python version it's also possible to do some crazy things like:</p>
+		<pre class="sh sh_python">3+"a" -> "aaa"
+"Hello %s"%"World!" -> "Hello World!"</pre>
+		
 		</div>
 
 		<script src="//code.jquery.com/jquery.min.js"></script>
