@@ -100,9 +100,29 @@ optional arguments:
 2+" Hello!" -> error (in JS you'll see NaN which is a bug)
 ""+2+" Hello!" -> "2 Hello!"</pre>
 		<p>In Python version it's also possible to do some crazy things like:</p>
-		<pre class="sh sh_python">3+"a" -> "aaa"
+		<pre class="sh sh_python">3*"a" -> "aaa"
 "Hello %s"%"World!" -> "Hello World!"</pre>
-		
+		<p>To access specific parts of the string use the following:</p>
+		<pre class="sh sh_python"># To get first character of the string
+"Hello World!"[0] -> "H" # We're counting letters from 0!
+# To get the last character of the string:
+"Hello World!"[-1] -> "!"
+# To get substring "Word"
+slice("Hello World!",[6,11]) -> "World"
+# or in Javascript version:
+"Hello World!"[6:11] -> "World"</pre>
+			<p>You also have vast of functions that do something with strings in your arsenal (currently available only in Python version):</p>
+			<pre class="sh sh_python">len("Hello") -> 5
+upper("Hello") -> "HELLO"
+lower("Hello") -> "hello"
+title("Hello world") -> "Hello World"
+capitalize("hello world") -> "Hello world"
+split("hello world"," ") -> ["Hello","world"]
+replace("hello world!","world","moon") -> "Hello moon!"
+# replace can also take advantage of regular expressions
+replace("hello world!","l[^l]","r") -> "Helr worr!"</pre>
+			<p>Functions can be nested:</p>
+			<pre class="sh sh_python">upper(replace("hello world!","world","moon")) -> "HELLO MOON!"</pre>
 		</div>
 
 		<script src="//code.jquery.com/jquery.min.js"></script>
