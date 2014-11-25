@@ -79,15 +79,6 @@
 				"isbn": "0-395-19395-8",
 				"price": 22.99
 			}
-		],
-		"bicycle": {
-			"color": "red",
-			"price": 19.95
-		},
-		"k":[
-			{
-				"_id":4
-			}
 		]
 	}
 }</pre>
@@ -165,6 +156,13 @@ replace("hello world!","world","moon") -> "Hello moon!"
 replace("hello world!","l[^l]","r") -> "Helr worr!"</pre>
 			<p>Functions can be nested:</p>
 			<pre class="sh_python">upper(replace("hello world!","world","moon")) -> "HELLO MOON!"</pre>
+
+			<h2>Simple queries</h2>
+			<p>Putting the boring stuff aside we fast forward to queries. Simple queries starts with <code>$</code> character. It indicates the root of the document. To show the whole document write:</p>
+			<pre class="sh_python">$</pre>
+			<p>ObjectPath is like paths to files in your operating system. <code>.</code> means we want to go one level deeper in JSON document (equivalent to / on Unix/Mac or \ on Windows in the paths to files).</p>
+			
+			<!--<p><code>*</code> is a wildcard, meaning that we want to get all things that are found there. <code>$.*</code></p>-->
 		</div>
 
 		<script src="//code.jquery.com/jquery.min.js"></script>
@@ -215,7 +213,7 @@ object={
 }
 }
 		op=new ObjectPath(object)
-		op.exe=op.execute</script>
+		op.exe=function(q){JSON.stringify(op.execute(q))}</script>
 
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
