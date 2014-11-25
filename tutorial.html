@@ -161,7 +161,20 @@ replace("hello world!","l[^l]","r") -> "Helr worr!"</pre>
 			<p>Putting the boring stuff aside we fast forward to queries. Simple queries starts with <code>$</code> character. It indicates the root of the document. To show the whole document write:</p>
 			<pre class="sh_python">$</pre>
 			<p>ObjectPath is like paths to files in your operating system. <code>.</code> means we want to go one level deeper in JSON document (equivalent to / on Unix/Mac or \ on Windows in the paths to files).</p>
-			
+			<pre class="sh_python">$.store.book</pre>
+			<p>This returns an array. You can select a specific element from it, filter etc:</p>
+			<pre class="sh_python">$.store.book[1] # get the second book
+$.store.book[-1] # get the last book
+$.store.book[2:4] # get the 3rd and 4th book</pre>
+			<p>We can also get specific elements based on their properties:</p>
+			<pre class="sh_python">$.store.book[@.price is 0.99] # get books of price 0.99</pre>
+			<p><code>@</code> points to the current element from books. In other words, <code>[</code> iterates over the array of books and for each element checks if condition inside square parenthesis is met. <code>@</code> tells ObjectPath that <code>price</code> is an property of each book, not a string.</p>
+			<p>To make it even more interesting we can filter it even further by getting only the specific fields from results:</p>
+			<pre class="sh_python">$.store.book[@.price is 0.99].(price, isbn) # WARNING! works only in Python verion! filter attributes from the result</pre>
+			<p>When we don't know where in the document are prices, we can search for all of them by:</p>
+			<pre class="sh_python">$..price # searches for any attribute named price in the document
+$..price[@ > 0.99] # returns all prices greater than 0.99</pre>
+			<p>In the last example we used <code>@</code> to indicate current element of an array of prices.</p>
 			<!--<p><code>*</code> is a wildcard, meaning that we want to get all things that are found there. <code>$.*</code></p>-->
 		</div>
 
