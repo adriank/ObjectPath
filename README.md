@@ -34,13 +34,6 @@ Documentation
 
 [ObjectPath Reference](http://objectpath.org/reference.html)
 
-What's in this repo?
---------------------
-
-ObjectPathPY - Python implementation of ObjectPath, used in production for over two years without problems. Use objectpath.py file as a example of usage.
-
-ObjectPathJS - beta version of Javascript implementation. Many tests passed, {} and functions are not implemented yet. Javascript implementation has the very same API as the Python version.
-
 Command line usage
 -----
 
