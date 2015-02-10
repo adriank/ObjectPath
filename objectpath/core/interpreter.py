@@ -446,6 +446,13 @@ class Tree(Debugger):
 						return sum(args)/float(len(args))
 				elif fnName=="round":
 					return round(*args)
+
+				#wildcards
+				elif fnName == "match":
+					if type(args[1]) is unicode:
+						args[1] = args[1].encode("utf8")
+					return re.findall(str(py2JSON(args[0])), str(py2JSON(args[1])))
+
 				# casting
 				elif fnName=="int":
 					return int(args[0])
