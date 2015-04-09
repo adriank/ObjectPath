@@ -84,4 +84,4 @@ Using ObjectPath language in your project does not mean that your project is a d
 
 AGPL v3 license has been chosen to ensure language consistency and provide a way to finance its development.
 
-**If AGPL v3 is too restrictive for you, please consider buying a commercial licenses provided by Asyncode. This is the preferred way of supporting this project financially.**
+**AGPL is choosen to make access to the code equal for any party. If you make changes to the library, just give changes back to the community so that everyone can benefit.**
