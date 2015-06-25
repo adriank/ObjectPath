@@ -11,7 +11,8 @@ try:
 		"UTC":pytz.utc
 	}
 except ImportError:
-	print("WARNING! pytz is not installed. Localized times are not supported.")
+	if os.isatty(sys.stdin.fileno()) and sys.stdout.isatty():
+		print("WARNING! pytz is not installed. Localized times are not supported.")
 
 HOURS_IN_DAY=24
 
