@@ -25,15 +25,15 @@ try: ITER_TYPES+=[map, filter]
 except NameError: pass
 
 class ProgrammingError(Exception):
-	pass
+    pass
 
 class ExecutionError(Exception):
-	pass
+    pass
 
 PY_TYPES_MAP={
-	"int":"number",
-	"float":"number",
-	"str":"string",
-	"dict":"object",
-	"list":"array"
+    "int":"number",
+    "float":"number",
+    "str":"string",
+    "dict":"object",
+    "list":"array"
 }

@@ -15,49 +15,49 @@ escapeDict={"'":"&apos;","\"":"&quot;"}
 
 # islice=islice is an optimization
 def skip(iterable, n, islice=islice):
-	try:
-		return next(islice(iterable, n, None))
-	except StopIteration:
-		return None
-		# raise IndexError("generator index out of range")
+    try:
+        return next(islice(iterable, n, None))
+    except StopIteration:
+        return None
+        # raise IndexError("generator index out of range")
 
 def filter_dict(iterable, keys):
-	"""
-	filters keys of each element of iterable
-	$.(a,b) returns all objects from array that have at least one of the keys:
-	[1,"aa",{"a":2,"c":3},{"c":3},{"a":1,"b":2}].(a,b) -> [{"a":2},{"a":1,"b":2}]
-	"""
-	if type(keys) is not list:
-		keys=[keys]
-	for i in iterable:
-		try:
-			d={}
-			for a in keys:
-				try:
-					d[a]=i[a]
-				except KeyError:
-					pass
-			if d != {}:
-				yield d
-		except Exception:
-			pass
+    """
+    filters keys of each element of iterable
+    $.(a,b) returns all objects from array that have at least one of the keys:
+    [1,"aa",{"a":2,"c":3},{"c":3},{"a":1,"b":2}].(a,b) -> [{"a":2},{"a":1,"b":2}]
+    """
+    if type(keys) is not list:
+        keys=[keys]
+    for i in iterable:
+        try:
+            d={}
+            for a in keys:
+                try:
+                    d[a]=i[a]
+                except KeyError:
+                    pass
+            if d != {}:
+                yield d
+        except Exception:
+            pass
 
 def flatten(fragment,skip=False):
-	def rec(frg):
-		typefrg=type(frg)
-		if typefrg in ITER_TYPES:
-			for i in frg:
-				for j in rec(i):
-					yield j
-		elif typefrg is dict:
-			yield frg
-			for i in frg.items():
-				for j in rec(i[1]):
-					yield j
+    def rec(frg):
+        typefrg=type(frg)
+        if typefrg in ITER_TYPES:
+            for i in frg:
+                for j in rec(i):
+                    yield j
+        elif typefrg is dict:
+            yield frg
+            for i in frg.items():
+                for j in rec(i[1]):
+                    yield j
 
-	g=rec(fragment)
-	if skip:
-		for i in xrange(skip):
-			g.next()
-	for i in g:
-		yield i
+    g=rec(fragment)
+    if skip:
+        for i in xrange(skip):
+            g.next()
+    for i in g:
+        yield i
