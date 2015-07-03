@@ -32,6 +32,7 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules"
     ],
     zip_safe=True,
+    install_requires = ["pytz >= 2015.4"],
     entry_points = {
         'console_scripts': [
             'objectpath = objectpath.shell:main'
