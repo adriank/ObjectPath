@@ -5,13 +5,15 @@
 # Copyright (C) 2008-2010 Adrian Kalbarczyk
 
 import datetime
+import sys, os
 try:
 	import pytz
 	TIMEZONE_CACHE={
 		"UTC":pytz.utc
 	}
 except ImportError:
-	print("WARNING! pytz is not installed. Localized times are not supported.")
+	if os.isatty(sys.stdin.fileno()) and sys.stdout.isatty():
+		print("WARNING! pytz is not installed. Localized times are not supported.")
 
 HOURS_IN_DAY=24
 
