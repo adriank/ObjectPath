@@ -2,7 +2,7 @@ import os
 from setuptools import setup
 
 def read(*rnames):
-    filename = os.path.join(os_path.dirname(__file__), *rnames)
+    filename = os.path.join(os.path.dirname(__file__), *rnames)
     with open(filename) as f:
         return f.read()
 
