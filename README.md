@@ -7,6 +7,12 @@ ObjectPath
 [![Code Health](https://landscape.io/github/adriank/ObjectPath/master/landscape.png)](https://landscape.io/github/adriank/ObjectPath/master)
 [![Coverage Status](https://coveralls.io/repos/adriank/ObjectPath/badge.png?branch=master)](https://coveralls.io/r/adriank/ObjectPath?branch=master)
 
+We are looking for a maintainer!
+============
+
+Since I'm recently involved in building startup, I'm not able to manage development of ObjectPath in a pace that the community requires. Therefore I'm looking for a person who would help me with maintaining this project especially with tasks of releasing new versions and documenting the language functionality. 
+
+**If you are interested in taking ObjectPath to the next stage, drop me an e-mail!**
 
 The agile NoSQL query language for semi-structured data
 -----------------------------------------------
