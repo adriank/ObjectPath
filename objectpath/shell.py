@@ -85,7 +85,7 @@ def main():
 			sortby = 'cumulative'
 			ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
 			ps.print_stats()
-			print s.getvalue()
+			print (s.getvalue())
 		return
 
 	try:
@@ -112,7 +112,7 @@ def main():
 				print(printJSON(r,length=limitResult))
 				if args.profile:
 					h = hpy()
-					print h.heap()
+					print (h.heap())
 			except Exception as e:
 				print(e)
 	except KeyboardInterrupt:
