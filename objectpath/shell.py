@@ -76,7 +76,7 @@ def main():
 		except Exception as e:
 			print(e.__class__.__name__+": "+str(e))
 			exit(1)
-		if type(ret) in ITER_TYPES:
+		if isinstance(ret, ITER_TYPES):
 			ret=list(ret)
 		print(json.dumps(ret))
 		if args.profile:
@@ -105,7 +105,7 @@ def main():
 
 				# python 3 raises error here - unicode is not a proper type there
 				try:
-					if type(r) is unicode:
+					if isinstance(r, unicode):
 						r=r.encode("utf8")
 				except NameError:
 					pass

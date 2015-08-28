@@ -41,12 +41,12 @@ def py2JSON(o):
 		return 'false'
 	if o is None:
 		return 'null'
-	if type(o) in NUM_TYPES:
+	if isinstance(o, tuple(NUM_TYPES)):
 		return o
 	# TODO - check if that is correct
-	if type(o) is tuple:
+	if isinstance(o, tuple):
 		return list(o)
-	elif type(o) in ITER_TYPES+[list,str]:
+	elif isinstance(o, tuple(ITER_TYPES+[list,str])):
 		return o
 	try:
 		return str(o)
@@ -79,7 +79,7 @@ def printJSON(o, length=5,depth=5):
 			ret.append(s)
 
 	def rec(o):
-		if type(o) in ITER_TYPES:
+		if isinstance(o, tuple(ITER_TYPES)):
 			o=list(o)
 			if currDepth[0]>=depth:
 				out("<array of "+str(len(o))+" items>")
@@ -106,7 +106,7 @@ def printJSON(o, length=5,depth=5):
 					minus()
 			out("]")
 
-		elif type(o) is dict:
+		elif isinstance(o, dict):
 			currDepth[0]+=1
 			if currDepth[0]>depth:
 				out("{...}")
@@ -127,11 +127,11 @@ def printJSON(o, length=5,depth=5):
 					out("\n")
 			out("}")
 		else:
-			if type(o) in NUM_TYPES:
+			if isinstance(o, tuple(NUM_TYPES)):
 				out(const(o))
 			elif o in [None, False, True]:
 				out(const(py2JSON(o)))
-			elif type(o) in STR_TYPES:
+			elif isinstance(o, STR_TYPES):
 				out(string('"'+o+'"'))
 			else:
 				out(string(o))

@@ -21,8 +21,9 @@ except NameError: pass
 
 ITER_TYPES=[list,generator,chain]
 
-try: ITER_TYPES+=[map, filter]
-except NameError: pass
+# map and filter are build in functions not types. The returned type is always list
+#try: ITER_TYPES+=[map, filter]
+#except NameError: pass
 
 class ProgrammingError(Exception):
 	pass
