@@ -41,7 +41,7 @@ class Tree(Debugger):
 				try:
 					return obj.__getattribute__(attr)
 				except AttributeError:
-					if D: self.end(color.op(".")+" returning '%s'", color.bold(obj))
+					if self.D: self.end(color.op(".")+" returning '%s'", color.bold(obj))
 					return obj
 			self.object_getter = default_getter
 
