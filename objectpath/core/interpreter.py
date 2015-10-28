@@ -24,6 +24,7 @@ class Tree(Debugger):
 		if not cfg:
 			cfg={}
 		self.D=cfg.get("debug",False)
+		self.setObjectGetter(cfg.get("object_getter", None))
 		self.setData(obj)
 		self.current=self.node=None
 		if self.D: super(Tree, self).__init__()
@@ -31,6 +32,18 @@ class Tree(Debugger):
 	def setData(self,obj):
 		if type(obj) in ITER_TYPES+[dict]:
 			self.data=obj
+
+	def setObjectGetter(self, object_getter_cb):
+		if callable(object_getter_cb):
+			self.object_getter = object_getter_cb
+		else:
+			def default_getter(obj, attr):
+				try:
+					return obj.__getattribute__(attr)
+				except AttributeError:
+					if self.D: self.end(color.op(".")+" returning '%s'", color.bold(obj))
+					return obj
+			self.object_getter = default_getter
 
 	def compile(self,expr):
 		if expr in EXPR_CACHE:
@@ -278,10 +291,7 @@ class Tree(Debugger):
 					return fst.get(snd)
 				except Exception:
 					if isinstance(fst,object):
-						try:
-							return fst.__getattribute__(snd)
-						except Exception:
-							pass
+						return self.object_getter(fst, snd)
 					if D: self.end(color.op(".")+" returning '%s'", color.bold(fst))
 					return fst
 			elif op=="..":
