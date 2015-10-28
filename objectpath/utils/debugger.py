@@ -71,11 +71,11 @@ class Debugger(object):
 	def consolelog(self, lvl, s):
 		def f(x):
 			try:
-				if type(x) is unicode:
+				if isinstance(x, unicode):
 					x=x.encode("utf8")
 			except NameError:
 				pass
-			if self.CUT_AFTER and type(x) is dict:
+			if self.CUT_AFTER and isinstance(x, dict):
 				s=[]
 				for i in x.items():
 					s.append("'%s': %s"%(i[0],repr(i[1])[:self.CUT_AFTER]))

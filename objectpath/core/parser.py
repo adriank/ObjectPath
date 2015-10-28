@@ -70,9 +70,9 @@ class symbol_base(object):
 		ret_append=ret.append
 		L=(dict,tuple,list)
 		for i in filter(None, [self.fst, self.snd, self.third]):
-			if type(i) is str:
+			if isinstance(i, str):
 				ret_append(i)
-			elif type(i) in L:
+			elif isinstance(i, L):
 				t=[]
 				t_append=t.append
 				if self.id == "{":
@@ -92,7 +92,7 @@ class symbol_base(object):
 				# ret_append(t)
 				# return (self.id,ret[1:])
 			else:
-				if type(self.fst.value) in NUM_TYPES and self.snd is None:
+				if isinstance(self.fst.value, tuple(NUM_TYPES)) and self.snd is None:
 					if self.id=="-":
 						return -self.fst.value
 					if self.id=="+":
@@ -450,9 +450,9 @@ def expression(rbp=0):
 	return left
 
 def parse(expr, D=False):
-	if sys.version_info.major < 3 and type(expr) is unicode:
+	if sys.version_info.major < 3 and isinstance(expr, unicode):
 		expr=expr.encode("utf8")
-	if type(expr) is not str:
+	if not isinstance(expr, str):
 		return expr
 	expr=expr.strip()
 	global token, nextToken

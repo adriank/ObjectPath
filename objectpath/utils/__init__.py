@@ -27,7 +27,7 @@ def filter_dict(iterable, keys):
 	$.(a,b) returns all objects from array that have at least one of the keys:
 	[1,"aa",{"a":2,"c":3},{"c":3},{"a":1,"b":2}].(a,b) -> [{"a":2},{"a":1,"b":2}]
 	"""
-	if type(keys) is not list:
+	if not isinstance(keys, list):
 		keys=[keys]
 	for i in iterable:
 		try:
@@ -44,12 +44,11 @@ def filter_dict(iterable, keys):
 
 def flatten(fragment,skip=False):
 	def rec(frg):
-		typefrg=type(frg)
-		if typefrg in ITER_TYPES:
+		if isinstance(frg, tuple(ITER_TYPES)):
 			for i in frg:
 				for j in rec(i):
 					yield j
-		elif typefrg is dict:
+		elif isinstance(frg, dict):
 			yield frg
 			for i in frg.items():
 				for j in rec(i[1]):

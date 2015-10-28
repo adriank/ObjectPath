@@ -20,17 +20,41 @@ EXPR_CACHE={}
 ObjectId=generateID=calendar=escape=escapeDict=unescape=unescapeDict=0
 
 class Tree(Debugger):
+	_REGISTERED_FUNCTIONS = {}
+	@classmethod
+	def register_function(cls, name, func):
+		"""
+		This method is used to add custom functions not catered for by default
+		:param str name: The name by which the function will be referred to in the expression
+		:param callable func: The function
+		:return:
+		"""
+		cls._REGISTERED_FUNCTIONS[name] = func
+
 	def __init__(self,obj,cfg=None):
 		if not cfg:
 			cfg={}
 		self.D=cfg.get("debug",False)
+		self.setObjectGetter(cfg.get("object_getter", None))
 		self.setData(obj)
 		self.current=self.node=None
 		if self.D: super(Tree, self).__init__()
 
 	def setData(self,obj):
-		if type(obj) in ITER_TYPES+[dict]:
+		if isinstance(obj, tuple(ITER_TYPES+[dict])):
 			self.data=obj
+
+	def setObjectGetter(self, object_getter_cb):
+		if callable(object_getter_cb):
+			self.object_getter = object_getter_cb
+		else:
+			def default_getter(obj, attr):
+				try:
+					return obj.__getattribute__(attr)
+				except AttributeError:
+					if self.D: self.end(color.op(".")+" returning '%s'", color.bold(obj))
+					return obj
+			self.object_getter = default_getter
 
 	def compile(self,expr):
 		if expr in EXPR_CACHE:
@@ -55,11 +79,11 @@ class Tree(Debugger):
 			"""
 			if D: self.start("executing node '%s'", node)
 			type_node=type(node)
-			if node is None or type_node in TYPES:
+			if node is None or isinstance(node, tuple(TYPES)):
 				return node
-			elif type_node is list:
+			elif isinstance(node, list):
 				return (exe(n) for n in node)
-			elif type_node is dict:
+			elif isinstance(node, dict):
 				ret={}
 				for i in node.items():
 					ret[exe(i[0])]=exe(i[1])
@@ -77,41 +101,39 @@ class Tree(Debugger):
 					snd=exe(node[2])
 					if None in (fst,snd):
 						return fst or snd
-					typefst=type(fst)
-					typesnd=type(snd)
-					if typefst is dict:
+					if isinstance(fst, dict):
 						try:
 							fst.update(snd)
 						except Exception:
-							if type(snd) is not dict:
+							if not isinstance(snd, dict):
 								raise ProgrammingError("Can't add value of type %s to %s" % (color.bold(PY_TYPES_MAP.get(type(snd).__name__, type(snd).__name__)), color.bold("object")))
 						return fst
-					if typefst is list and typesnd is list:
+					if isinstance(fst, list) and isinstance(snd, list):
 						if D: self.debug("both sides are lists, returning '%s'",fst+snd)
 						return fst+snd
-					if typefst in ITER_TYPES or typesnd in ITER_TYPES:
-						if typefst not in ITER_TYPES:
+					if isinstance(fst, tuple(ITER_TYPES)) or isinstance(snd, tuple(ITER_TYPES)):
+						if not isinstance(fst, tuple(ITER_TYPES)):
 							fst=[fst]
-						elif typesnd not in ITER_TYPES:
+						elif not isinstance(snd, tuple(ITER_TYPES)):
 							snd=[snd]
 						if D: self.debug("at least one side is generator and other is iterable, returning chain")
 						return chain(fst,snd)
-					if typefst in NUM_TYPES:
+					if isinstance(fst, tuple(NUM_TYPES)):
 						try:
 							return fst+snd
 						except Exception:
 							return fst+float(snd)
-					if typefst in STR_TYPES or typesnd in STR_TYPES:
+					if isinstance(fst, tuple(STR_TYPES)) or isinstance(snd, tuple(STR_TYPES)):
 						if D: self.info("doing string comparison '%s' is '%s'",fst,snd)
 						if sys.version_info.major < 3:
-							if typefst is unicode:
+							if isinstance(fst, unicode):
 								fst=fst.encode("utf-8")
-							if typesnd is unicode:
+							if isinstance(snd, unicode):
 								snd=snd.encode("utf-8")
 						return str(fst)+str(snd)
 					try:
 						timeType=timeutils.datetime.time
-						if typefst is timeType and typesnd is timeType:
+						if isinstance(fst, timeType) and isinstance(snd, timeType):
 							return timeutils.addTimes(fst,snd)
 					except Exception:
 						pass
@@ -126,10 +148,8 @@ class Tree(Debugger):
 					try:
 						return fst-snd
 					except Exception:
-						typefst=type(fst)
-						typesnd=type(snd)
 						timeType=timeutils.datetime.time
-						if typefst is timeType and typesnd is timeType:
+						if isinstance(fst, timeType) and isinstance(snd, timeType):
 							return timeutils.subTimes(fst,snd)
 				else:
 					return - exe(node[1])
@@ -168,14 +188,14 @@ class Tree(Debugger):
 				fst=exe(node[1])
 				snd=exe(node[2])
 				if D: self.debug("doing '%s' in '%s'",node[1],node[2])
-				if type(fst) in ITER_TYPES and type(snd) in ITER_TYPES:
+				if isinstance(fst, tuple(ITER_TYPES)) and isinstance(snd, tuple(ITER_TYPES)):
 					return any(x in max(fst,snd,key=len) for x in min(fst,snd,key=len))
 				return exe(node[1]) in exe(node[2])
 			elif op=="not in":
 				fst=exe(node[1])
 				snd=exe(node[2])
 				if D: self.debug("doing '%s' not in '%s'",node[1],node[2])
-				if type(fst) in ITER_TYPES and type(snd) in ITER_TYPES:
+				if isinstance(fst, tuple(ITER_TYPES)) and isinstance(snd, tuple(ITER_TYPES)):
 					return not any(x in max(fst,snd,key=len) for x in min(fst,snd,key=len))
 				return exe(node[1]) not in exe(node[2])
 			elif op in ("is","is not"):
@@ -195,22 +215,20 @@ class Tree(Debugger):
 				# this doesn't work for 3 is not '3'
 				# if op == "is not" and fst != snd:
 				# 	return True
-				typefst=type(fst)
-				typesnd=type(snd)
 				if D: self.debug("type fst: '%s', type snd: '%s'",typefst,typesnd)
-				if typefst in STR_TYPES:
+				if isinstance(fst, tuple(STR_TYPES)):
 					if D: self.info("doing string comparison '\"%s\" is \"%s\"'",fst,snd)
 					ret=fst==str(snd)
-				elif typefst is float:
+				elif isinstance(fst, float):
 					if D: self.info("doing float comparison '%s is %s'",fst,snd)
 					ret=abs(fst-float(snd))<EPSILON
-				elif typefst is int:
+				elif isinstance(fst, int):
 					if D: self.info("doing integer comparison '%s is %s'",fst,snd)
 					ret=fst==int(snd)
-				elif typefst is list and typesnd is list:
+				elif isinstance(fst, list) and isinstance(snd, list):
 					if D: self.info("doing array comparison '%s' is '%s'",fst,snd)
 					ret=fst==snd
-				elif typefst is dict and typesnd is dict:
+				elif isinstance(fst, dict) and isinstance(snd, dict):
 					if D: self.info("doing object comparison '%s' is '%s'",fst,snd)
 					ret=fst==snd
 				# else:
@@ -254,34 +272,30 @@ class Tree(Debugger):
 				return node[1]
 			elif op==".":
 				fst=node[1]
-				if type(fst) is tuple:
+				if isinstance(fst, tuple):
 					fst=exe(fst)
-				typefst=type(fst)
 				if D: self.debug(color.op(".")+" left is '%s'", fst)
 				# try:
 				if node[2][0] == "*":
-					if D: self.end(color.op(".")+" returning '%s'", typefst in ITER_TYPES and fst or [fst])
+					if D: self.end(color.op(".")+" returning '%s'", isinstance(fst, tuple(ITER_TYPES)) and fst or [fst])
 					return fst # typefst in ITER_TYPES and fst or [fst]
 				# except:
 				# 	pass
 				snd=exe(node[2])
 				if D: self.debug(color.op(".")+" right is '%s'",snd)
-				if typefst in ITER_TYPES:
+				if isinstance(fst, tuple(ITER_TYPES)):
 					if D: self.debug(color.op(".")+" filtering %s by %s",color.bold(fst),color.bold(snd))
-					if type(snd) in ITER_TYPES:
+					if isinstance(snd, tuple(ITER_TYPES)):
 						return filter_dict(fst, list(snd))
 					else:
 						# if D: self.debug(list(fst))
-						return (e[snd] for e in fst if type(e) is dict and snd in e)
+						return (e[snd] for e in fst if isinstance(e, dict) and snd in e)
 				try:
 					if D: self.end(color.op(".")+" returning '%s'",fst.get(snd))
 					return fst.get(snd)
 				except Exception:
 					if isinstance(fst,object):
-						try:
-							return fst.__getattribute__(snd)
-						except Exception:
-							pass
+						return self.object_getter(fst, snd)
 					if D: self.end(color.op(".")+" returning '%s'", color.bold(fst))
 					return fst
 			elif op=="..":
@@ -292,7 +306,7 @@ class Tree(Debugger):
 				# reduce objects to selected attributes
 				snd=exe(node[2])
 				if D: self.debug(color.op("..")+" finding all %s in %s", color.bold(snd), color.bold(fst))
-				if type(snd) in ITER_TYPES:
+				if isinstance(snd, tuple(ITER_TYPES)):
 					ret=filter_dict(fst, list(snd))
 					if D: self.debug(color.op("..")+" returning %s",color.bold(ret))
 					return ret
@@ -317,7 +331,7 @@ class Tree(Debugger):
 						return fst
 					selector=node[2]
 					if D: self.debug("found '%s' selector. executing on %s", color.bold(selector),color.bold(fst))
-					selectorIsTuple=type(selector) is tuple
+					selectorIsTuple=isinstance(selector, tuple)
 
 					if selectorIsTuple and selector[0] is "[":
 						nodeList=[]
@@ -335,10 +349,10 @@ class Tree(Debugger):
 
 					if selectorIsTuple and selector[0] in SELECTOR_OPS:
 						if D: self.debug("found %s operator in selector", color.bold(selector[0]))
-						if type(fst) is dict:
+						if isinstance(fst, dict):
 							fst=[fst]
 						# TODO move it to tree building phase
-						if type(selector[1]) is tuple and selector[1][0]=="name":
+						if isinstance(selector[1], tuple) and selector[1][0]=="name":
 							selector=(selector[0],selector[1][1],selector[2])
 						selector0=selector[0]
 						selector1=selector[1]
@@ -350,7 +364,7 @@ class Tree(Debugger):
 								self.current=i
 								if selector0=="fn":
 									yield exe(selector)
-								elif type(selector1) in STR_TYPES:
+								elif isinstance(selector1, tuple(STR_TYPES)):
 									try:
 										if exe((selector0,i[selector1],selector2)):
 											yield i
@@ -372,14 +386,12 @@ class Tree(Debugger):
 						return exeSelector(fst)
 					self.current=fst
 					snd=exe(node[2])
-					typefst=type(fst)
-					if typefst in [tuple]+ITER_TYPES+STR_TYPES:
-						typesnd=type(snd)
+					if isinstance(fst, tuple([tuple]+ITER_TYPES+STR_TYPES)):
 						# nodes[N]
-						if typesnd in NUM_TYPES or typesnd is str and snd.isdigit():
+						if isinstance(snd, tuple(NUM_TYPES)) or isinstance(snd, str) and snd.isdigit():
 							n=int(snd)
 							if D: self.info("getting %sth element from '%s'", color.bold(n), color.bold(fst))
-							if typefst in (generator,chain):
+							if isinstance(fst, (generator,chain)):
 								if n>0:
 									return skip(fst,n)
 								elif n==0:
@@ -392,7 +404,7 @@ class Tree(Debugger):
 								except (IndexError, TypeError):
 									return None
 						# $.*['string']==$.string
-						if type(snd) in STR_TYPES:
+						if isinstance(snd, tuple(STR_TYPES)):
 							return exe((".",fst,snd))
 						else:
 							# $.*[@.string] - bad syntax, but allowed
@@ -417,31 +429,31 @@ class Tree(Debugger):
 				# arithmetic
 				if fnName=="sum":
 					args=args[0]
-					if type(args) in NUM_TYPES:
+					if isinstance(args, tuple(NUM_TYPES)):
 						return args
-					return sum((x for x in args if type(x) in NUM_TYPES))
+					return sum((x for x in args if isinstance(x, tuple(NUM_TYPES))))
 				elif fnName=="max":
 					args=args[0]
-					if type(args) in NUM_TYPES:
+					if isinstance(args, tuple(NUM_TYPES)):
 						return args
-					return max((x for x in args if type(x) in NUM_TYPES))
+					return max((x for x in args if isinstance(x, tuple(NUM_TYPES))))
 				elif fnName=="min":
 					args=args[0]
-					if type(args) in NUM_TYPES:
+					if isinstance(args, tuple(NUM_TYPES)):
 						return args
-					return min((x for x in args if type(x) in NUM_TYPES))
+					return min((x for x in args if isinstance(x, tuple(NUM_TYPES))))
 				elif fnName=="avg":
 					args=args[0]
-					if type(args) in NUM_TYPES:
+					if isinstance(args, tuple(NUM_TYPES)):
 						return args
-					if type(args) not in ITER_TYPES:
+					if not isinstance(args, tuple(ITER_TYPES)):
 						raise Exception("Argument for avg() is not an array")
 					else:
 						args=list(args)
 					try:
 						return sum(args)/float(len(args))
 					except TypeError:
-						args=[x for x in args if type(x) in NUM_TYPES]
+						args=[x for x in args if isinstance(x, tuple(NUM_TYPES))]
 						self.warning("Some items in array were ommited")
 						return sum(args)/float(len(args))
 				elif fnName=="round":
@@ -458,12 +470,11 @@ class Tree(Debugger):
 						a=args[0]
 					except IndexError:
 						return []
-					targs=type(a)
-					if targs is timeutils.datetime.datetime:
+					if isinstance(a, timeutils.datetime.datetime):
 						return timeutils.date2list(a)+timeutils.time2list(a)
-					if targs is timeutils.datetime.date:
+					if isinstance(a, timeutils.datetime.date):
 						return timeutils.date2list(a)
-					if targs is timeutils.datetime.time:
+					if isinstance(a, timeutils.datetime.time):
 						return timeutils.time2list(a)
 					return list(a)
 				# string
@@ -478,11 +489,11 @@ class Tree(Debugger):
 				elif fnName=="split":
 					return args[0].split(*args[1:])
 				elif fnName=="slice":
-					if args and type(args[1]) not in ITER_TYPES:
+					if args and not isinstance(args[1], tuple(ITER_TYPES)):
 						raise ExecutionError("Wrong usage of slice(STRING, ARRAY). Second argument is not an array but %s."%color.bold(type(args[1]).__name__))
 					try:
 						pos=list(args[1])
-						if type(pos[0]) in ITER_TYPES:
+						if isinstance(pos[0], tuple(ITER_TYPES)):
 							if D: self.debug("run slice() for a list of slicers")
 							return (args[0][x[0]:x[1]] for x in pos)
 						return args[0][pos[0]:pos[1]]
@@ -500,7 +511,7 @@ class Tree(Debugger):
 						from objectpath.utils import unescape, unescapeDict
 					return unescape(args[0],unescapeDict)
 				elif fnName=="replace":
-					if sys.version_info.major < 3 and type(args[0]) is unicode:
+					if sys.version_info.major < 3 and isinstance(args[0], unicode):
 						args[0]=args[0].encode("utf8")
 					return str.replace(args[0],args[1],args[2])
 				# TODO this should be supported by /regex/
@@ -531,7 +542,7 @@ class Tree(Debugger):
 					args=args[0]
 					if args in (True,False,None):
 						return args
-					if type(args) in ITER_TYPES:
+					if isinstance(args, tuple(ITER_TYPES)):
 						return len(list(args))
 					return len(args)
 				elif fnName=="join":
@@ -573,7 +584,7 @@ class Tree(Debugger):
 						import calendar
 					return int(calendar.timegm(args.timetuple()) * 1000 + args.microsecond / 1000)
 				elif fnName=="localize":
-					if type(args[0]) is timeutils.datetime.datetime:
+					if isinstance(args[0], timeutils.datetime.datetime):
 						return timeutils.UTC2local(*args)
 				# polygons
 				elif fnName=="area":
@@ -589,21 +600,22 @@ class Tree(Debugger):
 					except AttributeError:
 						raise ExecutionError("Argument is not "+color.bold("object")+" but %s in keys()"%color.bold(type(args[0]).__name__))
 				elif fnName=="type":
-					ret=type(args[0])
-					if ret in ITER_TYPES:
+					if isinstance(args[0], tuple(ITER_TYPES)):
 						return "array"
-					if ret is dict:
+					if isinstance(args[0], dict):
 						return "object"
-					return ret.__name__
+					return args[0].__class__.__name__
+				elif fnName in self._REGISTERED_FUNCTIONS:
+					return self._REGISTERED_FUNCTIONS[fnName](*args)
 				else:
 					raise ProgrammingError("Function "+color.bold(fnName)+" does not exist.")
 			else:
 				return node
 
 		D=self.D
-		if type(expr) in STR_TYPES:
+		if isinstance(expr, tuple(STR_TYPES)):
 			tree=self.compile(expr)
-		elif type(expr) not in (tuple,list,dict):
+		elif not isinstance(expr, (tuple,list,dict)):
 			return expr
 		ret=exe(tree)
 		if D: self.end("Tree.execute with: '%s'", ret)
