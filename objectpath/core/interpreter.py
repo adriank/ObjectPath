@@ -20,6 +20,17 @@ EXPR_CACHE={}
 ObjectId=generateID=calendar=escape=escapeDict=unescape=unescapeDict=0
 
 class Tree(Debugger):
+	_REGISTERED_FUNCTIONS = {}
+	@classmethod
+	def register_function(cls, name, func):
+		"""
+		This method is used to add custom functions not catered for by default
+		:param str name: The name by which the function will be referred to in the expression
+		:param callable func: The function
+		:return:
+		"""
+		cls._REGISTERED_FUNCTIONS[name] = func
+
 	def __init__(self,obj,cfg=None):
 		if not cfg:
 			cfg={}
@@ -594,6 +605,8 @@ class Tree(Debugger):
 					if isinstance(args[0], dict):
 						return "object"
 					return args[0].__class__.__name__
+				elif fnName in self._REGISTERED_FUNCTIONS:
+					return self._REGISTERED_FUNCTIONS[fnName](*args)
 				else:
 					raise ProgrammingError("Function "+color.bold(fnName)+" does not exist.")
 			else:
