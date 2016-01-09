@@ -1,3 +1,5 @@
+if (window.location.protocol != "http:")
+    window.location.protocol = "http";
 if (window.location.host !== "objectpath.org")
 	window.location = "//objectpath.org/"+window.location.pathname.split("/").slice(2).join("/")
 $(document).ready(function(){
