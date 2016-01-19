@@ -355,7 +355,7 @@ class Tree(Debugger):
 						return fst
 
 					if selectorIsTuple and selector[0] in SELECTOR_OPS:
-						if D: self.debug("found %s operator in selector", color.bold(selector[0]))
+						if D: self.debug("found %s operator in selector, %s", color.bold(selector[0]), color.bold(selector))
 						if type(fst) is dict:
 							fst=[fst]
 						# TODO move it to tree building phase
@@ -367,18 +367,21 @@ class Tree(Debugger):
 
 						def exeSelector(fst):
 							for i in fst:
-								if D: self.debug("setting self.current to %s", color.bold(i))
+								if D:
+									self.debug("setting self.current to %s", color.bold(i))
+									self.debug("%s %s %s %s", selector0, selector1, selector2, i)
 								self.current=i
 								if selector0=="fn":
 									yield exe(selector)
-								elif type(selector1) in STR_TYPES:
-									try:
-										if exe((selector0,i[selector1],selector2)):
-											yield i
-											if D: self.debug("appended")
-										if D: self.debug("discarded")
-									except Exception as e:
-										if D: self.debug("discarded, Exception: %s",color.bold(e))
+								# elif type(selector1) in STR_TYPES and False:
+								# 	if D: self.debug("found string %s", type(i))
+								# 	try:
+								# 		if exe((selector0,i[selector1],selector2)):
+								# 			yield i
+								# 			if D: self.debug("appended")
+								# 		if D: self.debug("discarded")
+								# 	except Exception as e:
+								# 		if D: self.debug("discarded, Exception: %s",color.bold(e))
 								else:
 									try:
 										# TODO optimize an event when @ is not used. exe(selector1) can be cached
@@ -389,7 +392,7 @@ class Tree(Debugger):
 									except Exception:
 										if D: self.debug("discarded")
 
-						if D: self.debug("returning '%s' objects: '%s'", color.bold(len(nodeList)), color.bold(nodeList))
+						# if D and nodeList: self.debug("returning '%s' objects: '%s'", color.bold(len(nodeList)), color.bold(nodeList))
 						return exeSelector(fst)
 					self.current=fst
 					snd=exe(node[2])

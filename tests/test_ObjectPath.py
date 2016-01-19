@@ -397,6 +397,7 @@ class ObjectPath_Paths(unittest.TestCase):
 		self.assertEqual(execute("$.*['test'].o._id"), 2)
 		self.assertEqual(execute('[1,"aa",{"a":2,"c":3},{"c":3},{"a":1,"b":2}].(a,b)'), [{"a":2},{"a":1,"b":2}])
 		self.assertEqual(execute2("$.store.book.(price,title)[0]"), {"price": 8.95, "title": "Sayings of the Century"})
+		self.assertEqual(len(execute2("$..*['Lord' in @.title]")), 1)
 		self.assertEqual(execute2("$..book.(price,title)"), [{'price': 8.95, 'title': 'Sayings of the Century'}, {'price': 12.99, 'title': 'Sword of Honour'}, {'price': 8.99, 'title': 'Moby Dick'}, {'price': 22.99, 'title': 'The Lord of the Rings'}])
 		self.assertEqual(execute2("sort($..(price,title),'price')"), [{'price': 8.95, 'title': 'Sayings of the Century'}, {'price': 8.99, 'title': 'Moby Dick'}, {'price': 12.99, 'title': 'Sword of Honour'}, {'price': 19.95}, {'price': 22.99, 'title': 'The Lord of the Rings'}])
 		self.assertIsInstance(execute("now().year"),int)
