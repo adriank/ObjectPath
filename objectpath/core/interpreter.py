@@ -77,15 +77,15 @@ class Tree(Debugger):
 				node[0] - operator name
 				node[1:] - params
 			"""
-			if D: self.start("executing node '%s'", node)
-			type_node=type(node)
-			if node is None or type_node in TYPES:
-				return node
 			types = [str, timeutils.datetime.time, timeutils.datetime.date, timeutils.datetime.datetime]
 			try:
 				types+= [unicode]
 			except: 
 				pass
+			if D: self.start("executing node '%s'", node)
+			type_node=type(node)
+			if node is None or type_node in TYPES:
+				return node
 			elif type_node in types:
 				return node
 			elif type_node is list:
