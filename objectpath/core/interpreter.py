@@ -81,6 +81,8 @@ class Tree(Debugger):
 			type_node=type(node)
 			if node is None or type_node in TYPES:
 				return node
+			elif type_node in [str, unicode, timeutils.datetime.time, timeutils.datetime.date, timeutils.datetime.datetime]:
+				return node
 			elif type_node is list:
 				return (exe(n) for n in node)
 			elif type_node is dict:
@@ -164,7 +166,7 @@ class Tree(Debugger):
 			elif op=="/":
 				return exe(node[1]) / float(exe(node[2]))
 			elif op==">":
-				if D: self.debug("%s > %s", node[1],node[2])
+				if D: self.debug("%s > %s, %s", node[1], node[2], node[1] > node[2])
 				return exe(node[1]) > exe(node[2])
 			elif op=="<":
 				return exe(node[1]) < exe(node[2])
@@ -389,8 +391,8 @@ class Tree(Debugger):
 											yield i
 											if D: self.debug("appended")
 										if D: self.debug("discarded")
-									except Exception:
-										if D: self.debug("discarded")
+									except Exception, e:
+										if D: self.debug("discarded", e)
 
 						# if D and nodeList: self.debug("returning '%s' objects: '%s'", color.bold(len(nodeList)), color.bold(nodeList))
 						return exeSelector(fst)
