@@ -81,7 +81,12 @@ class Tree(Debugger):
 			type_node=type(node)
 			if node is None or type_node in TYPES:
 				return node
-			elif type_node in [str, unicode, timeutils.datetime.time, timeutils.datetime.date, timeutils.datetime.datetime]:
+			types = [str, timeutils.datetime.time, timeutils.datetime.date, timeutils.datetime.datetime]
+			try:
+				types+= [unicode]
+			except: 
+				pass
+			elif type_node in types:
 				return node
 			elif type_node is list:
 				return (exe(n) for n in node)
