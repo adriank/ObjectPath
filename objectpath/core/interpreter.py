@@ -391,8 +391,8 @@ class Tree(Debugger):
 											yield i
 											if D: self.debug("appended")
 										if D: self.debug("discarded")
-									except Exception, e:
-										if D: self.debug("discarded", e)
+									except Exception:
+										if D: self.debug("discarded")
 
 						# if D and nodeList: self.debug("returning '%s' objects: '%s'", color.bold(len(nodeList)), color.bold(nodeList))
 						return exeSelector(fst)
