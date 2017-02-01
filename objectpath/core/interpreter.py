@@ -134,7 +134,7 @@ class Tree(Debugger):
 							return fst+float(snd)
 					if typefst in STR_TYPES or typesnd in STR_TYPES:
 						if D: self.info("doing string comparison '%s' is '%s'",fst,snd)
-						if sys.version_info.major < 3:
+						if sys.version_info[0] < 3:
 							if typefst is unicode:
 								fst=fst.encode("utf-8")
 							if typesnd is unicode:
@@ -531,7 +531,7 @@ class Tree(Debugger):
 						from objectpath.utils import unescape, unescapeDict
 					return unescape(args[0],unescapeDict)
 				elif fnName=="replace":
-					if sys.version_info.major < 3 and type(args[0]) is unicode:
+					if sys.version_info[0] < 3 and type(args[0]) is unicode:
 						args[0]=args[0].encode("utf8")
 					return str.replace(args[0],args[1],args[2])
 				# TODO this should be supported by /regex/
