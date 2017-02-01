@@ -11,7 +11,7 @@
 
 import sys
 
-if sys.version_info.major >= 3:
+if sys.version_info[0] >= 3:
 	from io import StringIO
 else:
 	from cStringIO import StringIO
@@ -387,7 +387,7 @@ type_map={
 
 # python tokenizer
 def tokenize_python(program):
-	if sys.version_info.major < 3:
+	if sys.version_info[0] < 3:
 		tokens=tokenizer.generate_tokens(StringIO(program).next)
 	else:
 		tokens=tokenizer.generate_tokens(StringIO(program).__next__)
@@ -450,13 +450,13 @@ def expression(rbp=0):
 	return left
 
 def parse(expr, D=False):
-	if sys.version_info.major < 3 and type(expr) is unicode:
+	if sys.version_info[0] < 3 and type(expr) is unicode:
 		expr=expr.encode("utf8")
 	if type(expr) is not str:
 		return expr
 	expr=expr.strip()
 	global token, nextToken
-	if sys.version_info.major >= 3:
+	if sys.version_info[0] >= 3:
 		nextToken=tokenize(expr).__next__
 	else:
 		nextToken=tokenize(expr).next
