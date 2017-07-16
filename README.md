@@ -81,13 +81,4 @@ $ python
 License
 -------
 
-**AGPLv3**
-
-Using ObjectPath language in your project does not mean that your project is a derivative work, provided that you don't
-- extend the language functionality,
-- make optimizations,
-- sub-class any of it's modules.
-
-AGPL v3 license has been chosen to ensure language consistency and provide a way to finance its development.
-
-**AGPL is choosen to make access to the code equal for any party. If you make changes to the library, just give changes back to the community so that everyone can benefit.**
+**MIT**
