@@ -10,13 +10,12 @@
 # - optimized
 
 import sys
+from objectpath.core import SELECTOR_OPS, NUM_TYPES
 
 if sys.version_info[0] >= 3:
     from io import StringIO
 else:
     from cStringIO import StringIO
-
-from objectpath.core import SELECTOR_OPS, NUM_TYPES
 
 symbol_table = {}
 token = nextToken = None
