@@ -38,27 +38,38 @@ class Tree(Debugger):
         if not cfg:
             cfg = {}
         self.D = cfg.get("debug", False)
-        self.setObjectGetter(cfg.get("object_getter", None))
-        self.setData(obj)
+        self._data = None
+
+        self.data = obj
+        self.object_getter = None
+        self.set_object_getter(cfg.get("object_getter", None))
+
         self.current = self.node = None
-        if self.D: super(Tree, self).__init__()
+        if self.D:
+            super(Tree, self).__init__()
 
-    def setData(self, obj):
-        if type(obj) in ITER_TYPES + [dict]:
-            self.data = obj
+    @property
+    def data(self):
+        return self._data
 
-    def setObjectGetter(self, object_getter_cb):
-        if callable(object_getter_cb):
-            self.object_getter = object_getter_cb
+    @data.setter
+    def data(self, value):
+        if isinstance(value, (list, generator, chain, dict)):
+            self._data = value
+
+    def set_object_getter(self, value):
+        if callable(value):
+            self.object_getter = value
         else:
-            def default_getter(obj, attr):
-                try:
-                    return obj.__getattribute__(attr)
-                except AttributeError:
-                    if self.D: self.end(color.op(".") + " returning '%s'", color.bold(obj))
-                    return obj
+            self.object_getter = self.default_getter
 
-            self.object_getter = default_getter
+    def default_getter(self, o, attr):
+        try:
+            return o.__getattribute__(attr)
+        except AttributeError:
+            if self.D:
+                self.end(color.op(".") + " returning '%s'", color.bold(o))
+            return o
 
     def compile(self, expr):
         if expr in EXPR_CACHE:
