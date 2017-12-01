@@ -10,8 +10,8 @@ from objectpath.core import NUM_TYPES, generator, chain, ITER_TYPES
 
 escape = escape
 unescape = unescape
-unescapeDict = {"&apos;":"'","&quot;":"\""}
-escapeDict = {"'":"&apos;","\"":"&quot;"}
+unescapeDict = {"&apos;": "'", "&quot;": "\""}
+escapeDict = {"'": "&apos;", "\"": "&quot;"}
 
 
 # islice=islice is an optimization
@@ -30,13 +30,13 @@ def filter_dict(iterable, keys):
     [1,"aa",{"a":2,"c":3},{"c":3},{"a":1,"b":2}].(a,b) -> [{"a":2},{"a":1,"b":2}]
     """
     if type(keys) is not list:
-        keys=[keys]
+        keys = [keys]
     for i in iterable:
         try:
-            d={}
+            d = {}
             for a in keys:
                 try:
-                    d[a]=i[a]
+                    d[a] = i[a]
                 except KeyError:
                     pass
             if d != {}:
@@ -45,9 +45,9 @@ def filter_dict(iterable, keys):
             pass
 
 
-def flatten(fragment,skip=False):
+def flatten(fragment, skip=False):
     def rec(frg):
-        typefrg=type(frg)
+        typefrg = type(frg)
         if typefrg in ITER_TYPES:
             for i in frg:
                 for j in rec(i):
@@ -58,7 +58,7 @@ def flatten(fragment,skip=False):
                 for j in rec(i[1]):
                     yield j
 
-    g=rec(fragment)
+    g = rec(fragment)
     if skip:
         for i in xrange(skip):
             g.next()

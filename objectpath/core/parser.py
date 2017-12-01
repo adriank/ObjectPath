@@ -506,7 +506,7 @@ def expression(rbp=0):
     return left
 
 
-def parse(expr, D=False):
+def parse(expr, debug=False):
     if sys.version_info[0] < 3 and type(expr) is unicode:
         expr = expr.encode("utf8")
     if type(expr) is not str:
@@ -519,7 +519,7 @@ def parse(expr, D=False):
         nextToken = tokenize(expr).next
     token = nextToken()
     r = expression().getTree()
-    if D:
-        print ("PARSE STAGE")
-        print (r)
+    if debug:
+        print("PARSE STAGE")
+        print(r)
     return r
