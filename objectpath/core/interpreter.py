@@ -321,7 +321,6 @@ class Tree(Debugger):
     def execute(self, expr):
         if self.D:
             self.start("Tree.execute")
-        # D = self.D
         if type(expr) in STR_TYPES:
             tree = self.compile(expr)
         elif type(expr) not in (tuple, list, dict):
