@@ -68,8 +68,27 @@ object2={
 	}
 }
 
+object3={
+    "item_1": {
+        "value": "foo",
+        "x": 5.6,
+        "y": 9
+    },
+    "item_2": {
+        "value": "bar",
+        "x": 5.6,
+        "y": 9.891
+    },
+    "item_3": {
+        "value": "foobar",
+        "x": 5.6,
+        "y": 9.8
+	}
+}
+
 tree1=Tree(object1)
 tree2=Tree(object2)
+tree3=Tree(object3)
 
 def execute_raw(expr):
 	return tree1.execute(expr)
@@ -88,6 +107,13 @@ def execute(expr):
 
 def execute2(expr):
 	r=tree2.execute(expr)
+	if isinstance(r, TYPES):
+		return list(r)
+	else:
+		return r
+
+def execute3(expr):
+	r=tree3.execute(expr)
 	if isinstance(r, TYPES):
 		return list(r)
 	else:
@@ -424,6 +450,7 @@ class ObjectPath_Paths(unittest.TestCase):
 		self.assertEqual(execute("$..*[@._id>1 and @._id<3][0]"), {'_id': 2})
 		# very bad syntax!!!
 		self.assertEqual(sorted(execute2("$.store.book[@.price]")), sorted([8.95,12.99,8.99,22.99]))
+		self.assertEqual(execute3("$..*[@.x is 5.6 and @.y is 9.891].value"), ['bar'])
 
 #testcase2=unittest.FunctionTestCase(test_efficiency(2))
 testcase1=unittest.TestLoader().loadTestsFromTestCase(ObjectPath)
