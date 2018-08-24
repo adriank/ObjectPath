@@ -376,7 +376,8 @@ class ObjectPath(unittest.TestCase):
 		self.assertEqual(execute("age(dateTime([2000,1,1,1,1]),dateTime([2000,1,1,2,1]))"), [1,"hour"])
 		self.assertEqual(execute("age(dateTime([2000,1,1,1,1]),dateTime([2000,1,1,1,2]))"), [1,"minute"])
 		self.assertEqual(execute("age(dateTime([2000,1,1,1,1,1]),dateTime([2000,1,1,1,1,2]))"), [1,"second"])
-
+                self.assertEqual(execute("""array(time([0,0]) - time([0,0,0,999999]))"""), [23, 59, 59, 1])
+                
 	def test_localize(self):
 		pass
 		#these tests are passing on computers with timezone set to UTC - not the case of TravisCI
