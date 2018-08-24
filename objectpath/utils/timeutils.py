@@ -118,8 +118,8 @@ def addTimes(fst,snd):
 	t2=[]
 	one=0
 	ms=t[3]
-	if ms>=10000:
-		t2.append(ms-10000)
+	if ms>=1000000:
+		t2.append(ms-1000000)
 		one=1
 	else:
 		t2.append(ms)

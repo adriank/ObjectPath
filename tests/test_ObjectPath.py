@@ -367,7 +367,7 @@ class ObjectPath(unittest.TestCase):
 		self.assertEqual(execute("array(time([0,00])-time([0,0,0,1]))"), [23,59,59,999999])
 		self.assertEqual(execute("array(time([0,0])+time([1,1,1,1]))"), [1,1,1,1])
 		self.assertEqual(execute("array(time([0,0])+time([1,2,3,4]))"), [1,2,3,4])
-		self.assertEqual(execute("array(time([23,59,59,9999])+time([0,0,0,1]))"), [0,0,0,0])
+		self.assertEqual(execute("array(time([23,59,59,999999])+time([0,0,0,1]))"), [0,0,0,0])
 		# age tests
 		self.assertEqual(execute("age(now())"), [0,"seconds"])
 		self.assertEqual(execute("age(dateTime([2000,1,1,1,1]),dateTime([2001,1,1,1,1]))"), [1,"year"])
