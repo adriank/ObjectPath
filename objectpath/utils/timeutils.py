@@ -118,8 +118,8 @@ def addTimes(fst,snd):
 	t2=[]
 	one=0
 	ms=t[3]
-	if ms>=10000:
-		t2.append(ms-10000)
+	if ms>=1000000:
+		t2.append(ms-1000000)
 		one=1
 	else:
 		t2.append(ms)
@@ -149,7 +149,7 @@ def subTimes(fst,snd):
 	one=0
 	ms=t[3]
 	if ms<0:
-		t2.append(10000+ms)
+		t2.append(1000000+ms)
 		one=1
 	else:
 		t2.append(ms)

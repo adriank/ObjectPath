@@ -364,10 +364,10 @@ class ObjectPath(unittest.TestCase):
 		self.assertEqual(execute("array(time([12,12,12,12])-time([1,2,3,4]))"), [11,10,9,8])
 		self.assertEqual(execute("array(time([12,00])-time([1,10]))"), [10,50,0,0])
 		self.assertEqual(execute("array(time([1,00])-time([1,10]))"), [23,50,0,0])
-		self.assertEqual(execute("array(time([0,00])-time([0,0,0,1]))"), [23,59,59,9999])
+		self.assertEqual(execute("array(time([0,00])-time([0,0,0,1]))"), [23,59,59,999999])
 		self.assertEqual(execute("array(time([0,0])+time([1,1,1,1]))"), [1,1,1,1])
 		self.assertEqual(execute("array(time([0,0])+time([1,2,3,4]))"), [1,2,3,4])
-		self.assertEqual(execute("array(time([23,59,59,9999])+time([0,0,0,1]))"), [0,0,0,0])
+		self.assertEqual(execute("array(time([23,59,59,999999])+time([0,0,0,1]))"), [0,0,0,0])
 		# age tests
 		self.assertEqual(execute("age(now())"), [0,"seconds"])
 		self.assertEqual(execute("age(dateTime([2000,1,1,1,1]),dateTime([2001,1,1,1,1]))"), [1,"year"])
@@ -376,7 +376,9 @@ class ObjectPath(unittest.TestCase):
 		self.assertEqual(execute("age(dateTime([2000,1,1,1,1]),dateTime([2000,1,1,2,1]))"), [1,"hour"])
 		self.assertEqual(execute("age(dateTime([2000,1,1,1,1]),dateTime([2000,1,1,1,2]))"), [1,"minute"])
 		self.assertEqual(execute("age(dateTime([2000,1,1,1,1,1]),dateTime([2000,1,1,1,1,2]))"), [1,"second"])
-
+		self.assertEqual(execute("""array(time([0,0]) - time([0,0,0,999999]))"""), [23, 59, 59, 1])
+		self.assertEqual(execute("""array(time([0,0]) + time([0,0,0,999999]))"""), [0, 0, 0, 999999])
+                
 	def test_localize(self):
 		pass
 		#these tests are passing on computers with timezone set to UTC - not the case of TravisCI
