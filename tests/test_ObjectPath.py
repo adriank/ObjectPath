@@ -86,9 +86,26 @@ object3={
 	}
 }
 
+object4={
+	"root": {
+		"response": {
+			"200": {
+				"value": 5,
+			},
+			"201": {
+				"value": 4,
+			},
+			"404": {
+				"value": 0,
+			}
+		}
+	}
+}
+
 tree1=Tree(object1)
 tree2=Tree(object2)
 tree3=Tree(object3)
+tree4=Tree(object4)
 
 def execute_raw(expr):
 	return tree1.execute(expr)
@@ -114,6 +131,13 @@ def execute2(expr):
 
 def execute3(expr):
 	r=tree3.execute(expr)
+	if isinstance(r, TYPES):
+		return list(r)
+	else:
+		return r
+
+def execute4(expr):
+	r=tree4.execute(expr)
 	if isinstance(r, TYPES):
 		return list(r)
 	else:
@@ -455,10 +479,9 @@ class ObjectPath_Paths(unittest.TestCase):
 		self.assertEqual(execute3("$..*[@.x is 5.6 and @.y is 9.891].value"), ['bar'])
 
 	def test_object_list(self):
-		self.assertEqual(
-			execute3('values($.*).value'),
-			[ 'foo', 'bar', 'foobar' ]
-		)
+		self.assertEqual(execute3('values($.*).value'), [ 'foo', 'bar', 'foobar' ])
+		self.assertEqual(execute3('keys($.*)'), [ 'item_1', 'item_2', 'item_3' ])
+		self.assertEqual(execute4('map(values, $..root..response).value'), [ 5, 4, 0 ])
 
 #testcase2=unittest.FunctionTestCase(test_efficiency(2))
 testcase1=unittest.TestLoader().loadTestsFromTestCase(ObjectPath)
