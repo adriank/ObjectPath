@@ -454,6 +454,12 @@ class ObjectPath_Paths(unittest.TestCase):
 		self.assertEqual(sorted(execute2("$.store.book[@.price]")), sorted([8.95,12.99,8.99,22.99]))
 		self.assertEqual(execute3("$..*[@.x is 5.6 and @.y is 9.891].value"), ['bar'])
 
+	def test_object_list(self):
+		self.assertEqual(
+			execute3('values($.*).value'),
+			[ 'foo', 'bar', 'foobar' ]
+		)
+
 #testcase2=unittest.FunctionTestCase(test_efficiency(2))
 testcase1=unittest.TestLoader().loadTestsFromTestCase(ObjectPath)
 testcase2=unittest.TestLoader().loadTestsFromTestCase(ObjectPath_Paths)
