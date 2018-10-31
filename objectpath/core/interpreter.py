@@ -557,7 +557,7 @@ class Tree(Debugger):
 					except TypeError:
 						return args
 				elif fnName=="map":
-					return map(lambda x: exe(("fn",args[0],x)), args[1])
+					return chain(*map(lambda x: exe(("fn",args[0],x)), args[1]))
 				elif fnName in ("count","len"):
 					args=args[0]
 					if args in (True,False,None):
@@ -619,6 +619,11 @@ class Tree(Debugger):
 						return list(args[0].keys())
 					except AttributeError:
 						raise ExecutionError("Argument is not "+color.bold("object")+" but %s in keys()"%color.bold(type(args[0]).__name__))
+				elif fnName=="values":
+					try:
+						return list(args[0].values())
+					except AttributeError:
+						raise ExecutionError("Argument is not "+color.bold("object")+" but %s in values()"%color.bold(type(args[0]).__name__))
 				elif fnName=="type":
 					ret=type(args[0])
 					if ret in ITER_TYPES:
