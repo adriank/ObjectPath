@@ -397,7 +397,7 @@ def tokenize_python(program):
 			# change this to output python values in correct type
 			yield type_map[t[0]], t[1]
 		except KeyError:
-			if t[0] in [tokenizer.NL, tokenizer.COMMENT]:
+			if t[0] in [tokenizer.NL, tokenizer.COMMENT, tokenizer.NEWLINE]:
 				continue
 			if t[0] == tokenizer.ENDMARKER:
 				break
