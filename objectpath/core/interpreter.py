@@ -80,7 +80,7 @@ class Tree(Debugger):
 			types = [str, timeutils.datetime.time, timeutils.datetime.date, timeutils.datetime.datetime]
 			try:
 				types+= [unicode]
-			except: 
+			except:
 				pass
 			if D: self.start("executing node '%s'", node)
 			type_node=type(node)
@@ -223,6 +223,11 @@ class Tree(Debugger):
 				# 	snd=node[2]
 				if op == "is" and fst == snd:
 					return True
+				elif fst is None:
+					if op == "is":
+						return snd is None
+					else:
+						return snd is not None
 				# this doesn't work for 3 is not '3'
 				# if op == "is not" and fst != snd:
 				# 	return True
