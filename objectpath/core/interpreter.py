@@ -255,12 +255,12 @@ class Tree(Debugger):
           if D:
             self.info("doing string comparison '\"%s\" is \"%s\"'", fst, snd)
           ret = fst == str(snd)
-        elif typefst is float:
+        elif typefst is float or typesnd is float:
           if D: self.info("doing float comparison '%s is %s'", fst, snd)
-          ret = abs(fst - float(snd)) < EPSILON
-        elif typefst is int:
+          ret = abs(float(fst) - float(snd)) < EPSILON
+        elif typefst is int or typesnd is int:
           if D: self.info("doing integer comparison '%s is %s'", fst, snd)
-          ret = fst == int(snd)
+          ret = int(fst) == int(snd)
         elif typefst is list and typesnd is list:
           if D: self.info("doing array comparison '%s' is '%s'", fst, snd)
           ret = fst == snd

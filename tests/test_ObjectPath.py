@@ -660,9 +660,9 @@ class ObjectPath_Paths(unittest.TestCase):
     )
 
   def test_object_list(self):
-    self.assertEqual(execute3('values($.*).value'), ['bar', 'foobar', 'foo'])
-    self.assertEqual(execute3('keys($.*)'), ['item_1', 'item_2', 'item_3'])
-    self.assertEqual(
+    self.assertItemsEqual(execute3('values($.*).value'), ['foo', 'bar', 'foobar'])
+    self.assertItemsEqual(execute3('keys($.*)'), ['item_1', 'item_2', 'item_3'])
+    self.assertItemsEqual(
       execute4('map(values, $..root..response).value'), [5, 4, 0]
     )
 
