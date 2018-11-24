@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# This file is part of ObjectPath released under AGPL v3 license.
+# This file is part of ObjectPath released under MIT license.
 # Copyright (C) 2010-2014 Adrian Kalbarczyk
 
 from itertools import islice

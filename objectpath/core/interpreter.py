@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# This file is part of ObjectPath released under AGPL v3 license.
+# This file is part of ObjectPath released under MIT license.
 # Copyright (C) 2010-2014 Adrian Kalbarczyk
 
 import sys, re
@@ -80,7 +80,7 @@ class Tree(Debugger):
 			types = [str, timeutils.datetime.time, timeutils.datetime.date, timeutils.datetime.datetime]
 			try:
 				types+= [unicode]
-			except: 
+			except:
 				pass
 			if D: self.start("executing node '%s'", node)
 			type_node=type(node)
