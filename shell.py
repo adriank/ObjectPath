@@ -4,4 +4,3 @@
 from objectpath import shell
 
 shell.main()
-

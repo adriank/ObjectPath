@@ -8,6 +8,6 @@ from .test_utils import utils_test
 import unittest
 
 def doTests():
-	print ('Started ObjectPath Python implementation testing.\n')
-	unittest.TextTestRunner(verbosity = 2).run(op_test)
-	unittest.TextTestRunner(verbosity = 2).run(utils_test)
+  print('Started ObjectPath Python implementation testing.\n')
+  unittest.TextTestRunner(verbosity=2).run(op_test)
+  unittest.TextTestRunner(verbosity=2).run(utils_test)
