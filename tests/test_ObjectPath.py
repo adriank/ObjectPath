@@ -512,6 +512,10 @@ class ObjectPath(unittest.TestCase):
     self.assertEqual(execute("type({})"), "object")
     self.assertEqual(execute("type('')"), "str")
 
+  def test_selector_with_empty_result(self):
+    self.assertEqual(execute("$.missing is None"), True)
+    self.assertEqual(execute("$.missing is not None"), False)
+
   def test_misc(self):
     self.assertEqual(execute(2), 2)
     self.assertEqual(execute('{"@aaa":1}.@aaa'), 1)
