@@ -142,6 +142,11 @@ def execute4(expr):
     return r
 
 class ObjectPath(unittest.TestCase):
+  def assertItemsEqual(self, a, b, m):
+    if sys.version_info[0] > 3 :
+      return self.assertCountEqual(a, b, m)
+    return super.assertItemsEqual(a, b, m)
+
   def test_simple_types(self):
     self.assertEqual(execute("null"), None)
     self.assertEqual(execute("true"), True)
