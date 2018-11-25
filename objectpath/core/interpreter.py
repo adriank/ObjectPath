@@ -245,11 +245,13 @@ class Tree(Debugger):
         # 	snd=node[2]
         if op == "is" and fst == snd:
           return True
+
         # this doesn't work for 3 is not '3'
         # if op == "is not" and fst != snd:
         # 	return True
         typefst = type(fst)
         typesnd = type(snd)
+        ret = None
         if D: self.debug("type fst: '%s', type snd: '%s'", typefst, typesnd)
         if typefst in STR_TYPES:
           if D:
@@ -282,6 +284,8 @@ class Tree(Debugger):
         # 		pass
         if op == "is not":
           if D: self.info("'is not' found. Returning %s", not ret)
+          if ret == None:
+            return False
           return not ret
         else:
           if D: self.info("returning '%s' is '%s'='%s'", fst, snd, ret)
