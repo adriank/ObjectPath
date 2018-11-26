@@ -20,7 +20,7 @@ setup(
   keywords="query, tree, JSON, nested structures",
   classifiers=[
     "Development Status :: 6 - Mature", "Intended Audience :: Developers",
-    "Intended Audience :: Science/Research", "License :: OSI Approved :: MIT",
+    "Intended Audience :: Science/Research", "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
     "Topic :: Software Development :: Libraries :: Python Modules"
   ],
