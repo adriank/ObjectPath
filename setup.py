@@ -14,7 +14,7 @@ setup(
   url='http://adriank.github.io/ObjectPath',
   author='Adrian Kalbarczyk',
   author_email='adrian.kalbarczyk@gmail.com',
-  license='MIT',
+  # license='MIT',
   packages=['objectpath', 'objectpath.utils', 'objectpath.core'],
   # package_dir={'': 'objectpath'},
   keywords="query, tree, JSON, nested structures",
