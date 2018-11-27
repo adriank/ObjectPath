@@ -15,6 +15,12 @@ from objectpath.utils.colorify import *  # pylint: disable=W0614
 from objectpath.utils import json_ext as json
 from objectpath.utils.json_ext import printJSON
 
+try:
+  import pytz
+except ImportError:
+  if os.isatty(sys.stdin.fileno()) and sys.stdout.isatty():
+    print("WARNING! pytz is not installed. Localized times are not supported.")
+
 def main():
   parser = argparse.ArgumentParser(description='Command line options')
   parser.add_argument(

@@ -10,8 +10,8 @@ try:
   import pytz
   TIMEZONE_CACHE = {"UTC": pytz.utc}
 except ImportError:
-  if os.isatty(sys.stdin.fileno()) and sys.stdout.isatty():
-    print("WARNING! pytz is not installed. Localized times are not supported.")
+  pass
+
 
 HOURS_IN_DAY = 24
 
