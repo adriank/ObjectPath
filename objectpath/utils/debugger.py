@@ -3,6 +3,7 @@
 
 # move dbgMap outside
 import inspect
+from objectpath.core import ITER_TYPES
 
 class Debugger(object):
   dbg = None
@@ -68,6 +69,12 @@ class Debugger(object):
     """Returns the current line number in our program."""
     return inspect.currentframe().f_back.f_back.f_back.f_lineno
 
+  def cleanOutput(self, o):
+    toOutput = o
+    if type(toOutput) in ITER_TYPES:
+      toOutput = list(toOutput)
+    return toOutput
+
   def consolelog(self, lvl, s):
     def f(x):
       try:
@@ -80,18 +87,20 @@ class Debugger(object):
         for i in x.items():
           s.append("'%s': %s" % (i[0], repr(i[1])[:self.CUT_AFTER]))
           if len(s[-1]) > self.CUT_AFTER:
-            s.append("...")
+            s.append("...\033[0m")
         return "{\n\t" + ",\n\t".join(s) + "\n}"
-      s = str(x).replace("\n", "").replace("\t", "")
+      s = str(x).replace("\n", "").replace("\t", "").replace("u'", "'")
       if self.CUT_AFTER and len(s) > self.CUT_AFTER:
-        return s[:self.CUT_AFTER] + "..."
+        return s[:self.CUT_AFTER] + "...\033[0m"
       else:
         return x
 
     if len(s) > 1:
       v = tuple(map(f, s[1:]))
       self._debugStr.append((lvl, s[0] % v))
-      print(lvl + "@" + str(self.lineno()) + " " + s[0] % v)
+      print(
+        lvl + "@" + str(self.lineno()) + " " + (s[0] % v).replace("u'", "'")
+      )
     else:
       self._debugStr.append((lvl, s[0]))
       print(lvl + "@" + str(self.lineno()) + " " + f(s[0]))

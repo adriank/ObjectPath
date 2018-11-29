@@ -8,7 +8,7 @@ from types import GeneratorType as generator
 from itertools import chain
 
 SELECTOR_OPS = [
-  "is", ">", "<", "is not", ">=", "<=", "in", "not in", ":", "and", "or", "fn"
+  "is", ">", "<", "is not", ">=", "<=", "in", "not in", ":", "and", "or", "matches", "fn"
 ]
 # it must be list because of further concatenations
 NUM_TYPES = [int, float]

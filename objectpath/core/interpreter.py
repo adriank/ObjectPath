@@ -89,7 +89,7 @@ class Tree(Debugger):
         types += [unicode]
       except:
         pass
-      if D: self.start("executing node '%s'", node)
+      if D: self.start("executing node %s", color.bold(node))
       type_node = type(node)
       if node is None or type_node in TYPES:
         return node
@@ -293,7 +293,18 @@ class Tree(Debugger):
       elif op == "re":
         return re.compile(exe(node[1]))
       elif op == "matches":
-        return not not re.match(exe(node[1]), exe(node[2]))
+        fst = exe(node[1])
+        snd = exe(node[2])
+        if type(fst) not in STR_TYPES:
+          raise Exception("operator " + color.bold("matches") + " expects regexp on the right. Example: 'abcd' matches 'a.*d'")
+        if type(fst) in ITER_TYPES:
+          for i in fst:
+            if not not re.match(snd, i):
+              return True
+          return False
+        else:
+          # string matches regex not the way around $.*[@.name.long matches "Butter"]
+          return not not re.match(snd, fst)
       # elif op=="(literal)":
       # 	fstLetter=node[1][0]
       # 	if fstLetter is "'":
@@ -306,7 +317,7 @@ class Tree(Debugger):
       # 	if D: self.debug("returning node %s",self.node)
       # 	return self.node
       elif op == "(current)":  # this is @
-        if D: self.debug("returning current node %s", self.current)
+        if D: self.debug("returning current node: \n  %s", color.bold(self.current))
         return self.current
       elif op == "name":
         return node[1]
@@ -315,23 +326,23 @@ class Tree(Debugger):
         if type(fst) is tuple:
           fst = exe(fst)
         typefst = type(fst)
-        if D: self.debug(color.op(".") + " left is '%s'", fst)
+        if D: self.debug(color.op(".") + " left is '%s'", color.bold(self.cleanOutput(fst)))
         # try:
         if node[2][0] == "*":
           if D:
             self.end(
                 color.op(".") + " returning '%s'",
-                typefst in ITER_TYPES and fst or [fst]
+                color.bold(typefst in ITER_TYPES and fst or [fst])
             )
           return fst  # typefst in ITER_TYPES and fst or [fst]
         # except:
         # 	pass
         snd = exe(node[2])
-        if D: self.debug(color.op(".") + " right is '%s'", snd)
+        if D: self.debug(color.op(".") + " right is '%s'", color.bold(snd))
         if typefst in ITER_TYPES:
           if D:
             self.debug(
-                color.op(".") + " filtering %s by %s", color.bold(fst),
+                color.op(".") + " filtering %s by %s", color.bold(self.cleanOutput(fst)),
                 color.bold(snd)
             )
           if type(snd) in ITER_TYPES:
@@ -390,8 +401,8 @@ class Tree(Debugger):
           selector = node[2]
           if D:
             self.debug(
-                "found '%s' selector. executing on %s", color.bold(selector),
-                color.bold(fst)
+              "\n  found selector '%s'.\n  executing on %s", color.bold(selector),
+              color.bold(fst)
             )
           selectorIsTuple = type(selector) is tuple
 
@@ -732,7 +743,7 @@ class Tree(Debugger):
     elif type(expr) not in (tuple, list, dict):
       return expr
     ret = exe(tree)
-    if D: self.end("Tree.execute with: '%s'", ret)
+    if D: self.end("Tree.execute with: %s", color.bold(ret))
     return ret
 
   def __str__(self):
