@@ -30,31 +30,32 @@ object1 = {
 object2 = {
   "store": {
     "book": [{
+      "id":1,
       "category": "reference",
       "author": "Nigel Rees",
       "title": "Sayings of the Century",
       "price": 8.95
     },
-             {
-               "category": "fiction",
-               "author": "Evelyn Waugh",
-               "title": "Sword of Honour",
-               "price": 12.99
-             },
-             {
-               "category": "fiction",
-               "author": "Herman Melville",
-               "title": "Moby Dick",
-               "isbn": "0-553-21311-3",
-               "price": 8.99
-             },
-             {
-               "category": "fiction",
-               "author": "J. R. R. Tolkien",
-               "title": "The Lord of the Rings",
-               "isbn": "0-395-19395-8",
-               "price": 22.99
-             }],
+    {
+      "category": "fiction",
+      "author": "Evelyn Waugh",
+      "title": "Sword of Honour",
+      "price": 12.99
+    },
+    {
+      "category": "fiction",
+      "author": "Herman Melville",
+      "title": "Moby Dick",
+      "isbn": "0-553-21311-3",
+      "price": 8.99
+    },
+    {
+      "category": "fiction",
+      "author": "J. R. R. Tolkien",
+      "title": "The Lord of the Rings",
+      "isbn": "0-395-19395-8",
+      "price": 22.99
+    }],
     "bicycle": {
       "color": "red",
       "price": 19.95
@@ -263,6 +264,7 @@ class ObjectPath(unittest.TestCase):
     self.assertEqual(execute("[] is []"), True)
     self.assertEqual(execute("[1] is [1]"), True)
     self.assertEqual(execute("{} is {}"), True)
+    self.assertEqual(execute("None is 'aaa'"), False)
     self.assertEqual(execute("None is None"), True)
     self.assertEqual(execute("{'aaa':1} is {'aaa':1}"), True)
     #oid=ObjectId()
@@ -270,6 +272,7 @@ class ObjectPath(unittest.TestCase):
 
   def test_comparison_isnot(self):
     self.assertEqual(execute("None is not None"), False)
+    self.assertEqual(execute("None is not 'aaa'"), True)
     self.assertEqual(execute("3 is not 6"), True)
     self.assertEqual(execute("3 is not '3'"), False)
     self.assertEqual(execute("[] is not [1]"), True)
@@ -659,6 +662,17 @@ class ObjectPath_Paths(unittest.TestCase):
     )
 
   def test_selectors(self):
+    self.assertEqual(
+      execute2("$.store.book[@.id is not null]"),
+      [{
+        'category': 'reference',
+        'price': 8.95,
+        'title': 'Sayings of the Century',
+        'id': 1,
+        'author': 'Nigel Rees'
+      }]
+    )
+    self.assertEqual(len(execute2("$.store.book[@.id is null]")), 3)
     self.assertEqual(len(execute("$..*[@._id>2]")), 2)
     self.assertEqual(execute("$..*[3 in @.l._id]")[0], object1['test'])
     self.assertEqual(execute2("$.store..*[4 in @.k._id]")[0], object2['store'])

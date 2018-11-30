@@ -276,9 +276,10 @@ class Tree(Debugger):
           ret = fst == snd
         elif fst is None or snd is None:
           if fst is None and snd is None:
+            # this executes only for "is not"
             ret = True
           else:
-            ret = not not (fst or snd)
+            ret = (fst or snd) is None
             if D:
               self.info(
                 "doing None comparison %s is %s = %s", color.bold(fst), color.bold(snd),
