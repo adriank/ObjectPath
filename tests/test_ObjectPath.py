@@ -263,11 +263,13 @@ class ObjectPath(unittest.TestCase):
     self.assertEqual(execute("[] is []"), True)
     self.assertEqual(execute("[1] is [1]"), True)
     self.assertEqual(execute("{} is {}"), True)
+    self.assertEqual(execute("None is None"), True)
     self.assertEqual(execute("{'aaa':1} is {'aaa':1}"), True)
     #oid=ObjectId()
     #self.assertEqual(execute("ObjectID('"+str(oid)+"') is '"+str(oid)+"'"), True)
 
   def test_comparison_isnot(self):
+    self.assertEqual(execute("None is not None"), False)
     self.assertEqual(execute("3 is not 6"), True)
     self.assertEqual(execute("3 is not '3'"), False)
     self.assertEqual(execute("[] is not [1]"), True)
