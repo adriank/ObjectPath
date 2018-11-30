@@ -89,7 +89,7 @@ class Tree(Debugger):
         types += [unicode]
       except:
         pass
-      if D: self.start("executing node %s", color.bold(node))
+      if D: self.start("executing node %s", color.bold(self.cleanOutput(node)))
       type_node = type(node)
       if node is None or type_node in TYPES:
         return node
@@ -251,24 +251,42 @@ class Tree(Debugger):
         # 	return True
         typefst = type(fst)
         typesnd = type(snd)
-        ret = None
         if D: self.debug("type fst: '%s', type snd: '%s'", typefst, typesnd)
         if typefst in STR_TYPES:
           if D:
             self.info("doing string comparison '\"%s\" is \"%s\"'", fst, snd)
-          ret = fst == str(snd)
+          ret = str(fst) == str(snd)
         elif typefst is float or typesnd is float:
           if D: self.info("doing float comparison '%s is %s'", fst, snd)
-          ret = abs(float(fst) - float(snd)) < EPSILON
+          try:
+            ret = abs(float(fst) - float(snd)) < EPSILON
+          except:
+            ret = False
         elif typefst is int or typesnd is int:
           if D: self.info("doing integer comparison '%s is %s'", fst, snd)
-          ret = int(fst) == int(snd)
+          try:
+            ret = int(fst) == int(snd)
+          except:
+            ret = False
         elif typefst is list and typesnd is list:
           if D: self.info("doing array comparison '%s' is '%s'", fst, snd)
           ret = fst == snd
         elif typefst is dict and typesnd is dict:
           if D: self.info("doing object comparison '%s' is '%s'", fst, snd)
           ret = fst == snd
+        elif fst is None or snd is None:
+          if fst is None and snd is None:
+            ret = True
+          else:
+            ret = not not (fst or snd)
+            if D:
+              self.info(
+                "doing None comparison %s is %s = %s", color.bold(fst), color.bold(snd),
+                color.bold(not not (fst or snd))
+              )
+        else:
+          if D: self.info("can't compare %s and %s. Returning False", fst, snd)
+          ret = False
         # else:
         # 	try:
         # 		global ObjectId
@@ -283,12 +301,15 @@ class Tree(Debugger):
         # 	except Exception:
         # 		pass
         if op == "is not":
-          if D: self.info("'is not' found. Returning %s", not ret)
           if ret == None:
+            if D: self.info("'is not' found. Returning False")
             return False
+          if D: self.info("'is not' found. Returning %s", not ret)
           return not ret
         else:
           if D: self.info("returning '%s' is '%s'='%s'", fst, snd, ret)
+          if ret is None:
+            ret = False
           return ret
       elif op == "re":
         return re.compile(exe(node[1]))
@@ -368,7 +389,7 @@ class Tree(Debugger):
         if D:
           self.debug(
               color.op("..") + " finding all %s in %s", color.bold(snd),
-              color.bold(fst)
+              color.bold(self.cleanOutput(fst))
           )
         if type(snd) in ITER_TYPES:
           ret = filter_dict(fst, list(snd))
@@ -382,7 +403,7 @@ class Tree(Debugger):
               )
           )
           # print list(chain(*(type(x) in ITER_TYPES and x or [x] for x in (e[snd] for e in fst if snd in e))))
-          if D: self.debug(color.op("..") + " returning %s", color.bold(ret))
+          if D: self.debug(color.op("..") + " returning %s", color.bold(self.cleanOutput(ret)))
           return ret
       elif op == "[":
         len_node = len(node)
@@ -449,7 +470,7 @@ class Tree(Debugger):
               for i in fst:
                 if D:
                   self.debug("setting self.current to %s", color.bold(i))
-                  self.debug("%s %s %s %s", selector0, selector1, selector2, i)
+                  self.debug("  s0: %s\n  s1: %s\n  s2: %s\n  Current: %s", selector0, selector1, selector2, i)
                 self.current = i
                 if selector0 == "fn":
                   yield exe(selector)
@@ -467,8 +488,8 @@ class Tree(Debugger):
                     # TODO optimize an event when @ is not used. exe(selector1) can be cached
                     if exe((selector0, exe(selector1), exe(selector2))):
                       yield i
-                      if D: self.debug("appended")
-                    if D: self.debug("discarded")
+                      if D: self.debug("appended %s", i)
+                    elif D: self.debug("discarded")
                   except Exception:
                     if D: self.debug("discarded")
 
@@ -743,7 +764,7 @@ class Tree(Debugger):
     elif type(expr) not in (tuple, list, dict):
       return expr
     ret = exe(tree)
-    if D: self.end("Tree.execute with: %s", color.bold(ret))
+    if D: self.end("Tree.execute with: %s", color.bold(self.cleanOutput(ret)))
     return ret
 
   def __str__(self):
