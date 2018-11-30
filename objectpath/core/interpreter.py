@@ -14,7 +14,7 @@ from objectpath.utils.debugger import Debugger
 
 EPSILON = 0.0000000000000001  #this is used in float comparison
 EXPR_CACHE = {}
-
+RE_TYPE = type(re.compile(''))
 # setting external modules to 0, thus enabling lazy loading. 0 ensures that Pythonic types are never matched.
 # this way is efficient because if statement is fast and once loaded these variables are pointing to libraries.
 ObjectId = generateID = calendar = escape = escapeDict = unescape = unescapeDict = 0
@@ -140,10 +140,7 @@ class Tree(Debugger):
               fst = [fst]
             elif typesnd not in ITER_TYPES:
               snd = [snd]
-            if D:
-              self.debug(
-                  "at least one side is generator and other is iterable, returning chain"
-              )
+            if D: self.debug("at least one side is a generator and the other is an iterable, returning chain")
             return chain(fst, snd)
           if typefst in NUM_TYPES:
             try:
@@ -253,8 +250,7 @@ class Tree(Debugger):
         typesnd = type(snd)
         if D: self.debug("type fst: '%s', type snd: '%s'", typefst, typesnd)
         if typefst in STR_TYPES:
-          if D:
-            self.info("doing string comparison '\"%s\" is \"%s\"'", fst, snd)
+          if D: self.info("doing string comparison '\"%s\" is \"%s\"'", fst, snd)
           ret = str(fst) == str(snd)
         elif typefst is float or typesnd is float:
           if D: self.info("doing float comparison '%s is %s'", fst, snd)
@@ -302,22 +298,17 @@ class Tree(Debugger):
         # 	except Exception:
         # 		pass
         if op == "is not":
-          if ret == None:
-            if D: self.info("'is not' found. Returning False")
-            return False
           if D: self.info("'is not' found. Returning %s", not ret)
           return not ret
         else:
           if D: self.info("returning '%s' is '%s'='%s'", fst, snd, ret)
-          if ret is None:
-            ret = False
           return ret
       elif op == "re":
         return re.compile(exe(node[1]))
       elif op == "matches":
         fst = exe(node[1])
         snd = exe(node[2])
-        if type(fst) not in STR_TYPES:
+        if type(snd) not in STR_TYPES+[RE_TYPE]:
           raise Exception("operator " + color.bold("matches") + " expects regexp on the right. Example: 'abcd' matches 'a.*d'")
         if type(fst) in ITER_TYPES:
           for i in fst:
@@ -362,8 +353,7 @@ class Tree(Debugger):
         snd = exe(node[2])
         if D: self.debug(color.op(".") + " right is '%s'", color.bold(snd))
         if typefst in ITER_TYPES:
-          if D:
-            self.debug(
+          if D: self.debug(
                 color.op(".") + " filtering %s by %s", color.bold(self.cleanOutput(fst)),
                 color.bold(snd)
             )
@@ -387,8 +377,7 @@ class Tree(Debugger):
           return fst
         # reduce objects to selected attributes
         snd = exe(node[2])
-        if D:
-          self.debug(
+        if D: self.debug(
               color.op("..") + " finding all %s in %s", color.bold(snd),
               color.bold(self.cleanOutput(fst))
           )
@@ -437,8 +426,7 @@ class Tree(Debugger):
               nodeList_append(
                   exe((selector[0], exe(selector[1]), exe(selector[2])))
               )
-            if D:
-              self.debug(
+            if D: self.debug(
                   "returning %s objects: %s", color.bold(len(nodeList)),
                   color.bold(nodeList)
               )
@@ -453,8 +441,7 @@ class Tree(Debugger):
             return fst
 
           if selectorIsTuple and selector[0] in SELECTOR_OPS:
-            if D:
-              self.debug(
+            if D: self.debug(
                   "found %s operator in selector, %s", color.bold(selector[0]),
                   color.bold(selector)
               )

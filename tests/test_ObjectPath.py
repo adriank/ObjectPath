@@ -254,6 +254,7 @@ class ObjectPath(unittest.TestCase):
     self.assertIsInstance(execute("/aaa/"), type(re.compile("")))
     self.assertEqual(execute("'xxxaaaadddd' matches /.*aaa/"), True)
     self.assertEqual(execute("'xxxaaaadddd' matches '.*aaa' "), True)
+    self.assertEqual(execute("['xxxaaaadddd', 'xxx'] matches '.*aaa' "), True)
 
   def test_comparison_is(self):
     self.assertEqual(execute("2 is 2"), True)
@@ -264,6 +265,7 @@ class ObjectPath(unittest.TestCase):
     self.assertEqual(execute("[] is []"), True)
     self.assertEqual(execute("[1] is [1]"), True)
     self.assertEqual(execute("{} is {}"), True)
+    self.assertEqual(execute("{} is []"), False)
     self.assertEqual(execute("None is 'aaa'"), False)
     self.assertEqual(execute("None is None"), True)
     self.assertEqual(execute("{'aaa':1} is {'aaa':1}"), True)
@@ -273,6 +275,7 @@ class ObjectPath(unittest.TestCase):
   def test_comparison_isnot(self):
     self.assertEqual(execute("None is not None"), False)
     self.assertEqual(execute("None is not 'aaa'"), True)
+    self.assertEqual(execute("{} is not []"), True)
     self.assertEqual(execute("3 is not 6"), True)
     self.assertEqual(execute("3 is not '3'"), False)
     self.assertEqual(execute("[] is not [1]"), True)
