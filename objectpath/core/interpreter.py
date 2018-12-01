@@ -276,13 +276,12 @@ class Tree(Debugger):
             ret = True
           else:
             ret = (fst or snd) is None
-            if D:
-              self.info(
+            if D: self.info(
                 "doing None comparison %s is %s = %s", color.bold(fst), color.bold(snd),
                 color.bold(not not (fst or snd))
               )
         else:
-          if D: self.info("can't compare %s and %s. Returning False", fst, snd)
+          if D: self.info("can't compare %s and %s. Returning False", self.cleanOutput(fst), self.cleanOutput(snd))
           ret = False
         # else:
         # 	try:
@@ -301,23 +300,23 @@ class Tree(Debugger):
           if D: self.info("'is not' found. Returning %s", not ret)
           return not ret
         else:
-          if D: self.info("returning '%s' is '%s'='%s'", fst, snd, ret)
+          if D: self.info("returning %s is %s => %s", color.bold(self.cleanOutput(fst)), color.bold(self.cleanOutput(snd)), color.bold(ret))
           return ret
       elif op == "re":
         return re.compile(exe(node[1]))
       elif op == "matches":
         fst = exe(node[1])
         snd = exe(node[2])
-        if type(snd) not in STR_TYPES+[RE_TYPE]:
-          raise Exception("operator " + color.bold("matches") + " expects regexp on the right. Example: 'abcd' matches 'a.*d'")
-        if type(fst) in ITER_TYPES:
-          for i in fst:
-            if not not re.match(snd, i):
+        if type(fst) not in STR_TYPES+[RE_TYPE]:
+          raise Exception("operator " + color.bold("matches") + " expects regexp on the left. Example: 'a.*d' matches 'abcd'")
+        if type(snd) in ITER_TYPES:
+          for i in snd:
+            if not not re.match(fst, i):
               return True
           return False
         else:
-          # string matches regex not the way around $.*[@.name.long matches "Butter"]
-          return not not re.match(snd, fst)
+          # regex matches string
+          return not not re.match(fst, snd)
       # elif op=="(literal)":
       # 	fstLetter=node[1][0]
       # 	if fstLetter is "'":

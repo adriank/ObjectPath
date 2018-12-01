@@ -73,6 +73,8 @@ class Debugger(object):
     toOutput = o
     if type(toOutput) in ITER_TYPES:
       toOutput = list(toOutput)
+    if type(toOutput) is tuple:
+      return tuple(map(lambda x: type(x) in ITER_TYPES and list(x) or x, toOutput))
     return toOutput
 
   def consolelog(self, lvl, s):
