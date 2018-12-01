@@ -253,8 +253,8 @@ class ObjectPath(unittest.TestCase):
   def test_comparison_regex(self):
     self.assertIsInstance(execute("/aaa/"), type(re.compile("")))
     self.assertEqual(execute("'xxxaaaadddd' matches /.*aaa/"), True)
-    self.assertEqual(execute("'xxxaaaadddd' matches '.*aaa' "), True)
-    self.assertEqual(execute("['xxxaaaadddd', 'xxx'] matches '.*aaa' "), True)
+    self.assertEqual(execute("'xxxaaaadddd' matches '.*aaa'"), True)
+    self.assertEqual(execute("['xxxaaaadddd', 'xxx'] matches '.*aaa'"), True)
 
   def test_comparison_is(self):
     self.assertEqual(execute("2 is 2"), True)
@@ -407,6 +407,7 @@ class ObjectPath(unittest.TestCase):
     self.assertEqual(execute("reverse([1,2,3,4]+[2,4])"), [4, 2, 4, 3, 2, 1])
     self.assertEqual(execute("reverse(sort($.._id))"), [4, 3, 2, 1])
     self.assertEqual(execute("len([1,2,3,4]+[2,4])"), 6)
+    self.assertEqual(execute("unique([1,1,3,3])"), [1, 3])
     # edge cases
     self.assertEqual(execute("len(True)"), True)
     self.assertEqual(execute("len('aaa')"), 3)
