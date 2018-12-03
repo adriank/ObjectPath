@@ -12,6 +12,7 @@ try:
 except ImportError:
   pass
 
+from objectpath.core import STR_TYPES
 
 HOURS_IN_DAY = 24
 
@@ -200,15 +201,19 @@ def dateTime(arg):
       return datetime.datetime(*dt)
   if l is 2:
     date = time = None
-    if type(arg[0]) is datetime.date:
+    typeArg0 = type(arg[0])
+    typeArg1 = type(arg[1])
+    if typeArg0 in STR_TYPES:
+      return datetime.datetime.strptime(arg[0], arg[1])
+    if typeArg0 is datetime.date:
       d = arg[0]
       date = [d.year, d.month, d.day]
-    if type(arg[0]) in (tuple, list):
+    if typeArg0 in (tuple, list):
       date = arg[0]
-    if type(arg[1]) is datetime.time:
+    if typeArg1 is datetime.time:
       t = arg[1]
       time = [t.hour, t.minute, t.second, t.microsecond]
-    if type(arg[1]) in (tuple, list):
+    if typeArg1 in (tuple, list):
       time = arg[1]
     return datetime.datetime(*date + time)
 

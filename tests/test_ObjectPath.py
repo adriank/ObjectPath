@@ -429,6 +429,9 @@ class ObjectPath(unittest.TestCase):
     self.assertIsInstance(
       execute("dateTime([2001,12,30,12,23,21,777777])"), datetime.datetime
     )
+    self.assertIsInstance(execute('dateTime("1980-05-11 04:22:33", "%Y-%m-%d %H:%M:%S")'), datetime.datetime)
+    self.assertEqual(str(execute('dateTime("1980-05-11 04:22:33", "%Y-%m-%d %H:%M:%S")')), "1980-05-11 04:22:33")
+
     self.assertEqual(
       execute("toMillis(dateTime([2001,12,30,12,23,21,777777]))"),
       1009715001777
