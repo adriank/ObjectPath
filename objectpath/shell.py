@@ -6,9 +6,12 @@
 
 import argparse
 import sys
-import readline
-# this is to prevent various tools from deleting import readline
-___x = readline.__doc__
+try:
+  import readline
+  # this is to prevent various tools from deleting import readline
+  ___x = readline.__doc__
+except ImportError:
+  import pyreadline as readline
 
 from objectpath import Tree, ITER_TYPES
 from objectpath.utils.colorify import *  # pylint: disable=W0614
