@@ -42,7 +42,7 @@ class Tree(Debugger):
     if self.D: super(Tree, self).__init__()
 
   def setData(self, obj):
-    if type(obj) in ITER_TYPES + [dict]:
+    if isinstance(obj, tuple(ITER_TYPES + [dict])):
       self.data = obj
 
   def setObjectGetter(self, object_getter_cb):
