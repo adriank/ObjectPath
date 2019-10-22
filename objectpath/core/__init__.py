@@ -6,6 +6,7 @@
 
 from types import GeneratorType as generator
 from itertools import chain
+from sys import version_info
 
 SELECTOR_OPS = [
   "is", ">", "<", "is not", ">=", "<=", "in", "not in", ":", "and", "or", "matches", "fn"
@@ -27,10 +28,8 @@ except NameError:
 
 ITER_TYPES = [list, generator, chain]
 
-try:
+if version_info[0] >= 3:
   ITER_TYPES += [map, filter]
-except NameError:
-  pass
 
 class ProgrammingError(Exception):
   pass
