@@ -24,6 +24,9 @@ setup(
     "Programming Language :: Python",
     "Topic :: Software Development :: Libraries :: Python Modules"
   ],
+  install_requires=[
+    'pytz',
+  ],
   zip_safe=True,
   entry_points={'console_scripts': ['objectpath = objectpath.shell:main']},
   test_suite="tests"
