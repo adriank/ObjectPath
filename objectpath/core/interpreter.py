@@ -385,11 +385,9 @@ class Tree(Debugger):
           if D: self.debug(color.op("..") + " returning %s", color.bold(ret))
           return ret
         else:
-          ret = chain(
-              *(
-                  type(x) in ITER_TYPES and x or [x]
-                  for x in (e[snd] for e in fst if snd in e)
-              )
+          ret = chain.from_iterable(
+              type(x) in ITER_TYPES and x or [x]
+              for x in (e[snd] for e in fst if snd in e)
           )
           # print list(chain(*(type(x) in ITER_TYPES and x or [x] for x in (e[snd] for e in fst if snd in e))))
           if D: self.debug(color.op("..") + " returning %s", color.bold(self.cleanOutput(ret)))
@@ -656,7 +654,7 @@ class Tree(Debugger):
           except TypeError:
             return args[0]
         elif fnName == "map":
-          return chain(*map(lambda x: exe(("fn", args[0], x)), args[1]))
+          return chain.from_iterable(map(lambda x: exe(("fn", args[0], x)), args[1]))
         elif fnName in ("count", "len"):
           args = args[0]
           if args in (True, False, None):
