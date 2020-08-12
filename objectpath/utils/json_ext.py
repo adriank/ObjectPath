@@ -94,11 +94,11 @@ def printJSON(o, length=5, depth=5):
         for i in o[0:length]:
           rec(i)
           out(",\n")
-        if length is -1:
+        if length == -1:
           rec(o[-1])
           out(",\n")
 
-        if length is not -1 and len(o) > length:
+        if length != -1 and len(o) > length:
           out("... (" + str(len(o) - length) + " more items)\n")
         else:
           ret.pop()
