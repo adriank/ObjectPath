@@ -37,35 +37,35 @@ def age(date, reference=None, lang="en"):
     years = round9_10(days/356)
     if years:
       if langIsPL:
-        return (years, years is 1 and "rok" or years < 5 and "lata" or "lat")
+        return (years, years == 1 and "rok" or years < 5 and "lata" or "lat")
       else:
-        return (years, years is 1 and "year" or "years")
+        return (years, years == 1 and "year" or "years")
 
     months = round9_10(days/30)
     if months:
       if langIsPL:
         return (
-            months, months is 1 and "miesiąc" or 1 < months < 5 and "miesiące"
+            months, months == 1 and "miesiąc" or 1 < months < 5 and "miesiące"
             or "miesięcy"
         )
       else:
-        return (months, months is 1 and "month" or "months")
+        return (months, months == 1 and "month" or "months")
 
     weeks = round9_10(days/7)
     if weeks:
       if langIsPL:
         return (
-            weeks, weeks is 1 and "tydzień"
+            weeks, weeks == 1 and "tydzień"
             or weeks % 10 in [0, 1, 5, 6, 7, 8, 9] and "tygodni" or "tygodnie"
         )
       else:
-        return (weeks, weeks is 1 and "week" or "weeks")
+        return (weeks, weeks == 1 and "week" or "weeks")
 
     days = int(days)
     if langIsPL:
-      return (days, days is 1 and "dzień" or "dni")
+      return (days, days == 1 and "dzień" or "dni")
     else:
-      return (days, days is 1 and "day" or "days")
+      return (days, days == 1 and "day" or "days")
 
   seconds = float(td.seconds)
   if seconds is not None:
@@ -73,30 +73,30 @@ def age(date, reference=None, lang="en"):
     if hours:
       if langIsPL:
         return (
-            hours, hours is 1 and "godzina" or 1 < hours < 5 and "godziny"
+            hours, hours == 1 and "godzina" or 1 < hours < 5 and "godziny"
             or "godzin"
         )
       else:
-        return (hours, hours is 1 and "hour" or "hours")
+        return (hours, hours == 1 and "hour" or "hours")
 
     minutes = round9_10(seconds/60)
     if minutes:
       if langIsPL:
         return (
-            minutes, minutes is 1 and "minuta" or 1 < minutes < 5 and "minuty"
+            minutes, minutes == 1 and "minuta" or 1 < minutes < 5 and "minuty"
             or "minut"
         )
       else:
-        return (minutes, minutes is 1 and "minute" or "minutes")
+        return (minutes, minutes == 1 and "minute" or "minutes")
 
     seconds = int(seconds)
     if langIsPL:
       return (
-          seconds, seconds is 1 and "sekunda" or 1 < seconds < 5 and "sekundy"
+          seconds, seconds == 1 and "sekunda" or 1 < seconds < 5 and "sekundy"
           or "sekund"
       )
     else:
-      return (seconds, seconds is 1 and "second" or "seconds")
+      return (seconds, seconds == 1 and "second" or "seconds")
   # return (0,"seconds")
 
 def date(d):
@@ -192,14 +192,14 @@ def dateTime(arg):
 		and permutations of above
 	"""
   l = len(arg)
-  if l is 1:
+  if l == 1:
     dt = arg[0]
     typed = type(dt)
     if typed is datetime.datetime:
       return dt
     if typed in (tuple, list) and len(dt) in [5, 6, 7]:
       return datetime.datetime(*dt)
-  if l is 2:
+  if l == 2:
     date = time = None
     typeArg0 = type(arg[0])
     typeArg1 = type(arg[1])

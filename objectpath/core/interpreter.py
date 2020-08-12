@@ -395,13 +395,13 @@ class Tree(Debugger):
       elif op == "[":
         len_node = len(node)
         # TODO move it to tree generation phase
-        if len_node is 1:  # empty list
+        if len_node == 1:  # empty list
           if D: self.debug("returning an empty list")
           return []
-        if len_node is 2:  # list - preserved to catch possible event of leaving it as '[' operator
+        if len_node == 2:  # list - preserved to catch possible event of leaving it as '[' operator
           if D: self.debug("doing list mapping")
           return [exe(x) for x in node[1]]
-        if len_node is 3:  # selector used []
+        if len_node == 3:  # selector used []
           fst = exe(node[1])
           # check against None
           if not fst:
@@ -414,7 +414,7 @@ class Tree(Debugger):
             )
           selectorIsTuple = type(selector) is tuple
 
-          if selectorIsTuple and selector[0] is "[":
+          if selectorIsTuple and selector[0] == "[":
             nodeList = []
             nodeList_append = nodeList.append
             for i in fst:
