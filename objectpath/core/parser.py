@@ -5,7 +5,7 @@
 
 # Code from http://effbot.org/zone/simple-top-down-parsing.htm was used in this file.
 # Licence of the code is public domain.
-# Relicenced to AGPL v3 by Adrian Kalbarczyk and:
+# Relicenced to MIT by Adrian Kalbarczyk and:
 # - specialized to work with ObjectPath,
 # - optimized
 
